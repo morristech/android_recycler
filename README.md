@@ -1,13 +1,13 @@
-Android Universi
+Android Recycler
 ===============
 
 ## Download ##
 
-Download the latest **[release](https://github.com/universum-studios/android_recycler/releases/tag/1.0.0-beta1 "Latest Releases page")** or **add as dependency** in your project via:
+Download the latest **[release](https://github.com/universum-studios/android_recycler/releases/tag/0.1.0 "Latest Releases page")** or **add as dependency** in your project via:
 
 ### Gradle ###
 
-    compile 'universum.studios.android:recycler:1.0.0-beta1@aar'
+    compile 'universum.studios.android:recycler:0.1.0@aar'
 
 ## Compatibility ##
 

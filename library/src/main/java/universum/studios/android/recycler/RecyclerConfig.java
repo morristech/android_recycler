@@ -16,7 +16,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
+package universum.studios.android.recycler;
+
 /**
+ * Configuration options for the Recycler library.
+ *
  * @author Martin Albedinsky
  */
-package universum.studios.android.recycler;
+public class RecyclerConfig {
+
+	/**
+	 * Flag indicating whether the output the Recycler library trough log-cat is enabled or not.
+	 */
+	public static boolean LOG_ENABLED = true;
+
+	/**
+	 * Flag indicating whether the debug output for the Recycler library trough log-cat is enabled or not.
+	 */
+	public static boolean DEBUG_LOG_ENABLED = false;
+}

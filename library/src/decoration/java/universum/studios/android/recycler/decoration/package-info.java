@@ -19,4 +19,4 @@
 /**
  * @author Martin Albedinsky
  */
-package universum.studios.android.recycler;
+package universum.studios.android.recycler.decoration;
