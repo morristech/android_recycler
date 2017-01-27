@@ -22,4 +22,12 @@ as usually.
         }
     }
 
-> COMING SOON
+## Available modules ##
+> Following modules are available in the [latest](https://github.com/universum-studios/android_recycler/releases "Latest Releases page") release.
+
+- **[Core](https://github.com/universum-studios/android_recycler/tree/master/library-core)**
+- **[@Decoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration)**
+- **[Decoration-Divider](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-divider)**
+- **[Decoration-Space](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-space)**
+- **[@Helper](https://github.com/universum-studios/android_recycler/tree/master/library-helper)**
+- **[Helper-Swipe](https://github.com/universum-studios/android_recycler/tree/master/library-helper-swipe)**

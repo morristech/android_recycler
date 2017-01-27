@@ -1,4 +1,4 @@
-Android Recycler
+Recycler
 ===============
 
 ## Download ##
@@ -11,11 +11,13 @@ Download the latest **[release](https://github.com/universum-studios/android_rec
 
 ## Compatibility ##
 
-Available from the **Android [API Level 9](http://developer.android.com/about/versions/android-2.3.html "See API highlights")**.
+Available from the **Android [API Level 14](http://developer.android.com/about/versions/android-4.0.html "See API highlights")**.
 
 ### Dependencies ###
 
 - [`com.android.support:support-annotations`](https://developer.android.com/topic/libraries/support-library/packages.html#annotations)
+- [`com.android.support:support-v4`](https://developer.android.com/topic/libraries/support-library/packages.html#v4)
+- [`com.android.support:recyclerview-v7`](https://developer.android.com/topic/libraries/support-library/packages.html#v7)
 
 ## License ##
 

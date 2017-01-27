@@ -9,6 +9,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library-core" />
+            <option value="$PROJECT_DIR$/library-decoration-core" />
+            <option value="$PROJECT_DIR$/library-decoration-divider" />
+            <option value="$PROJECT_DIR$/library-decoration-space" />
+            <option value="$PROJECT_DIR$/library-decoration_group" />
+            <option value="$PROJECT_DIR$/library-helper-core" />
+            <option value="$PROJECT_DIR$/library-helper-swipe" />
+            <option value="$PROJECT_DIR$/library-helper_group" />
             <option value="$PROJECT_DIR$/samples" />
           </set>
         </option>
