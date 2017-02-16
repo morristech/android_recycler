@@ -1,2 +1,5 @@
 // Gradle project settings. Specifies which modules to include into project.
-include ':library', ':samples', ':library-core', ':library-decoration_group', ':library-helper_group', ':library-decoration-divider', ':library-decoration-space', ':library-helper-swipe', ':library-decoration-core', ':library-helper-core'
+include ':library', ':samples'
+include ':library-core'
+include ':library-decoration_group', ':library-decoration-core', ':library-decoration-divider', ':library-decoration-space'
+include ':library-helper_group', ':library-helper-core', ':library-helper-swipe'
