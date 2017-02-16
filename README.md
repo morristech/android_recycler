@@ -1,17 +1,21 @@
 Recycler
 ===============
 
-## Download ##
+[![Build Status](https://travis-ci.org/universum-studios/android_recycler.svg?branch=master)](https://travis-ci.org/universum-studios/android_recycler)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_recycler&amp;utm_campaign=Badge_Grade)
 
-Download the latest **[release](https://github.com/universum-studios/android_recycler/releases/tag/0.1.0 "Latest Releases page")** or **add as dependency** in your project via:
+## Download ##
+[![Bintray Badge](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
+
+Download the latest **[release](https://github.com/universum-studios/android_recycler/releases "Latest Releases page")** or **add as dependency** in your project via:
 
 ### Gradle ###
 
-    compile 'universum.studios.android:recycler:0.1.0@aar'
+    compile "universum.studios.android:recycler:${DESIRED_VERSION}@aar"
 
 ## Compatibility ##
 
-Available from the **Android [API Level 14](http://developer.android.com/about/versions/android-4.0.html "See API highlights")**.
+Supported down to the **Android [API Level 14](http://developer.android.com/about/versions/android-4.0.html "See API highlights")**.
 
 ### Dependencies ###
 
