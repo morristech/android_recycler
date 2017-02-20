@@ -6,7 +6,7 @@ Recycler
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&utm_medium=referral&utm_content=universum-studios/android_recycler&utm_campaign=Badge_Coverage)
 
 ## Download ##
-[![Bintray Badge](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
+[![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
 
 Download the latest **[release](https://github.com/universum-studios/android_recycler/releases "Latest Releases page")** or **add as dependency** in your project via:
 
