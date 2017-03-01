@@ -23,7 +23,7 @@ package universum.studios.android.recycler;
  *
  * @author Martin Albedinsky
  */
-public class RecyclerConfig {
+public final class RecyclerConfig {
 
 	/**
 	 * Flag indicating whether the output the Recycler library trough log-cat is enabled or not.
@@ -34,4 +34,10 @@ public class RecyclerConfig {
 	 * Flag indicating whether the debug output for the Recycler library trough log-cat is enabled or not.
 	 */
 	public static boolean DEBUG_LOG_ENABLED = false;
+
+	/**
+	 */
+	private RecyclerConfig() {
+		// Creation of instances of this class is not publicly allowed.
+	}
 }
