@@ -26,15 +26,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 /**
- * todo: description
+ * A {@link RecyclerView.ItemDecoration} implementation that should be used as base class for all
+ * item decorations from the Recycler library.
  *
  * @author Martin Albedinsky
  */
 public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
-
-	/**
-	 * Interface ===================================================================================
-	 */
 
 	/**
 	 * Constants ===================================================================================
@@ -44,6 +41,10 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Log TAG.
 	 */
 	// private static final String TAG = "RecyclerViewItemDecoration";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -88,15 +89,16 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	}
 
 	/**
-	 * todo:
+	 * Creates a new instance of RecyclerViewItemDecoration for the given context.
 	 *
-	 * @param context
-	 * @param attrs
-	 * @param defStyleAttr
-	 * @param defStyleRes
+	 * @param context      Context in which will be the new decoration presented.
+	 * @param attrs        Set of Xml attributes used to configure the new instance of this decoration.
+	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
+	 *                     this decoration within a theme of the given context.
+	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
 	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
-		// todo:
+		// No configuration required for the base implementation.
 	}
 
 	/**

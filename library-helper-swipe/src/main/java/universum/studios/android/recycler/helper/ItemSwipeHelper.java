@@ -32,11 +32,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * todo: description
+ * A {@link RecyclerViewItemHelper} implementation ...
  *
  * @author Martin Albedinsky
  */
 public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelper.SwipeCallback> {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = "ItemSwipeHelper";
 
 	/**
 	 * Interface ===================================================================================
@@ -145,15 +154,6 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	}
 
 	/**
-	 * Constants ===================================================================================
-	 */
-
-	/**
-	 * Log TAG.
-	 */
-	// private static final String TAG = "ItemSwipeHelper";
-
-	/**
 	 * Static members ==============================================================================
 	 */
 
@@ -181,7 +181,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 */
 
 	/**
-	 * todo:
+	 * Creates a new instance of ItemSwipeHelper.
 	 */
 	public ItemSwipeHelper() {
 		this(new SwipeCallback());

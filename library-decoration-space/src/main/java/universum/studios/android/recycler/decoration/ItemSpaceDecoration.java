@@ -31,15 +31,12 @@ import android.view.View;
 import universum.studios.android.recycler.R;
 
 /**
- * todo: description
+ * A {@link RecyclerViewItemDecoration} implementation that may be used to add a space between items
+ * presented in a {@link RecyclerView}.
  *
  * @author Martin Albedinsky
  */
 public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
-
-	/**
-	 * Interface ===================================================================================
-	 */
 
 	/**
 	 * Constants ===================================================================================
@@ -49,6 +46,10 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ItemSpaceDecoration";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -121,34 +122,35 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * todo:
+	 * Creates a new instance of ItemSpaceDecoration for the given context.
 	 *
-	 * @param context
-	 * @param attrs
-	 * @param defStyleAttr
-	 * @param defStyleRes
+	 * @param context      Context in which will be the new decoration presented.
+	 * @param attrs        Set of Xml attributes used to configure the new instance of this decoration.
+	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
+	 *                     this decoration within a theme of the given context.
+	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
 	public ItemSpaceDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
-			final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
-			for (int i = 0; i < typedArray.getIndexCount(); i++) {
-				final int index = typedArray.getIndex(i);
+			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
+			for (int i = 0; i < attributes.getIndexCount(); i++) {
+				final int index = attributes.getIndex(i);
 				if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemDecorationSkipFirst) {
-					this.mSkipFirst = typedArray.getBoolean(index, false);
+					this.mSkipFirst = attributes.getBoolean(index, false);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemDecorationSkipLast) {
-					this.mSkipLast = typedArray.getBoolean(index, false);
+					this.mSkipLast = attributes.getBoolean(index, false);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
-					this.mHorizontalStart = typedArray.getDimensionPixelSize(index, 0);
+					this.mHorizontalStart = attributes.getDimensionPixelSize(index, 0);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
-					this.mHorizontalEnd = typedArray.getDimensionPixelSize(index, 0);
+					this.mHorizontalEnd = attributes.getDimensionPixelSize(index, 0);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
-					this.mVerticalStart = typedArray.getDimensionPixelSize(index, 0);
+					this.mVerticalStart = attributes.getDimensionPixelSize(index, 0);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
-					this.mVerticalEnd = typedArray.getDimensionPixelSize(index, 0);
+					this.mVerticalEnd = attributes.getDimensionPixelSize(index, 0);
 				}
 			}
-			typedArray.recycle();
+			attributes.recycle();
 		}
 	}
 
@@ -173,6 +175,10 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		this.mVerticalStart = verticalStart;
 		this.mVerticalEnd = verticalEnd;
 	}
+
+	/**
+	 * Methods =====================================================================================
+	 */
 
 	/**
 	 * todo:
@@ -209,10 +215,6 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	public int getVerticalEnd() {
 		return mVerticalEnd;
 	}
-
-	/**
-	 * Methods =====================================================================================
-	 */
 
 	/**
 	 */
