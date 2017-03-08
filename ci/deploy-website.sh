@@ -5,7 +5,7 @@ set -ex
 # Setup script constants.
 TEMP_DIR=website-temp
 LIBRARY_NAME=recycler
-LIBRARY_ARTIFACT_NAME=$LIBRARY_NAME
+LIBRARY_ARTIFACT_NAME="${LIBRARY_NAME//_/-}"
 LIBRARY_VERSION=0.1.0
 LIBRARY_REPO="git@github.com:universum-studios/android_${LIBRARY_NAME}.git"
 LIBRARY_DIR_ARTIFACTS=../artifacts/universum/studios/android/$LIBRARY_ARTIFACT_NAME/$LIBRARY_VERSION/
