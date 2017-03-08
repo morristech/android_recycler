@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ItemSwipeHelper.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.recycler.helper</a> &gt; <span class="el_source">ItemSwipeHelper.java</span></div><h1>ItemSwipeHelper.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License 
+ * you may obtain at
+ * 
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * You can redistribute, modify or publish any part of the code written within this file but as it 
+ * is described in the License, the software distributed under the License is distributed on an 
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * 
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.recycler.helper;
+
+import android.graphics.Canvas;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Interpolator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A {@link RecyclerViewItemHelper} implementation ...
+ *
+ * @author Martin Albedinsky
+ */
+public final class ItemSwipeHelper extends RecyclerViewItemHelper&lt;ItemSwipeHelper.SwipeCallback&gt; {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;ItemSwipeHelper&quot;;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * todo
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface SwipeDataSet {
+
+		/**
+		 * todo:
+		 *
+		 * @param position
+		 * @return
+		 */
+		int getItemSwipeFlags(int position);
+	}
+
+	/**
+	 * todo
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface SwipeViewHolder {
+
+		/**
+		 * todo:
+		 *
+		 * @return
+		 */
+		@NonNull
+		View getSwipeView();
+
+		/**
+		 * todo:
+		 *
+		 * @param canvas
+		 * @param dX
+		 * @param dY
+		 * @param isCurrentlyActive
+		 */
+		void onDraw(@NonNull Canvas canvas, float dX, float dY, boolean isCurrentlyActive);
+
+		/**
+		 * todo:
+		 *
+		 * @param canvas
+		 * @param dX
+		 * @param dY
+		 * @param isCurrentlyActive
+		 */
+		void onDrawOver(@NonNull Canvas canvas, float dX, float dY, boolean isCurrentlyActive);
+
+		/**
+		 * todo:
+		 */
+		void onSwipeStarted();
+
+		/**
+		 * todo:
+		 *
+		 * @param direction
+		 */
+		void onSwipeFinished(@Direction int direction);
+
+		/**
+		 * todo:
+		 */
+		void onSwipeCanceled();
+	}
+
+	/**
+	 * todo
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface OnSwipeListener {
+
+		/**
+		 * todo:
+		 *
+		 * @param swipeHelper
+		 * @param viewHolder
+		 */
+		void onSwipeStarted(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder);
+
+		/**
+		 * todo:
+		 *
+		 * @param swipeHelper
+		 * @param viewHolder
+		 * @param direction
+		 */
+		void onSwipeFinished(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder, @Direction int direction);
+
+		/**
+		 * todo:
+		 *
+		 * @param swipeHelper
+		 * @param viewHolder
+		 */
+		void onSwipeCanceled(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder);
+	}
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * List containing registered swipe listeners.
+	 */
+	private List&lt;OnSwipeListener&gt; mSwipeListeners;
+
+	/**
+	 * todo:
+	 */
+<span class="nc" id="L172">	private long mRestoreHolderAnimationDuration = 300;</span>
+
+	/**
+	 * todo:
+	 */
+<span class="nc" id="L177">	private Interpolator mRestoreHolderAnimationInterpolator = new FastOutSlowInInterpolator();</span>
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Creates a new instance of ItemSwipeHelper.
+	 */
+	public ItemSwipeHelper() {
+<span class="nc" id="L187">		this(new SwipeCallback());</span>
+<span class="nc" id="L188">	}</span>
+
+	/**
+	 * Creates a new instance of ItemSwipeHelper with the specified &lt;var&gt;callback&lt;/var&gt;.
+	 *
+	 * @param callback The callback used to receive and handle swipe related events.
+	 */
+	private ItemSwipeHelper(SwipeCallback callback) {
+<span class="nc" id="L196">		super(callback);</span>
+<span class="nc" id="L197">		callback.setHelper(this);</span>
+<span class="nc" id="L198">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * todo:
+	 *
+	 * @param movementFlags
+	 * @return
+	 */
+	public static int makeSwipeFlags(@Movement int movementFlags) {
+<span class="nc" id="L211">		return SwipeCallback.makeMovementFlags(0, movementFlags);</span>
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @param dataSet
+	 */
+	public void attachDataSet(@Nullable SwipeDataSet dataSet) {
+<span class="nc" id="L220">		mCallback.attachDataSet(dataSet);</span>
+<span class="nc" id="L221">	}</span>
+
+	/**
+	 * Registers a callback to be invoked when an item swipe related event occurs.
+	 *
+	 * @param listener The desired listener callback to add.
+	 * @see #removeOnSwipeListener(OnSwipeListener)
+	 */
+	public void addOnSwipeListener(@NonNull OnSwipeListener listener) {
+<span class="nc bnc" id="L230" title="All 2 branches missed.">		if (mSwipeListeners == null) mSwipeListeners = new ArrayList&lt;&gt;(1);</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">		if (!mSwipeListeners.contains(listener)) mSwipeListeners.add(listener);</span>
+<span class="nc" id="L232">	}</span>
+
+	/**
+	 * Removes the given &lt;var&gt;listener&lt;/var&gt; from the registered listeners.
+	 *
+	 * @param listener The desired listener callback to remove.
+	 * @see #addOnSwipeListener(OnSwipeListener)
+	 */
+	public void removeOnSwipeListener(@NonNull OnSwipeListener listener) {
+<span class="nc bnc" id="L241" title="All 2 branches missed.">		if (mSwipeListeners != null) mSwipeListeners.remove(listener);</span>
+<span class="nc" id="L242">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @param viewHolder
+	 */
+	void notifySwipeStarted(RecyclerView.ViewHolder viewHolder) {
+<span class="nc bnc" id="L250" title="All 4 branches missed.">		if (mSwipeListeners != null &amp;&amp; !mSwipeListeners.isEmpty()) {</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">			for (OnSwipeListener listener : mSwipeListeners) {</span>
+<span class="nc" id="L252">				listener.onSwipeStarted(this, viewHolder);</span>
+<span class="nc" id="L253">			}</span>
+		}
+<span class="nc" id="L255">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @param viewHolder
+	 * @param direction
+	 */
+	void notifySwipeFinished(RecyclerView.ViewHolder viewHolder, int direction) {
+<span class="nc bnc" id="L264" title="All 4 branches missed.">		if (mSwipeListeners != null &amp;&amp; !mSwipeListeners.isEmpty()) {</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">			for (OnSwipeListener listener : mSwipeListeners) {</span>
+<span class="nc" id="L266">				listener.onSwipeFinished(this, viewHolder, direction);</span>
+<span class="nc" id="L267">			}</span>
+		}
+<span class="nc" id="L269">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @param viewHolder
+	 */
+	void notifySwipeCanceled(RecyclerView.ViewHolder viewHolder) {
+<span class="nc bnc" id="L277" title="All 4 branches missed.">		if (mSwipeListeners != null &amp;&amp; !mSwipeListeners.isEmpty()) {</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">			for (OnSwipeListener listener : mSwipeListeners) {</span>
+<span class="nc" id="L279">				listener.onSwipeCanceled(this, viewHolder);</span>
+<span class="nc" id="L280">			}</span>
+		}
+<span class="nc" id="L282">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @param duration
+	 */
+	public void setRestoreHolderAnimationDuration(long duration) {
+<span class="nc" id="L290">		this.mRestoreHolderAnimationDuration = duration;</span>
+<span class="nc" id="L291">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	public long getRestoreHolderAnimationDuration() {
+<span class="nc" id="L299">		return mRestoreHolderAnimationDuration;</span>
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @param interpolator
+	 */
+	public void setRestoreHolderAnimationInterpolator(@NonNull Interpolator interpolator) {
+<span class="nc" id="L308">		this.mRestoreHolderAnimationInterpolator = interpolator;</span>
+<span class="nc" id="L309">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	@NonNull
+	public Interpolator getRestoreHolderAnimationInterpolator() {
+<span class="nc" id="L318">		return mRestoreHolderAnimationInterpolator;</span>
+	}
+
+	/**
+	 * Same as {@link #restoreHolderForAdapter(RecyclerView.ViewHolder, int, RecyclerView.Adapter, Runnable)}
+	 * with {@code null} &lt;var&gt;adapter&lt;/var&gt; and &lt;var&gt;callback&lt;/var&gt;.
+	 */
+	public void restoreHolder(@NonNull RecyclerView.ViewHolder viewHolder, @Direction int direction) {
+<span class="nc" id="L326">		restoreHolderForAdapter(viewHolder, direction, null, null);</span>
+<span class="nc" id="L327">	}</span>
+
+	/**
+	 * todo:
+	 *
+	 * @param viewHolder
+	 * @param direction
+	 * @param adapter
+	 * @param callback
+	 */
+	public void restoreHolderForAdapter(@NonNull RecyclerView.ViewHolder viewHolder, @Direction int direction, @Nullable final RecyclerView.Adapter adapter, @Nullable final Runnable callback) {
+<span class="nc bnc" id="L338" title="All 2 branches missed.">		if (viewHolder instanceof SwipeViewHolder) {</span>
+			// Restore holder's swipe view and when restore animation finishes notify the adapter
+			// that item at the holder's position has changed so view for the item is again properly
+			// drawn by the parent RecyclerView.
+<span class="nc" id="L342">			final View swipeView = ((SwipeViewHolder) viewHolder).getSwipeView();</span>
+			final ViewPropertyAnimator animator;
+<span class="nc bnc" id="L344" title="All 2 branches missed.">			switch (direction) {</span>
+				case START:
+				case END:
+<span class="nc bnc" id="L347" title="All 2 branches missed.">					if (swipeView.getTranslationX() == 0) return;</span>
+<span class="nc" id="L348">					animator = swipeView.animate().translationX(0);</span>
+<span class="nc" id="L349">					break;</span>
+				default:
+<span class="nc" id="L351">					return;</span>
+			}
+<span class="nc" id="L353">			animator.setDuration(mRestoreHolderAnimationDuration).setInterpolator(mRestoreHolderAnimationInterpolator).start();</span>
+<span class="nc bnc" id="L354" title="All 2 branches missed.">			if (adapter != null) {</span>
+<span class="nc" id="L355">				final int itemPosition = viewHolder.getAdapterPosition();</span>
+<span class="nc" id="L356">				swipeView.postDelayed(new Runnable() {</span>
+
+					/**
+					 */
+					@Override
+					public void run() {
+<span class="nc" id="L362">						adapter.notifyItemChanged(itemPosition);</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">						if (callback != null) {</span>
+<span class="nc" id="L364">							callback.run();</span>
+						}
+<span class="nc" id="L366">					}</span>
+				}, mRestoreHolderAnimationDuration);
+			}
+		}
+<span class="nc" id="L370">	}</span>
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+	/**
+	 * todo:
+	 */
+<span class="nc" id="L379">	static final class SwipeCallback extends RecyclerViewItemHelper.BaseCallback {</span>
+
+		/**
+		 * Parent helper which uses this callback instance.
+		 */
+		private ItemSwipeHelper helper;
+
+		/**
+		 * Data set with swipe items attached to this callback.
+		 */
+		private SwipeDataSet dataSet;
+
+		/**
+		 * Sets a parent helper for this callback.
+		 *
+		 * @param helper The helper which uses this callback.
+		 */
+		void setHelper(ItemSwipeHelper helper) {
+<span class="nc" id="L397">			this.helper = helper;</span>
+<span class="nc" id="L398">		}</span>
+
+		/**
+		 * todo:
+		 *
+		 * @param dataSet
+		 */
+		void attachDataSet(SwipeDataSet dataSet) {
+<span class="nc" id="L406">			this.dataSet = dataSet;</span>
+<span class="nc" id="L407">		}</span>
+
+		/**
+		 */
+		@Override
+		public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+<span class="nc bnc" id="L413" title="All 4 branches missed.">			return enabled &amp;&amp; dataSet != null ? dataSet.getItemSwipeFlags(viewHolder.getAdapterPosition()) : 0;</span>
+		}
+
+		/**
+		 */
+		@Override
+		public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+<span class="nc bnc" id="L420" title="All 2 branches missed.">			if (viewHolder != null) {</span>
+<span class="nc" id="L421">				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;</span>
+<span class="nc" id="L422">				getDefaultUIUtil().onSelected(swipeViewHolder.getSwipeView());</span>
+<span class="nc" id="L423">				swipeViewHolder.onSwipeStarted();</span>
+<span class="nc" id="L424">				helper.notifySwipeStarted(viewHolder);</span>
+			}
+<span class="nc" id="L426">		}</span>
+
+		/**
+		 */
+		@Override
+		public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+			// Ignored for this helper-callback implementation.
+<span class="nc" id="L433">			return false;</span>
+		}
+
+		/**
+		 */
+		@Override
+		public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+<span class="nc" id="L440">			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;</span>
+<span class="nc" id="L441">			getDefaultUIUtil().onDraw(c, recyclerView, swipeViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);</span>
+<span class="nc" id="L442">			swipeViewHolder.onDraw(c, dX, dY, isCurrentlyActive);</span>
+<span class="nc" id="L443">		}</span>
+
+		/**
+		 */
+		@Override
+		public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+<span class="nc" id="L449">			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;</span>
+<span class="nc" id="L450">			getDefaultUIUtil().onDrawOver(c, recyclerView, swipeViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);</span>
+<span class="nc" id="L451">			swipeViewHolder.onDrawOver(c, dX, dY, isCurrentlyActive);</span>
+<span class="nc" id="L452">		}</span>
+
+		/**
+		 */
+		@Override
+		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+<span class="nc" id="L458">			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;</span>
+<span class="nc" id="L459">			swipeViewHolder.onSwipeFinished(direction);</span>
+<span class="nc" id="L460">			helper.notifySwipeFinished(viewHolder, direction);</span>
+<span class="nc" id="L461">		}</span>
+
+		/**
+		 */
+		@Override
+		public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+<span class="nc" id="L467">			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;</span>
+<span class="nc" id="L468">			getDefaultUIUtil().clearView(swipeViewHolder.getSwipeView());</span>
+<span class="nc" id="L469">			swipeViewHolder.onSwipeCanceled();</span>
+<span class="nc" id="L470">			helper.notifySwipeCanceled(viewHolder);</span>
+<span class="nc" id="L471">		}</span>
+	}
+
+	/**
+	 * todo
+	 *
+	 * @author Martin Albedinsky
+	 */
+<span class="nc" id="L479">	public static class SwipeItemAnimator extends DefaultItemAnimator {</span>
+
+		/**
+		 */
+		@Override
+		public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
+<span class="nc bnc" id="L485" title="All 8 branches missed.">			if (fromX == toX &amp;&amp; fromY == toY &amp;&amp; oldHolder != null &amp;&amp; newHolder != null) {</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">				if (newHolder.equals(oldHolder)) {</span>
+<span class="nc" id="L487">					dispatchChangeFinished(newHolder, false);</span>
+				} else {
+<span class="nc" id="L489">					dispatchChangeFinished(oldHolder, true);</span>
+<span class="nc" id="L490">					dispatchChangeFinished(newHolder, false);</span>
+				}
+<span class="nc" id="L492">				return false;</span>
+			}
+<span class="nc" id="L494">			return super.animateChange(oldHolder, newHolder, fromX, fromY, toX, toY);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

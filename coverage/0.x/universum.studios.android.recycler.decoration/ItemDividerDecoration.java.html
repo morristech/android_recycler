@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ItemDividerDecoration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.recycler.decoration</a> &gt; <span class="el_source">ItemDividerDecoration.java</span></div><h1>ItemDividerDecoration.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License 
+ * you may obtain at
+ * 
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * You can redistribute, modify or publish any part of the code written within this file but as it 
+ * is described in the License, the software distributed under the License is distributed on an 
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * 
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.recycler.decoration;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
+import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
+import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
+
+import universum.studios.android.recycler.R;
+
+/**
+ * A {@link RecyclerViewItemDecoration} implementation that may be used to add a divider between
+ * items presented in a {@link RecyclerView}.
+ *
+ * @author Martin Albedinsky
+ */
+class ItemDividerDecoration extends RecyclerViewItemDecoration {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;ItemDividerDecoration&quot;;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Same as {@link #ItemDividerDecoration(Context)} with {@code null} &lt;var&gt;context&lt;/var&gt;.
+	 */
+	public ItemDividerDecoration() {
+<span class="nc" id="L68">		this(null);</span>
+<span class="nc" id="L69">	}</span>
+
+	/**
+	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet)} with {@code null} &lt;var&gt;attrs&lt;/var&gt;.
+	 */
+	public ItemDividerDecoration(@Nullable Context context) {
+<span class="nc" id="L75">		this(context, null);</span>
+<span class="nc" id="L76">	}</span>
+
+	/**
+	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet, int)} with {@code 0} &lt;var&gt;defStyleAttr&lt;/var&gt;.
+	 */
+	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+<span class="nc" id="L82">		this(context, attrs, 0);</span>
+<span class="nc" id="L83">	}</span>
+
+	/**
+	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet, int, int)} with {@code 0} &lt;var&gt;defStyleRes&lt;/var&gt;.
+	 */
+	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+<span class="nc" id="L89">		this(context, attrs, defStyleAttr, 0);</span>
+<span class="nc" id="L90">	}</span>
+
+	/**
+	 * Creates a new instance of ItemDividerDecoration for the given context.
+	 *
+	 * @param context      Context in which will be the new decoration presented.
+	 * @param attrs        Set of Xml attributes used to configure the new instance of this decoration.
+	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
+	 *                     this decoration within a theme of the given context.
+	 * @param defStyleRes  Resource id of the default style for the new decoration.
+	 */
+	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+<span class="nc" id="L102">		super(context, attrs, defStyleAttr, defStyleRes);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (context != null) {</span>
+<span class="nc" id="L104">			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Divider, defStyleAttr, defStyleRes);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			for (int i = 0; i &lt; attributes.getIndexCount(); i++) {</span>
+<span class="nc" id="L106">				final int index = attributes.getIndex(i);</span>
+				// todo: process attr indexes here
+			}
+<span class="nc" id="L109">			attributes.recycle();</span>
+		}
+<span class="nc" id="L111">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
