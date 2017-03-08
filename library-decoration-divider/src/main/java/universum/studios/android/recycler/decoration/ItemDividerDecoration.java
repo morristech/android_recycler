@@ -23,20 +23,18 @@ import android.content.res.TypedArray;
 import android.support.annotation.AttrRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import universum.studios.android.recycler.R;
 
 /**
- * todo: description
+ * A {@link RecyclerViewItemDecoration} implementation that may be used to add a divider between
+ * items presented in a {@link RecyclerView}.
  *
  * @author Martin Albedinsky
  */
-public class ItemDividerDecoration extends RecyclerViewItemDecoration {
-
-	/**
-	 * Interface ===================================================================================
-	 */
+class ItemDividerDecoration extends RecyclerViewItemDecoration {
 
 	/**
 	 * Constants ===================================================================================
@@ -46,6 +44,10 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ItemDividerDecoration";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -88,25 +90,23 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * todo:
+	 * Creates a new instance of ItemDividerDecoration for the given context.
 	 *
-	 * @param context
-	 * @param attrs
-	 * @param defStyleAttr
-	 * @param defStyleRes
+	 * @param context      Context in which will be the new decoration presented.
+	 * @param attrs        Set of Xml attributes used to configure the new instance of this decoration.
+	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
+	 *                     this decoration within a theme of the given context.
+	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
 	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
-			final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Divider, defStyleAttr, defStyleRes);
-			if (typedArray != null) {
-				final int n = typedArray.getIndexCount();
-				for (int i = 0; i < n; i++) {
-					final int index = typedArray.getIndex(i);
-					// todo: process attr indexes here
-				}
-				typedArray.recycle();
+			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Divider, defStyleAttr, defStyleRes);
+			for (int i = 0; i < attributes.getIndexCount(); i++) {
+				final int index = attributes.getIndex(i);
+				// todo: process attr indexes here
 			}
+			attributes.recycle();
 		}
 	}
 

@@ -26,16 +26,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * todo: description
+ * A {@link ItemTouchHelper} implementation that should be used as base for all item helpers from
+ * the Recycler library.
  *
- * @param <C>
+ * @param <C> Type of the callback to be used by this helper.
  * @author Martin Albedinsky
  */
 public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.BaseCallback> extends ItemTouchHelper {
-
-	/**
-	 * Interface ===================================================================================
-	 */
 
 	/**
 	 * Constants ===================================================================================
@@ -69,6 +66,10 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	@Retention(RetentionPolicy.SOURCE)
 	public @interface Movement {
 	}
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================

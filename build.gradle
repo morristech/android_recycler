@@ -9,9 +9,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
@@ -35,19 +34,19 @@ task clean(type: Delete) {
 }
 
 /**
- * Task that cleans local artifacts directory.
+ * Task that cleans library artifacts directory.
  */
-task cleanLocalArtifacts() {
+task cleanArtifacts(type: Delete) {
     // delete 'artifacts/universum/studios/android'
 }
 
 /**
- * Task that updates local artifacts directory.
+ * Task that updates library artifacts directory.
  */
-task updateLocalArtifacts() {
+task updateArtifacts() {
     subprojects.findAll {
         if (it.name.startsWith("library")) {
-            dependsOn ':' + it.name + ':updateLocalArtifacts'
+            dependsOn ':' + it.name + ':updateArtifacts'
         }
     }
 }
