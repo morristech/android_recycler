@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/library-helper-swipe/library-helper-swipe.iml" filepath="$PROJECT_DIR$/library-helper-swipe/library-helper-swipe.iml" />
       <module fileurl="file://$PROJECT_DIR$/library-helper_group/library-helper_group.iml" filepath="$PROJECT_DIR$/library-helper_group/library-helper_group.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/samples.iml" filepath="$PROJECT_DIR$/samples/samples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test-core/test-core.iml" filepath="$PROJECT_DIR$/test-core/test-core.iml" />
     </modules>
   </component>
 </project>
