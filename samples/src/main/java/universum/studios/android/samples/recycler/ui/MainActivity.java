@@ -21,16 +21,16 @@ package universum.studios.android.samples.recycler.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.MenuItem;
 
 import universum.studios.android.samples.recycler.R;
-import universum.studios.android.support.fragment.manage.FragmentController;
-import universum.studios.android.support.fragment.manage.FragmentRequest;
-import universum.studios.android.support.fragment.manage.FragmentRequestInterceptor;
-import universum.studios.android.support.fragment.transition.FragmentTransitions;
-import universum.studios.android.support.samples.ui.SamplesMainFragment;
-import universum.studios.android.support.samples.ui.SamplesNavigationActivity;
+import universum.studios.android.fragment.manage.FragmentController;
+import universum.studios.android.fragment.manage.FragmentRequest;
+import universum.studios.android.fragment.manage.FragmentRequestInterceptor;
+import universum.studios.android.fragment.transition.FragmentTransitions;
+import universum.studios.android.samples.ui.SamplesMainFragment;
+import universum.studios.android.samples.ui.SamplesNavigationActivity;
 
 /**
  * @author Martin Albedinsky
@@ -63,6 +63,6 @@ public final class MainActivity extends SamplesNavigationActivity implements Fra
 				fragmentController.newRequest(new SamplesMainFragment()).execute();
 				return true;
 		}
-		return true;
+		return false;
 	}
 }
