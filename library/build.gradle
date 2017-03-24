@@ -61,6 +61,15 @@ android {
                 '../library-decoration-space/src/main/res'
         ]
         debug.res.srcDirs = release.res.srcDirs
+        androidTest.java.srcDirs = [
+                '../library/src/androidTest/java',
+                '../library-core/src/androidTest/java',
+                '../library-decoration-core/src/androidTest/java',
+                '../library-decoration-divider/src/androidTest/java',
+                '../library-decoration-space/src/androidTest/java',
+                '../library-helper-core/src/androidTest/java',
+                '../library-helper-swipe/src/androidTest/java'
+        ]
     }
 
     compileOptions {
