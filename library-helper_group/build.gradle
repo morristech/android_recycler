@@ -67,6 +67,7 @@ android {
  */
 repositories {
     maven { url repos.project.artifacts }
+    mavenLocal()
 }
 
 dependencies {

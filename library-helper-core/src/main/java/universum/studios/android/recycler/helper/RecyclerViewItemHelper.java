@@ -34,7 +34,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.BaseCallback> extends ItemTouchHelper {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -67,15 +67,15 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	public @interface Movement {
 	}
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -84,7 +84,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 */
 	final C mCallback;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -98,7 +98,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		this.mCallback = callback;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -120,7 +120,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		return mCallback.isEnabled();
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

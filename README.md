@@ -5,6 +5,10 @@ Recycler
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_recycler&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&utm_medium=referral&utm_content=universum-studios/android_recycler&utm_campaign=Badge_Coverage)
 
+Common RecyclerView decorations and helpers for the Android platform.
+
+For more information please visit the **[Wiki](https://github.com/universum-studios/android_recycler/wiki)**.
+
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
 

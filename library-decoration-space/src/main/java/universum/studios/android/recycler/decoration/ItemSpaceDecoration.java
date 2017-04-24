@@ -38,7 +38,7 @@ import universum.studios.android.recycler.R;
  */
 public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -47,15 +47,15 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 	// private static final String TAG = "ItemSpaceDecoration";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -89,7 +89,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 	private int mVerticalEnd;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -176,7 +176,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		this.mVerticalEnd = verticalEnd;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -235,7 +235,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		}
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

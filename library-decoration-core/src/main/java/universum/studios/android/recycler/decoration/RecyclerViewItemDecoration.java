@@ -33,7 +33,7 @@ import android.util.AttributeSet;
  */
 public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -42,19 +42,19 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 	// private static final String TAG = "RecyclerViewItemDecoration";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -101,11 +101,11 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 		// No configuration required for the base implementation.
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

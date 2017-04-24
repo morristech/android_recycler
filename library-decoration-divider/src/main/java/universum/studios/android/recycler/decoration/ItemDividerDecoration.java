@@ -36,7 +36,7 @@ import universum.studios.android.recycler.R;
  */
 class ItemDividerDecoration extends RecyclerViewItemDecoration {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -45,19 +45,19 @@ class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 */
 	// private static final String TAG = "ItemDividerDecoration";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -110,11 +110,11 @@ class ItemDividerDecoration extends RecyclerViewItemDecoration {
 		}
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

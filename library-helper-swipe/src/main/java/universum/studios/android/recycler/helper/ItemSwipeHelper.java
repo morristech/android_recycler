@@ -38,7 +38,7 @@ import java.util.List;
  */
 public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelper.SwipeCallback> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -47,7 +47,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 */
 	// private static final String TAG = "ItemSwipeHelper";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
@@ -153,11 +153,11 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		void onSwipeCanceled(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder);
 	}
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -176,7 +176,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 */
 	private Interpolator mRestoreHolderAnimationInterpolator = new FastOutSlowInInterpolator();
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -197,7 +197,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		callback.setHelper(this);
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -369,7 +369,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		}
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 
