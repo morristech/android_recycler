@@ -68,7 +68,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	/**
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet)} with {@code null} <var>attrs</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context) {
+	public RecyclerViewItemDecoration(@Nullable final Context context) {
 		this(context, null);
 	}
 
@@ -76,7 +76,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int)} with {@code 0}
 	 * <var>defStyleAttr</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
@@ -84,7 +84,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int, int)} with {@code 0}
 	 * <var>defStyleRes</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
 		this(context, attrs, defStyleAttr, 0);
 	}
 
@@ -97,7 +97,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
 		// No configuration required for the base implementation.
 	}
 

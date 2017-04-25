@@ -93,7 +93,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @param callback
 	 */
-	public RecyclerViewItemHelper(@NonNull C callback) {
+	public RecyclerViewItemHelper(@NonNull final C callback) {
 		super(callback);
 		this.mCallback = callback;
 	}
@@ -107,7 +107,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @param enabled
 	 */
-	public final void setEnabled(boolean enabled) {
+	public final void setEnabled(final boolean enabled) {
 		mCallback.setEnabled(enabled);
 	}
 
@@ -143,7 +143,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		 * @param enabled
 		 * @see #isEnabled()
 		 */
-		protected final void setEnabled(boolean enabled) {
+		protected final void setEnabled(final boolean enabled) {
 			this.enabled = enabled;
 		}
 

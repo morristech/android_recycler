@@ -128,21 +128,21 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	/**
 	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet)} with {@code null} <var>attrs</var>.
 	 */
-	public ItemDividerDecoration(@Nullable Context context) {
+	public ItemDividerDecoration(@Nullable final Context context) {
 		this(context, null);
 	}
 
 	/**
 	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet, int)} with {@code 0} <var>defStyleAttr</var>.
 	 */
-	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+	public ItemDividerDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
 	/**
 	 * Same as {@link #ItemDividerDecoration(Context, AttributeSet, int, int)} with {@code 0} <var>defStyleRes</var>.
 	 */
-	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+	public ItemDividerDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
 		this(context, attrs, defStyleAttr, 0);
 	}
 
@@ -155,7 +155,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
-	public ItemDividerDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+	public ItemDividerDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Divider, defStyleAttr, defStyleRes);
@@ -173,7 +173,8 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param orientation
 	 * @param divider
 	 */
-	public ItemDividerDecoration(@Orientation int orientation, @NonNull Drawable divider) {
+	public ItemDividerDecoration(@Orientation final int orientation, @NonNull final Drawable divider) {
+		super();
 		this.mOrientation = orientation;
 		this.mDivider = divider;
 	}
@@ -188,7 +189,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param orientation
 	 * @see #getOrientation()
 	 */
-	public void setOrientation(@Orientation int orientation) {
+	public void setOrientation(@Orientation final int orientation) {
 		this.mOrientation = orientation;
 		this.resolveDividerDrawThickness();
 	}
@@ -210,7 +211,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param divider
 	 * @see #getDivider()
 	 */
-	public void setDivider(@Nullable Drawable divider) {
+	public void setDivider(@Nullable final Drawable divider) {
 		this.mDivider = divider;
 		this.resolveDividerDrawThickness();
 	}
@@ -232,7 +233,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param thickness
 	 * @see #getDividerThickness()
 	 */
-	public void setDividerThickness(@IntRange(from = 0) int thickness) {
+	public void setDividerThickness(@IntRange(from = 0) final int thickness) {
 		this.mDividerThickness = thickness;
 		this.mDividerDrawThickness = thickness;
 	}
@@ -270,7 +271,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	/**
 	 */
 	@Override
-	public void onDraw(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+	public void onDraw(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		if (shouldDecorate(parent)) {
 			switch (mOrientation) {
 				case HORIZONTAL:
@@ -290,7 +291,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param parent
 	 * @return
 	 */
-	private boolean shouldDecorate(RecyclerView parent) {
+	private boolean shouldDecorate(final RecyclerView parent) {
 		return parent.getLayoutManager() != null && mDivider != null && mDividerDrawThickness > 0;
 	}
 
@@ -302,7 +303,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param state
 	 */
 	@SuppressLint("NewApi")
-	protected void onDrawHorizontally(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+	protected void onDrawHorizontally(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		canvas.save();
 		final int top;
 		final int bottom;
@@ -338,7 +339,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param state
 	 */
 	@SuppressLint("NewApi")
-	protected void onDrawVertically(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+	protected void onDrawVertically(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		canvas.save();
 		final int left;
 		final int right;
@@ -369,15 +370,15 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	/**
 	 */
 	@Override
-	public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		if (shouldDecorate(parent)) {
 			switch (mOrientation) {
 				case HORIZONTAL:
-					outRect.set(0, 0, mDividerDrawThickness, 0);
+					rect.set(0, 0, mDividerDrawThickness, 0);
 					break;
 				case VERTICAL:
 				default:
-					outRect.set(0, 0, 0, mDividerDrawThickness);
+					rect.set(0, 0, 0, mDividerDrawThickness);
 					break;
 			}
 		}
