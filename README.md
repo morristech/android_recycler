@@ -18,6 +18,10 @@ Download the latest **[release](https://github.com/universum-studios/android_rec
 
     compile "universum.studios.android:recycler:${DESIRED_VERSION}@aar"
 
+## Modules ##
+
+This library may be also used via **separate modules**. For more information please see **[Modules](https://github.com/universum-studios/android_recycler/blob/master/MODULES.md)**.
+
 ## Compatibility ##
 
 Supported down to the **Android [API Level 14](http://developer.android.com/about/versions/android-4.0.html "See API highlights")**.

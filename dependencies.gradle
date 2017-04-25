@@ -3,9 +3,12 @@ def versions = [
         androidSupportVersion                : '25.3.0',
         androidSupportTestVersion            : '0.5',
         androidSupportTestEspressoVersion    : '2.2.2',
-        universumStudiosSamplesVersion       : '0.1.3',
+        universumStudiosSamplesVersion       : '0.1.4',
         universumStudiosFragmentsVersion     : '1.1.1',
         universumStudiosWidgetAdaptersVersion: '2.0.0-beta2',
+        universumStudiosLoggerVersion        : '1.0.0',
+        universumStudiosUIVersion            : '0.9.1',
+        universumStudiosFontVersion          : '1.0.0',
         butterknifeVersion                   : '8.5.1',
         junitVersion                         : '4.12',
         mockitoVersion                       : '2.7.20'
@@ -19,7 +22,8 @@ def androidSupport = [
         appCompatV7   : "com.android.support:appcompat-v7:${versions.androidSupportVersion}",
         vectorDrawable: "com.android.support:support-vector-drawable:${versions.androidSupportVersion}",
         recyclerView  : "com.android.support:recyclerview-v7:${versions.androidSupportVersion}",
-        design        : "com.android.support:design:${versions.androidSupportVersion}"
+        design        : "com.android.support:design:${versions.androidSupportVersion}",
+        cardView      : "com.android.support:cardview-v7:${versions.androidSupportVersion}"
 ]
 
 def annotationProcessor = [
@@ -41,7 +45,11 @@ def test = [
 def universumStudios = [
         samples       : "universum.studios.android:samples:${versions.universumStudiosSamplesVersion}@aar",
         fragments     : "universum.studios.android:fragments:${versions.universumStudiosFragmentsVersion}@aar",
-        widgetAdapters: "universum.studios.android:widget-adapters:${versions.universumStudiosWidgetAdaptersVersion}@aar"
+        widgetAdapters: "universum.studios.android:widget-adapters:${versions.universumStudiosWidgetAdaptersVersion}@aar",
+        logger        : "universum.studios.android:logger:${versions.universumStudiosLoggerVersion}@aar",
+        ui            : "universum.studios.android:ui:${versions.universumStudiosUIVersion}@aar",
+        fontCore      : "universum.studios.android:font-core:${versions.universumStudiosFontVersion}@aar",
+        fontUtil      : "universum.studios.android:font-util:${versions.universumStudiosFontVersion}@aar"
 ]
 
 def other = [

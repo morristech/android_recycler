@@ -93,7 +93,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @param callback
 	 */
-	public RecyclerViewItemHelper(@NonNull C callback) {
+	public RecyclerViewItemHelper(@NonNull final C callback) {
 		super(callback);
 		this.mCallback = callback;
 	}
@@ -107,7 +107,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @param enabled
 	 */
-	public void setEnabled(boolean enabled) {
+	public final void setEnabled(final boolean enabled) {
 		mCallback.setEnabled(enabled);
 	}
 
@@ -116,7 +116,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @return
 	 */
-	public boolean isEnabled() {
+	public final boolean isEnabled() {
 		return mCallback.isEnabled();
 	}
 
@@ -129,13 +129,13 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public static abstract class BaseCallback extends ItemTouchHelper.Callback {
+	protected static abstract class BaseCallback extends ItemTouchHelper.Callback {
 
 		/**
 		 * Boolean flag indicating whether this callback is enabled or not. If callback is disabled
 		 * it should not dispatch any callbacks to the parent helper.
 		 */
-		boolean enabled;
+		boolean enabled = true;
 
 		/**
 		 * todo:
@@ -143,7 +143,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		 * @param enabled
 		 * @see #isEnabled()
 		 */
-		protected void setEnabled(boolean enabled) {
+		protected final void setEnabled(final boolean enabled) {
 			this.enabled = enabled;
 		}
 
@@ -153,7 +153,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		 * @return
 		 * @see #setEnabled(boolean)
 		 */
-		protected boolean isEnabled() {
+		protected final boolean isEnabled() {
 			return enabled;
 		}
 	}

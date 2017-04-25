@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
@@ -103,21 +104,21 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/**
 	 * Same as {@link #ItemSpaceDecoration(Context, AttributeSet)} with {@code null} <var>attrs</var>.
 	 */
-	public ItemSpaceDecoration(@Nullable Context context) {
+	public ItemSpaceDecoration(@Nullable final Context context) {
 		this(context, null);
 	}
 
 	/**
 	 * Same as {@link #ItemSpaceDecoration(Context, AttributeSet, int)} with {@code 0} <var>defStyleAttr</var>.
 	 */
-	public ItemSpaceDecoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+	public ItemSpaceDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
 	/**
 	 * Same as {@link #ItemSpaceDecoration(Context, AttributeSet, int, int)} with {@code 0} <var>defStyleRes</var>.
 	 */
-	public ItemSpaceDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+	public ItemSpaceDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
 		this(context, attrs, defStyleAttr, 0);
 	}
 
@@ -130,7 +131,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
-	public ItemSpaceDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+	public ItemSpaceDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
@@ -157,7 +158,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/**
 	 * todo:
 	 */
-	public ItemSpaceDecoration(int horizontal, int vertical) {
+	public ItemSpaceDecoration(final int horizontal, final int vertical) {
 		this(horizontal, horizontal, vertical, vertical);
 	}
 
@@ -169,7 +170,8 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * @param verticalStart
 	 * @param verticalEnd
 	 */
-	public ItemSpaceDecoration(int horizontalStart, int horizontalEnd, int verticalStart, int verticalEnd) {
+	public ItemSpaceDecoration(final int horizontalStart, final int horizontalEnd, final int verticalStart, final int verticalEnd) {
+		super();
 		this.mHorizontalStart = horizontalStart;
 		this.mHorizontalEnd = horizontalEnd;
 		this.mVerticalStart = verticalStart;
@@ -179,6 +181,42 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/*
 	 * Methods =====================================================================================
 	 */
+
+	/**
+	 * todo:
+	 *
+	 * @param skip
+	 */
+	public void setSkipFirst(final boolean skip) {
+		this.mSkipFirst = skip;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	public boolean skipsFirst() {
+		return mSkipFirst;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @param skip
+	 */
+	public void setSkipLast(final boolean skip) {
+		this.mSkipLast = skip;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	public boolean skipsLast() {
+		return mSkipLast;
+	}
 
 	/**
 	 * todo:
@@ -219,19 +257,19 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/**
 	 */
 	@Override
-	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		if (mSkipFirst || mSkipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {
 				return;
 			}
 			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
-				outRect.set(0, 0, 0, 0);
+				rect.set(0, 0, 0, 0);
 			} else {
-				outRect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+				rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
 			}
 		} else {
-			outRect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+			rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
 		}
 	}
 
