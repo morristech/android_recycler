@@ -32,10 +32,17 @@ import android.view.View;
 import universum.studios.android.recycler.R;
 
 /**
- * A {@link RecyclerViewItemDecoration} implementation that may be used to add a space between items
- * presented in a {@link RecyclerView}.
+ * A {@link RecyclerViewItemDecoration} implementation that may be used to add a <b>space</b>,
+ * vertically and horizontally, between items displayed in a {@link RecyclerView}.
+ *
+ * <h3>Xml attributes</h3>
+ * {@link R.styleable#Recycler_ItemDecoration_Space ItemSpaceDecoration Attributes}
+ *
+ * <h3>Default style attribute</h3>
+ * {@code none}
  *
  * @author Martin Albedinsky
+ * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
  */
 public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 
@@ -59,16 +66,6 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/*
 	 * Members =====================================================================================
 	 */
-
-	/**
-	 * todo:
-	 */
-	private boolean mSkipFirst;
-
-	/**
-	 * todo:
-	 */
-	private boolean mSkipLast;
 
 	/**
 	 * Amount of space to apply at the start of an item in horizontal direction.
@@ -130,6 +127,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
+	 * @see #ItemSpaceDecoration(int, int, int, int)
 	 */
 	public ItemSpaceDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
@@ -137,11 +135,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
 			for (int i = 0; i < attributes.getIndexCount(); i++) {
 				final int index = attributes.getIndex(i);
-				if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemDecorationSkipFirst) {
-					this.mSkipFirst = attributes.getBoolean(index, false);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemDecorationSkipLast) {
-					this.mSkipLast = attributes.getBoolean(index, false);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
+				if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
 					this.mHorizontalStart = attributes.getDimensionPixelSize(index, 0);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
 					this.mHorizontalEnd = attributes.getDimensionPixelSize(index, 0);
@@ -149,6 +143,10 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 					this.mVerticalStart = attributes.getDimensionPixelSize(index, 0);
 				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
 					this.mVerticalEnd = attributes.getDimensionPixelSize(index, 0);
+				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
+					setSkipFirst(attributes.getBoolean(index, skipsFirst()));
+				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
+					setSkipLast(attributes.getBoolean(index, skipsLast()));
 				}
 			}
 			attributes.recycle();
@@ -156,19 +154,21 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * todo:
+	 * Same as {@link #ItemSpaceDecoration(int, int, int, int)} where the specified <var>horizontal</var>
+	 * amount will be used for both, horizontal start and horizontal end amounts, and the <var>vertical</var>
+	 * amount will be used similarly for both, vertical start and vertical end amounts.
 	 */
 	public ItemSpaceDecoration(final int horizontal, final int vertical) {
 		this(horizontal, horizontal, vertical, vertical);
 	}
 
 	/**
-	 * todo:
+	 * Creates a new instance of ItemSpaceDecoration with the specified spacing amounts.
 	 *
-	 * @param horizontalStart
-	 * @param horizontalEnd
-	 * @param verticalStart
-	 * @param verticalEnd
+	 * @param horizontalStart Amount to be applied at the start of an item in horizontal direction.
+	 * @param horizontalEnd   Amount to be applied at the end of an item in horizontal direction.
+	 * @param verticalStart   Amount to be applied at the start of an item in vertical direction.
+	 * @param verticalEnd     Amount to be applied at the end of an item in vertical direction.
 	 */
 	public ItemSpaceDecoration(final int horizontalStart, final int horizontalEnd, final int verticalStart, final int verticalEnd) {
 		super();
@@ -183,72 +183,40 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 
 	/**
-	 * todo:
+	 * Returns the amount of space that will be applied at the start of each item in horizontal direction.
 	 *
-	 * @param skip
-	 */
-	public void setSkipFirst(final boolean skip) {
-		this.mSkipFirst = skip;
-	}
-
-	/**
-	 * todo:
-	 *
-	 * @return
-	 */
-	public boolean skipsFirst() {
-		return mSkipFirst;
-	}
-
-	/**
-	 * todo:
-	 *
-	 * @param skip
-	 */
-	public void setSkipLast(final boolean skip) {
-		this.mSkipLast = skip;
-	}
-
-	/**
-	 * todo:
-	 *
-	 * @return
-	 */
-	public boolean skipsLast() {
-		return mSkipLast;
-	}
-
-	/**
-	 * todo:
-	 *
-	 * @return
+	 * @return Amount of space in pixels.
+	 * @see #getHorizontalEnd()
 	 */
 	public int getHorizontalStart() {
 		return mHorizontalStart;
 	}
 
 	/**
-	 * todo:
+	 * Returns the amount of space that will be applied at the end of each item in horizontal direction.
 	 *
-	 * @return
+	 * @return Amount of space in pixels.
+	 * @see #getHorizontalStart()
 	 */
 	public int getHorizontalEnd() {
 		return mHorizontalEnd;
 	}
 
 	/**
-	 * todo:
+	 * Returns the amount of space that will be applied at the start of each item in vertical direction.
 	 *
-	 * @return
+	 * @return Amount of space in pixels.
+	 * @see #getVerticalEnd()
 	 */
 	public int getVerticalStart() {
 		return mVerticalStart;
 	}
 
 	/**
-	 * todo:
+	 * Returns the amount of space that will be applied at the end of each item in vertical direction.
 	 *
-	 * @return
+	 * @return Amount of space in pixels.
+	 * @see #getVerticalStart()
 	 */
 	public int getVerticalEnd() {
 		return mVerticalEnd;

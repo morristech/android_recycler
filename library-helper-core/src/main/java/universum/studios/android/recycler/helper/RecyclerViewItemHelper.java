@@ -26,8 +26,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * A {@link ItemTouchHelper} implementation that should be used as base for all item helpers from
- * the Recycler library.
+ * An {@link ItemTouchHelper} implementation that is used as base class by all item helpers from the
+ * Recycler library and is also encouraged to be used as base class by custom helper implementations.
  *
  * @param <C> Type of the callback to be used by this helper.
  * @author Martin Albedinsky

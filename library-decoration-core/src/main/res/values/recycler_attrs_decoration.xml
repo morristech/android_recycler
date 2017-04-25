@@ -21,11 +21,11 @@
 -->
 <resources>
 
-	<!-- todo: -->
+	<!-- Base attributes for RecyclerView item decorations. -->
 	<declare-styleable name="Recycler.ItemDecoration">
-		<!-- todo: -->
+		<!-- Indicates whether the decoration should be skipped for the first item or not. -->
 		<attr name="recyclerItemDecorationSkipFirst" format="boolean"/>
-		<!-- todo: -->
+		<!-- Indicates whether the decoration should be skipped for the last item or not. -->
 		<attr name="recyclerItemDecorationSkipLast" format="boolean"/>
 	</declare-styleable>
 </resources>

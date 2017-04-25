@@ -21,19 +21,19 @@
 -->
 <resources>
 
-	<!-- todo: -->
+	<!-- Attributes for RecyclerView item space decoration. -->
 	<declare-styleable name="Recycler.ItemDecoration.Space">
-		<!-- Re-used. -->
-		<attr name="recyclerItemDecorationSkipFirst"/>
-		<!-- Re-used. -->
-		<attr name="recyclerItemDecorationSkipLast"/>
-		<!-- todo: -->
+		<!-- Amount of space to apply at the start of an item in horizontal direction. -->
 		<attr name="recyclerItemSpacingHorizontalStart" format="dimension"/>
-		<!-- todo: -->
+		<!-- Amount of space to apply at the end of an item in horizontal direction. -->
 		<attr name="recyclerItemSpacingHorizontalEnd" format="dimension"/>
-		<!-- todo: -->
+		<!-- Amount of space to apply at the start of an item in vertical direction. -->
 		<attr name="recyclerItemSpacingVerticalStart" format="dimension"/>
-		<!-- todo: -->
+		<!-- Amount of space to apply at the end of an item in vertical direction. -->
 		<attr name="recyclerItemSpacingVerticalEnd" format="dimension"/>
+		<!-- Indicates whether the space decoration should be skipped for the first item or not. -->
+		<attr name="recyclerItemSpacingSkipFirst" format="boolean"/>
+		<!-- Indicates whether the space decoration should be skipped for the last item or not. -->
+		<attr name="recyclerItemSpacingSkipLast" format="boolean"/>
 	</declare-styleable>
 </resources>
