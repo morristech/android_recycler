@@ -31,4 +31,27 @@
 	<!-- ### NAVIGATION ======================================================================== -->
 
 	<string name="navigation_item_home">Home</string>
+	<string name="navigation_header_decoration">Decoration</string>
+	<string name="navigation_item_decoration_divider">Divider Decoration</string>
+	<string name="navigation_item_decoration_space">Space Decoration</string>
+	<string name="navigation_header_helper">Helper</string>
+	<string name="navigation_item_helper_swipe">Swipe Helper</string>
+
+	<!-- ### MENU ============================================================================== -->
+
+	<string name="menu_refresh">Refresh</string>
+
+	<!-- ### RECYCLER ========================================================================== -->
+
+	<string name="recycler_empty">
+		There are no more items left.
+		\n\n
+		To start over, press the refresh button\nin the toolbar.
+	</string>
+	<string name="recycler_menu_layout">Layout</string>
+	<string name="recycler_menu_layout_linear">Linear</string>
+	<string name="recycler_menu_layout_grid">Grid</string>
+	<string name="recycler_menu_orientation">Orientation</string>
+	<string name="recycler_menu_orientation_vertical">Vertical</string>
+	<string name="recycler_menu_orientation_horizontal">Horizontal</string>
 </resources>

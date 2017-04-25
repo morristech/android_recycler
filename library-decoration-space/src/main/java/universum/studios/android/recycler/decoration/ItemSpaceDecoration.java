@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
@@ -183,6 +184,42 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/**
 	 * todo:
 	 *
+	 * @param skip
+	 */
+	public void setSkipFirst(boolean skip) {
+		this.mSkipFirst = skip;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	public boolean skipsFirst() {
+		return mSkipFirst;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @param skip
+	 */
+	public void setSkipLast(boolean skip) {
+		this.mSkipLast = skip;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	public boolean skipsLast() {
+		return mSkipLast;
+	}
+
+	/**
+	 * todo:
+	 *
 	 * @return
 	 */
 	public int getHorizontalStart() {
@@ -219,7 +256,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	/**
 	 */
 	@Override
-	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+	public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
 		if (mSkipFirst || mSkipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {

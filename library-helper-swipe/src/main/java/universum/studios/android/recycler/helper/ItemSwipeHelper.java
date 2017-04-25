@@ -56,7 +56,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public interface SwipeDataSet {
+	public interface SwipeableAdapter {
 
 		/**
 		 * todo:
@@ -72,7 +72,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public interface SwipeViewHolder {
+	public interface SwipeableViewHolder {
 
 		/**
 		 * todo:
@@ -214,10 +214,10 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	/**
 	 * todo:
 	 *
-	 * @param dataSet
+	 * @param adapter
 	 */
-	public void attachDataSet(@Nullable SwipeDataSet dataSet) {
-		mCallback.attachDataSet(dataSet);
+	public void attachAdapter(@Nullable SwipeableAdapter adapter) {
+		mCallback.attachAdapter(adapter);
 	}
 
 	/**
@@ -335,11 +335,11 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * @param callback
 	 */
 	public void restoreHolderForAdapter(@NonNull RecyclerView.ViewHolder viewHolder, @Direction int direction, @Nullable final RecyclerView.Adapter adapter, @Nullable final Runnable callback) {
-		if (viewHolder instanceof SwipeViewHolder) {
+		if (viewHolder instanceof SwipeableViewHolder) {
 			// Restore holder's swipe view and when restore animation finishes notify the adapter
 			// that item at the holder's position has changed so view for the item is again properly
 			// drawn by the parent RecyclerView.
-			final View swipeView = ((SwipeViewHolder) viewHolder).getSwipeView();
+			final View swipeView = ((SwipeableViewHolder) viewHolder).getSwipeView();
 			final ViewPropertyAnimator animator;
 			switch (direction) {
 				case START:
@@ -386,7 +386,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		/**
 		 * Data set with swipe items attached to this callback.
 		 */
-		private SwipeDataSet dataSet;
+		private SwipeableAdapter dataSet;
 
 		/**
 		 * Sets a parent helper for this callback.
@@ -402,7 +402,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 *
 		 * @param dataSet
 		 */
-		void attachDataSet(SwipeDataSet dataSet) {
+		void attachAdapter(SwipeableAdapter dataSet) {
 			this.dataSet = dataSet;
 		}
 
@@ -418,9 +418,9 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		@Override
 		public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
 			if (viewHolder != null) {
-				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-				getDefaultUIUtil().onSelected(swipeViewHolder.getSwipeView());
-				swipeViewHolder.onSwipeStarted();
+				final SwipeableViewHolder swipeableViewHolder = (SwipeableViewHolder) viewHolder;
+				getDefaultUIUtil().onSelected(swipeableViewHolder.getSwipeView());
+				swipeableViewHolder.onSwipeStarted();
 				helper.notifySwipeStarted(viewHolder);
 			}
 		}
@@ -437,26 +437,26 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-			getDefaultUIUtil().onDraw(c, recyclerView, swipeViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);
-			swipeViewHolder.onDraw(c, dX, dY, isCurrentlyActive);
+			final SwipeableViewHolder swipeableViewHolder = (SwipeableViewHolder) viewHolder;
+			getDefaultUIUtil().onDraw(c, recyclerView, swipeableViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);
+			swipeableViewHolder.onDraw(c, dX, dY, isCurrentlyActive);
 		}
 
 		/**
 		 */
 		@Override
 		public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-			getDefaultUIUtil().onDrawOver(c, recyclerView, swipeViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);
-			swipeViewHolder.onDrawOver(c, dX, dY, isCurrentlyActive);
+			final SwipeableViewHolder swipeableViewHolder = (SwipeableViewHolder) viewHolder;
+			getDefaultUIUtil().onDrawOver(c, recyclerView, swipeableViewHolder.getSwipeView(), dX, dY, actionState, isCurrentlyActive);
+			swipeableViewHolder.onDrawOver(c, dX, dY, isCurrentlyActive);
 		}
 
 		/**
 		 */
 		@Override
 		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-			swipeViewHolder.onSwipeFinished(direction);
+			final SwipeableViewHolder swipeableViewHolder = (SwipeableViewHolder) viewHolder;
+			swipeableViewHolder.onSwipeFinished(direction);
 			helper.notifySwipeFinished(viewHolder, direction);
 		}
 
@@ -464,9 +464,9 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-			final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-			getDefaultUIUtil().clearView(swipeViewHolder.getSwipeView());
-			swipeViewHolder.onSwipeCanceled();
+			final SwipeableViewHolder swipeableViewHolder = (SwipeableViewHolder) viewHolder;
+			getDefaultUIUtil().clearView(swipeableViewHolder.getSwipeView());
+			swipeableViewHolder.onSwipeCanceled();
 			helper.notifySwipeCanceled(viewHolder);
 		}
 	}

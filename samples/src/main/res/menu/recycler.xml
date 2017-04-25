@@ -21,47 +21,35 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<group android:checkableBehavior="single">
-
-		<item
-			android:id="@+id/navigation_item_home"
-			android:checked="true"
-			android:title="@string/navigation_item_home" />
-
-		<!--<item
-			android:id="@+id/navigation_header_decoration"
-			android:title="@string/navigation_header_decoration">
-
-			<menu>
-				<item
-					android:id="@+id/navigation_item_decoration_divider"
-					android:title="@string/navigation_item_decoration_divider" />
+	<item android:title="@string/recycler_menu_layout">
+		<menu>
+			<group android:checkableBehavior="single">
 
 				<item
-					android:id="@+id/navigation_item_decoration_space"
-					android:title="@string/navigation_item_decoration_space" />
-			</menu>
-		</item>-->
-		<item
-			android:id="@+id/navigation_item_decoration_divider"
-			android:title="@string/navigation_item_decoration_divider" />
+					android:id="@+id/menu_recycler_layout_linear"
+					android:checked="true"
+					android:title="@string/recycler_menu_layout_linear" />
 
-		<item
-			android:id="@+id/navigation_item_decoration_space"
-			android:title="@string/navigation_item_decoration_space" />
-
-		<!--<item
-			android:id="@+id/navigation_header_helper"
-			android:title="@string/navigation_header_helper">
-
-			<menu>
 				<item
-					android:id="@+id/navigation_item_helper_swipe"
-					android:title="@string/navigation_item_helper_swipe" />
-			</menu>
-		</item>-->
-		<item
-			android:id="@+id/navigation_item_helper_swipe"
-			android:title="@string/navigation_item_helper_swipe" />
-	</group>
+					android:id="@+id/menu_recycler_layout_grid"
+					android:title="@string/recycler_menu_layout_grid" />
+			</group>
+		</menu>
+	</item>
+
+	<item android:title="@string/recycler_menu_orientation">
+		<menu>
+			<group android:checkableBehavior="single">
+
+				<item
+					android:id="@+id/menu_recycler_orientation_vertical"
+					android:checked="true"
+					android:title="@string/recycler_menu_orientation_vertical" />
+
+				<item
+					android:id="@+id/menu_recycler_orientation_horizontal"
+					android:title="@string/recycler_menu_orientation_horizontal" />
+			</group>
+		</menu>
+	</item>
 </menu>
