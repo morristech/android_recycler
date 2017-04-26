@@ -21,9 +21,9 @@ import universum.studios.android.samples.recycler.ui.adapter.SampleViewHolder;
 /**
  * @author Martin Albedinsky
  */
-final class SwipeableItemsAdapter extends SampleAdapter implements ItemSwipeHelper.SwipeableAdapter {
+final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.SwipeAdapter {
 
-	SwipeableItemsAdapter(@NonNull Context context, @NonNull List<AdapterItem> items) {
+	SampleSwipeAdapter(@NonNull Context context, @NonNull List<AdapterItem> items) {
 		super(context, items);
 	}
 
@@ -37,7 +37,7 @@ final class SwipeableItemsAdapter extends SampleAdapter implements ItemSwipeHelp
 		return ItemSwipeHelper.makeSwipeFlags(ItemSwipeHelper.START | ItemSwipeHelper.END);
 	}
 
-	private static final class ItemHolder extends SampleViewHolder<ItemListSwipeableBinding> implements ItemSwipeHelper.SwipeableViewHolder {
+	private static final class ItemHolder extends SampleViewHolder<ItemListSwipeableBinding> implements ItemSwipeHelper.SwipeViewHolder {
 
 		private static final int ACTION_NONE = 0x00;
 		private static final int ACTION_DONE = 0x01;

@@ -29,10 +29,10 @@ import java.lang.annotation.RetentionPolicy;
  * An {@link ItemTouchHelper} implementation that is used as base class by all item helpers from the
  * Recycler library and is also encouraged to be used as base class by custom helper implementations.
  *
- * @param <C> Type of the callback to be used by this helper.
+ * @param <I> Type of the interactor used by this helper.
  * @author Martin Albedinsky
  */
-public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.BaseCallback> extends ItemTouchHelper {
+public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.ItemInteractor> extends ItemTouchHelper {
 
 	/*
 	 * Constants ===================================================================================
@@ -44,7 +44,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	// private static final String TAG = "RecyclerViewItemHelper";
 
 	/**
-	 * todo
+	 * Defines an annotation for determining supported directions by {@link ItemTouchHelper} API.
 	 */
 	@IntDef({
 			START, END,
@@ -56,7 +56,7 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	}
 
 	/**
-	 * todo
+	 * Defines an annotation for determining supported movement flags by {@link ItemTouchHelper} API.
 	 */
 	@IntDef(flag = true, value = {
 			START, END,
@@ -80,22 +80,23 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 */
 
 	/**
-	 * todo:
+	 * Interactor used by this item helper.
 	 */
-	final C mCallback;
+	final I mInteractor;
 
 	/*
 	 * Constructors ================================================================================
 	 */
 
 	/**
-	 * todo:
+	 * Creates a new instance of RecyclerViewItemHelper with the specified <var>interactor</var>.
 	 *
-	 * @param callback
+	 * @param interactor The interactor that will be used by the new helper to support is specific
+	 *                   feature.
 	 */
-	public RecyclerViewItemHelper(@NonNull final C callback) {
-		super(callback);
-		this.mCallback = callback;
+	protected RecyclerViewItemHelper(@NonNull final I interactor) {
+		super(interactor);
+		this.mInteractor = interactor;
 	}
 
 	/*
@@ -103,21 +104,29 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 */
 
 	/**
-	 * todo:
+	 * Sets a boolean flag indicating whether this helper should be enabled or not.
+	 * <p>
+	 * When a specific instance of helper is disabled it should not provide any functionality.
+	 * <p>
+	 * Default value: {@code true}
 	 *
-	 * @param enabled
+	 * @param enabled {@code True} to enable this helper, {@code false} otherwise.
+	 * @see #isEnabled()
+	 * @see ItemInteractor#setEnabled(boolean)
 	 */
 	public final void setEnabled(final boolean enabled) {
-		mCallback.setEnabled(enabled);
+		mInteractor.setEnabled(enabled);
 	}
 
 	/**
-	 * todo:
+	 * Returns boolean flag indicating whether this helper is enabled or not.
 	 *
-	 * @return
+	 * @return {@code True} if this helper instance is enabled, {@code false} otherwise.
+	 * @see #setEnabled(boolean)
+	 * @see ItemInteractor#isEnabled()
 	 */
 	public final boolean isEnabled() {
-		return mCallback.isEnabled();
+		return mInteractor.isEnabled();
 	}
 
 	/*
@@ -125,22 +134,23 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 	 */
 
 	/**
-	 * todo:
+	 * A {@link ItemTouchHelper.Callback} implementation which should be used as base class for
+	 * all interactors used by {@link RecyclerViewItemHelper} implementations.
 	 *
 	 * @author Martin Albedinsky
 	 */
-	protected static abstract class BaseCallback extends ItemTouchHelper.Callback {
+	protected static abstract class ItemInteractor extends ItemTouchHelper.Callback {
 
 		/**
-		 * Boolean flag indicating whether this callback is enabled or not. If callback is disabled
-		 * it should not dispatch any callbacks to the parent helper.
+		 * Boolean flag indicating whether this interactor is enabled or not. If interactor is
+		 * disabled it should not dispatch any events to the parent helper.
 		 */
 		boolean enabled = true;
 
 		/**
-		 * todo:
+		 * Sets a boolean flag indicating whether this interactor should be enabled or not.
 		 *
-		 * @param enabled
+		 * @param enabled {@code True} to enable this interactor, {@code false} otherwise.
 		 * @see #isEnabled()
 		 */
 		protected final void setEnabled(final boolean enabled) {
@@ -148,9 +158,10 @@ public abstract class RecyclerViewItemHelper<C extends RecyclerViewItemHelper.Ba
 		}
 
 		/**
-		 * todo:
+		 * Returns boolean flag indicating whether this interactor is enabled or not.
 		 *
-		 * @return
+		 * {@code True} if this interactor is enabled, {@code false} otherwise.
+		 *
 		 * @see #setEnabled(boolean)
 		 */
 		protected final boolean isEnabled() {

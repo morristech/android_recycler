@@ -40,7 +40,7 @@ import universum.studios.android.widget.adapter.holder.AdapterHolder;
 /**
  * @author Martin Albedinsky
  */
-public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAdapter>
+public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapter>
 		implements
 		ItemSwipeHelper.OnSwipeListener {
 
@@ -57,8 +57,8 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAd
 
 	@NonNull
 	@Override
-	protected SwipeableItemsAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
-		final SwipeableItemsAdapter adapter = new SwipeableItemsAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
+	protected SampleSwipeAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
+		final SampleSwipeAdapter adapter = new SampleSwipeAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
 		return adapter;
 	}
