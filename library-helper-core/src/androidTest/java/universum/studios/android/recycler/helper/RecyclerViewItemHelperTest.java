@@ -16,9 +16,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.recycler;
+package universum.studios.android.recycler.helper;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import universum.studios.android.test.BaseInstrumentedTest;
 
 /**
  * @author Martin Albedinsky
  */
-@SuppressWarnings("unused") final class HelperSwipeTests {}
+@RunWith(AndroidJUnit4.class)
+public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
+    
+	@SuppressWarnings("unused")
+	private static final String TAG = "RecyclerViewItemHelperTest";
+
+    @Test
+	public void test() {
+		// todo:: implement test
+	}
+}

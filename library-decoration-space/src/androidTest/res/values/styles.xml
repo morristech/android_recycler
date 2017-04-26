@@ -21,22 +21,27 @@
 -->
 <resources>
 
-	<!-- Attributes for RecyclerView item divider decoration. -->
-	<declare-styleable name="Recycler.ItemDecoration.Divider">
-		<!-- Orientation in which should be the divider between items drawn. -->
-		<attr name="recyclerDividerOrientation">
-			<!-- Draw divider between items horizontally. -->
-			<enum name="horizontal" value="0x00"/>
-			<!-- Draw divider between items vertically. -->
-			<enum name="vertical" value="0x01"/>
-		</attr>
-		<!-- Drawable used to draw divider between items. -->
-		<attr name="recyclerDivider" format="reference|color"/>
-		<!-- Thickness in which should be the divider drawable drawn. -->
-		<attr name="recyclerDividerThickness" format="dimension"/>
-		<!-- Indicates whether the divider decoration should be skipped for the first item or not. -->
-		<attr name="recyclerDividerSkipFirst" format="boolean"/>
-		<!-- Indicates whether the divider decoration should be skipped for the last item or not. -->
-		<attr name="recyclerDividerSkipLast" format="boolean"/>
-	</declare-styleable>>
+	<style name="Test.ItemDecoration.Space" parent="">
+		<item name="recyclerItemSpacingHorizontalStart">8px</item>
+		<item name="recyclerItemSpacingHorizontalEnd">16px</item>
+		<item name="recyclerItemSpacingVerticalStart">4px</item>
+		<item name="recyclerItemSpacingVerticalEnd">2px</item>
+		<item name="recyclerItemSpacingSkipFirst">true</item>
+		<item name="recyclerItemSpacingSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Space.SkipNone" parent="">
+		<item name="recyclerItemSpacingSkipFirst">false</item>
+		<item name="recyclerItemSpacingSkipLast">false</item>
+	</style>
+	<style name="Test.ItemDecoration.Space.SkipFirst" parent="">
+		<item name="recyclerItemSpacingSkipFirst">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Space.SkipLast" parent="">
+		<item name="recyclerItemSpacingSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Space.SkipBoth" parent="">
+		<item name="recyclerItemSpacingSkipFirst">true</item>
+		<item name="recyclerItemSpacingSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Space.Empty" parent=""/>
 </resources>

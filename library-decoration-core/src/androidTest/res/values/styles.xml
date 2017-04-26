@@ -21,22 +21,18 @@
 -->
 <resources>
 
-	<!-- Attributes for RecyclerView item divider decoration. -->
-	<declare-styleable name="Recycler.ItemDecoration.Divider">
-		<!-- Orientation in which should be the divider between items drawn. -->
-		<attr name="recyclerDividerOrientation">
-			<!-- Draw divider between items horizontally. -->
-			<enum name="horizontal" value="0x00"/>
-			<!-- Draw divider between items vertically. -->
-			<enum name="vertical" value="0x01"/>
-		</attr>
-		<!-- Drawable used to draw divider between items. -->
-		<attr name="recyclerDivider" format="reference|color"/>
-		<!-- Thickness in which should be the divider drawable drawn. -->
-		<attr name="recyclerDividerThickness" format="dimension"/>
-		<!-- Indicates whether the divider decoration should be skipped for the first item or not. -->
-		<attr name="recyclerDividerSkipFirst" format="boolean"/>
-		<!-- Indicates whether the divider decoration should be skipped for the last item or not. -->
-		<attr name="recyclerDividerSkipLast" format="boolean"/>
-	</declare-styleable>>
+	<style name="Test.ItemDecoration.SkipNone" parent="">
+		<item name="recyclerItemDecorationSkipFirst">false</item>
+		<item name="recyclerItemDecorationSkipLast">false</item>
+	</style>
+	<style name="Test.ItemDecoration.SkipFirst" parent="">
+		<item name="recyclerItemDecorationSkipFirst">true</item>
+	</style>
+	<style name="Test.ItemDecoration.SkipLast" parent="">
+		<item name="recyclerItemDecorationSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.SkipBoth" parent="">
+		<item name="recyclerItemDecorationSkipFirst">true</item>
+		<item name="recyclerItemDecorationSkipLast">true</item>
+	</style>
 </resources>

@@ -70,6 +70,15 @@ android {
                 '../library-helper-core/src/androidTest/java',
                 '../library-helper-swipe/src/androidTest/java'
         ]
+        androidTest.res.srcDirs = [
+                '../library/src/androidTest/res',
+                '../library-core/src/androidTest/res',
+                '../library-decoration-core/src/androidTest/res',
+                '../library-decoration-divider/src/androidTest/res',
+                '../library-decoration-space/src/androidTest/res',
+                '../library-helper-core/src/androidTest/res',
+                '../library-helper-swipe/src/androidTest/res'
+        ]
     }
 
     compileOptions {

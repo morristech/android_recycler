@@ -21,22 +21,25 @@
 -->
 <resources>
 
-	<!-- Attributes for RecyclerView item divider decoration. -->
-	<declare-styleable name="Recycler.ItemDecoration.Divider">
-		<!-- Orientation in which should be the divider between items drawn. -->
-		<attr name="recyclerDividerOrientation">
-			<!-- Draw divider between items horizontally. -->
-			<enum name="horizontal" value="0x00"/>
-			<!-- Draw divider between items vertically. -->
-			<enum name="vertical" value="0x01"/>
-		</attr>
-		<!-- Drawable used to draw divider between items. -->
-		<attr name="recyclerDivider" format="reference|color"/>
-		<!-- Thickness in which should be the divider drawable drawn. -->
-		<attr name="recyclerDividerThickness" format="dimension"/>
-		<!-- Indicates whether the divider decoration should be skipped for the first item or not. -->
-		<attr name="recyclerDividerSkipFirst" format="boolean"/>
-		<!-- Indicates whether the divider decoration should be skipped for the last item or not. -->
-		<attr name="recyclerDividerSkipLast" format="boolean"/>
-	</declare-styleable>>
+	<style name="Test.ItemDecoration.Divider" parent="">
+		<item name="recyclerDividerOrientation">horizontal</item>
+		<item name="recyclerDivider">@android:color/darker_gray</item>
+		<item name="recyclerDividerThickness">2px</item>
+		<item name="recyclerDividerSkipFirst">true</item>
+		<item name="recyclerDividerSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Divider.SkipNone" parent="">
+		<item name="recyclerDividerSkipFirst">false</item>
+		<item name="recyclerDividerSkipLast">false</item>
+	</style>
+	<style name="Test.ItemDecoration.Divider.SkipFirst" parent="">
+		<item name="recyclerDividerSkipFirst">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Divider.SkipLast" parent="">
+		<item name="recyclerDividerSkipLast">true</item>
+	</style>
+	<style name="Test.ItemDecoration.Divider.SkipBoth" parent="">
+		<item name="recyclerDividerSkipFirst">true</item>
+		<item name="recyclerDividerSkipLast">true</item>
+	</style>
 </resources>

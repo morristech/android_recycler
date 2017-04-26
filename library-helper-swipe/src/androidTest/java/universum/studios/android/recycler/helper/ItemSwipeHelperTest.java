@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.recycler; 
+package universum.studios.android.recycler.helper;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;

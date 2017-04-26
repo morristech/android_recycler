@@ -99,6 +99,31 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
+	 * Same as {@link #ItemSpaceDecoration(int, int, int, int)} where the specified <var>horizontal</var>
+	 * amount will be used for both, horizontal start and horizontal end amounts, and the <var>vertical</var>
+	 * amount will be used similarly for both, vertical start and vertical end amounts.
+	 */
+	public ItemSpaceDecoration(final int horizontal, final int vertical) {
+		this(horizontal, horizontal, vertical, vertical);
+	}
+
+	/**
+	 * Creates a new instance of ItemSpaceDecoration with the specified spacing amounts.
+	 *
+	 * @param horizontalStart Amount to be applied at the start of an item in horizontal direction.
+	 * @param horizontalEnd   Amount to be applied at the end of an item in horizontal direction.
+	 * @param verticalStart   Amount to be applied at the start of an item in vertical direction.
+	 * @param verticalEnd     Amount to be applied at the end of an item in vertical direction.
+	 */
+	public ItemSpaceDecoration(final int horizontalStart, final int horizontalEnd, final int verticalStart, final int verticalEnd) {
+		super();
+		this.mHorizontalStart = horizontalStart;
+		this.mHorizontalEnd = horizontalEnd;
+		this.mVerticalStart = verticalStart;
+		this.mVerticalEnd = verticalEnd;
+	}
+
+	/**
 	 * Same as {@link #ItemSpaceDecoration(Context, AttributeSet)} with {@code null} <var>attrs</var>.
 	 */
 	public ItemSpaceDecoration(@Nullable final Context context) {
@@ -151,31 +176,6 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 			}
 			attributes.recycle();
 		}
-	}
-
-	/**
-	 * Same as {@link #ItemSpaceDecoration(int, int, int, int)} where the specified <var>horizontal</var>
-	 * amount will be used for both, horizontal start and horizontal end amounts, and the <var>vertical</var>
-	 * amount will be used similarly for both, vertical start and vertical end amounts.
-	 */
-	public ItemSpaceDecoration(final int horizontal, final int vertical) {
-		this(horizontal, horizontal, vertical, vertical);
-	}
-
-	/**
-	 * Creates a new instance of ItemSpaceDecoration with the specified spacing amounts.
-	 *
-	 * @param horizontalStart Amount to be applied at the start of an item in horizontal direction.
-	 * @param horizontalEnd   Amount to be applied at the end of an item in horizontal direction.
-	 * @param verticalStart   Amount to be applied at the start of an item in vertical direction.
-	 * @param verticalEnd     Amount to be applied at the end of an item in vertical direction.
-	 */
-	public ItemSpaceDecoration(final int horizontalStart, final int horizontalEnd, final int verticalStart, final int verticalEnd) {
-		super();
-		this.mHorizontalStart = horizontalStart;
-		this.mHorizontalEnd = horizontalEnd;
-		this.mVerticalStart = verticalStart;
-		this.mVerticalEnd = verticalEnd;
 	}
 
 	/*
@@ -234,11 +234,20 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
 				rect.set(0, 0, 0, 0);
 			} else {
-				rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+				this.updateRectWithOffsets(rect);
 			}
 		} else {
-			rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+			this.updateRectWithOffsets(rect);
 		}
+	}
+
+	/**
+	 * Updates the given <var>rect</var> with the current spacing amounts specified for this decoration.
+	 *
+	 * @param rect The rect to be updated.
+	 */
+	private void updateRectWithOffsets(final Rect rect) {
+		rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
 	}
 
 	/*

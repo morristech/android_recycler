@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.recycler;
+package universum.studios.android.recycler.decoration;
 
 /**
  * @author Martin Albedinsky
  */
-@SuppressWarnings("unused") final class DecorationDividerTests {}
+@SuppressWarnings("unused") final class DecorationSpaceTests {}

@@ -21,6 +21,7 @@ package universum.studios.android.recycler.helper;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -492,7 +493,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 *
 		 * @param viewHolder The view holder for which the swipe has started.
 		 */
-		private void notifySwipeStarted(final RecyclerView.ViewHolder viewHolder) {
+		@VisibleForTesting void notifySwipeStarted(final RecyclerView.ViewHolder viewHolder) {
 			if (swipeListeners != null && !swipeListeners.isEmpty()) {
 				for (final OnSwipeListener listener : swipeListeners) {
 					listener.onSwipeStarted(helper, viewHolder);
@@ -507,7 +508,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 * @param viewHolder The view holder for which the swipe has finished.
 		 * @param direction  Direction in which the holder has been swiped.
 		 */
-		private void notifySwipeFinished(final RecyclerView.ViewHolder viewHolder, final int direction) {
+		@VisibleForTesting void notifySwipeFinished(final RecyclerView.ViewHolder viewHolder, final int direction) {
 			if (swipeListeners != null && !swipeListeners.isEmpty()) {
 				for (final OnSwipeListener listener : swipeListeners) {
 					listener.onSwipeFinished(helper, viewHolder, direction);
@@ -521,7 +522,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 *
 		 * @param viewHolder The view holder for which the swipe has canceled.
 		 */
-		private void notifySwipeCanceled(final RecyclerView.ViewHolder viewHolder) {
+		@VisibleForTesting void notifySwipeCanceled(final RecyclerView.ViewHolder viewHolder) {
 			if (swipeListeners != null && !swipeListeners.isEmpty()) {
 				for (final OnSwipeListener listener : swipeListeners) {
 					listener.onSwipeCanceled(helper, viewHolder);

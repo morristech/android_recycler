@@ -21,6 +21,7 @@ package universum.studios.android.recycler.decoration;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
@@ -189,6 +190,23 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 	public boolean skipsLast() {
 		return mSkipLast;
+	}
+
+	/**
+	 * Checks whether any subsequent decoration algorithm should be applied by this decoration for
+	 * the given <var>parent</var> RecyclerView and its current <var>state</var>.
+	 * <p>
+	 * This implementation checks whether the given RecyclerView has its {@link RecyclerView.LayoutManager}
+	 * specified by {@code RecyclerView.getLayoutManager() != null} and if there are any items to be
+	 * decorated by {@code RecyclerView.State.getItemCount() > 0}. If both conditions are met, this
+	 * method returns {@code true}, if not, {@code false} is returned.
+	 *
+	 * @param parent The RecyclerView into which is this decoration added.
+	 * @param state  Current state of the parent RecyclerView.
+	 * @return {@code True} if decorating should be performed, {@code false} otherwise.
+	 */
+	protected boolean shouldDecorate(@NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+		return parent.getLayoutManager() != null && state.getItemCount() > 0;
 	}
 
 	/*
