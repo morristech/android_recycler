@@ -71,7 +71,7 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 		super.onViewCreated(view, savedInstanceState);
 		this.collectionView.setItemAnimator(new ItemSwipeHelper.SwipeItemAnimator());
 		this.mSwipeHelper = new ItemSwipeHelper();
-		this.mSwipeHelper.addOnSwipeListener(this);
+		this.mSwipeHelper.getInteractor().addOnSwipeListener(this);
 		this.mSwipeHelper.attachToRecyclerView(collectionView);
 	}
 
@@ -94,7 +94,7 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 		switch (item.getItemId()) {
 			case R.id.menu_enabled:
 				item.setChecked(!item.isChecked());
-				mSwipeHelper.setEnabled(item.isChecked());
+				mSwipeHelper.getInteractor().setEnabled(item.isChecked());
 				return true;
 			case R.id.menu_refresh:
 				adapter.changeItems(AdapterItems.createSampleList(getResources()));

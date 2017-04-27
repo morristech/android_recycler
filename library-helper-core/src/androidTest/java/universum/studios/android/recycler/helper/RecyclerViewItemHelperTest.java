@@ -58,29 +58,23 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 	public final UiThreadTestRule UI_RULE = new UiThreadTestRule();
 
 	private Interactor mMockInteractor;
-	private RecyclerViewItemHelper<Interactor> mHelper;
-	private RecyclerViewItemHelper.ItemInteractor mInteractor;
 
 	@Override
 	public void beforeTest() throws Exception {
 		super.beforeTest();
 		this.mMockInteractor = mock(Interactor.class);
-		this.mHelper = new Helper(mMockInteractor);
-		this.mInteractor = new Interactor();
 	}
 
 	@Override
 	public void afterTest() throws Exception {
 		super.afterTest();
 		this.mMockInteractor = null;
-		this.mHelper = null;
-		this.mInteractor = null;
 	}
 
 	@Test
 	public void testInstantiation() {
 		final Helper helper = new Helper(mMockInteractor);
-		assertThat(helper.mInteractor, is(not(nullValue())));
+		assertThat(helper.getInteractor(), is(not(nullValue())));
 		verify(mMockInteractor, times(1)).onAttachedToHelper(helper);
 	}
 
@@ -90,9 +84,9 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 		final RecyclerView recyclerView = new RecyclerView(mContext);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
-		when(mMockInteractor.canAttachToAdapter(mockAdapter)).thenReturn(true);
-		mHelper.attachToRecyclerView(recyclerView);
-		verify(mMockInteractor, times(1)).canAttachToAdapter(mockAdapter);
+		when(mMockInteractor.canAttachAdapter(mockAdapter)).thenReturn(true);
+		new Helper(mMockInteractor).attachToRecyclerView(recyclerView);
+		verify(mMockInteractor, times(1)).canAttachAdapter(mockAdapter);
 		verify(mMockInteractor, times(1)).onAdapterAttached(mockAdapter);
 		verify(mMockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
@@ -103,46 +97,26 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 		final RecyclerView recyclerView = new RecyclerView(mContext);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
-		when(mMockInteractor.canAttachToAdapter(mockAdapter)).thenReturn(false);
-		mHelper.attachToRecyclerView(recyclerView);
+		when(mMockInteractor.canAttachAdapter(mockAdapter)).thenReturn(false);
+		new Helper(mMockInteractor).attachToRecyclerView(recyclerView);
 	}
 
 	@Test
 	@UiThreadTest
 	public void testAttachToRecyclerViewWithoutAdapter() {
 		final RecyclerView recyclerView = new RecyclerView(mContext);
-		mHelper.attachToRecyclerView(recyclerView);
-		verify(mMockInteractor, times(0)).canAttachToAdapter(any(RecyclerView.Adapter.class));
+		new Helper(mMockInteractor).attachToRecyclerView(recyclerView);
+		verify(mMockInteractor, times(0)).canAttachAdapter(any(RecyclerView.Adapter.class));
 		verify(mMockInteractor, times(0)).onAdapterAttached(any(RecyclerView.Adapter.class));
 		verify(mMockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
 
 	@Test
 	public void testAttachToNullRecyclerView() {
-		mHelper.attachToRecyclerView(null);
-		verify(mMockInteractor, times(0)).canAttachToAdapter(any(RecyclerView.Adapter.class));
+		new Helper(mMockInteractor).attachToRecyclerView(null);
+		verify(mMockInteractor, times(0)).canAttachAdapter(any(RecyclerView.Adapter.class));
 		verify(mMockInteractor, times(0)).onAdapterAttached(any(RecyclerView.Adapter.class));
 		verify(mMockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
-	}
-
-	@Test
-	public void testSetEnabled() {
-		mHelper.setEnabled(true);
-		verify(mMockInteractor, times(1)).setEnabled(true);
-		mHelper.setEnabled(false);
-		verify(mMockInteractor, times(1)).setEnabled(false);
-	}
-
-	@Test
-	public void testIsEnabled() {
-		mHelper.isEnabled();
-		verify(mMockInteractor, times(1)).isEnabled();
-	}
-
-	@Test
-	public void testIsActive() {
-		mHelper.isActive();
-		verify(mMockInteractor, times(1)).isActive();
 	}
 
 	@Test
@@ -194,38 +168,39 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 	@Test
 	public void testInteractorOnAttachedToHelper() {
 		// Only test that invocation of this method does not cause any troubles.
-		mInteractor.onAttachedToHelper(mock(Helper.class));
+		new Interactor().onAttachedToHelper(mock(Helper.class));
 	}
 
 	@Test
 	public void testInteractorOnAdapterAttached() {
 		// Only test that invocation of this method does not cause any troubles.
-		mInteractor.onAdapterAttached(mock(RecyclerView.Adapter.class));
+		new Interactor().onAdapterAttached(mock(RecyclerView.Adapter.class));
 	}
 
 	@Test
 	public void testInteractorOnAdapterDetached() {
 		// Only test that invocation of this method does not cause any troubles.
-		mInteractor.onAdapterDetached(mock(RecyclerView.Adapter.class));
+		new Interactor().onAdapterDetached(mock(RecyclerView.Adapter.class));
 	}
 
 	@Test
 	public void testInteractorSetIsEnabled() {
-		mInteractor.setEnabled(false);
-		assertThat(mInteractor.isEnabled(), is(false));
-		mInteractor.setEnabled(true);
-		assertThat(mInteractor.isEnabled(), is(true));
+		final Interactor interactor = new Interactor();
+		interactor.setEnabled(false);
+		assertThat(interactor.isEnabled(), is(false));
+		interactor.setEnabled(true);
+		assertThat(interactor.isEnabled(), is(true));
 	}
 
 	@Test
 	public void testInteractorIsEnabledDefault() {
-		assertThat(mInteractor.isEnabled(), is(true));
+		assertThat(new Interactor().isEnabled(), is(true));
 	}
 
 	@Test
 	@UiThreadTest
 	public void testInteractorOnChildDraw() throws Exception {
-		final Holder mockHolder = createMockHolderWithItemView(new View(mContext));
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(mContext);
@@ -260,7 +235,7 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 
 	@Test
 	public void testInteractorOnChildDrawWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
-		final Holder mockHolder = createMockHolderWithItemView(new View(mContext));
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(mContext);
@@ -279,7 +254,7 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 
 	@Test
 	public void testInteractorOnChildDrawOver() throws Exception {
-		final Holder mockHolder = createMockHolderWithItemView(new View(mContext));
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(mContext);
@@ -314,7 +289,7 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 
 	@Test
 	public void testInteractorOnChildDrawOverWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
-		final Holder mockHolder = createMockHolderWithItemView(new View(mContext));
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(mContext);
@@ -331,11 +306,11 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 		verify(mockHolder, times(1)).onDrawOver(canvas, 0, 0, Helper.ACTION_STATE_DRAG, true);
 	}
 
-	private static Holder createMockHolderWithItemView(View view) throws Exception {
+	private static Holder createMockHolder(View itemView) throws Exception {
 		final Holder mockHolder = mock(Holder.class);
 		final Field itemViewField = Holder.class.getField("itemView");
 		itemViewField.setAccessible(true);
-		itemViewField.set(mockHolder, view);
+		itemViewField.set(mockHolder, itemView);
 		return mockHolder;
 	}
 
@@ -349,7 +324,7 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 	private static class Interactor extends RecyclerViewItemHelper.ItemInteractor {
 
 		@Override
-		protected boolean canAttachToAdapter(@NonNull RecyclerView.Adapter adapter) {
+		protected boolean canAttachAdapter(@NonNull RecyclerView.Adapter adapter) {
 			return false;
 		}
 
@@ -368,7 +343,7 @@ public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
 		}
 
 		@Override
-		protected boolean isActive() {
+		public boolean isActive() {
 			return false;
 		}
 	}

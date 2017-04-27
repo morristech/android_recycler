@@ -42,14 +42,15 @@ import java.util.List;
  * whenever appropriate via the adapter's interface.
  *
  * <h3>Drag Callbacks</h3>
- * A {@link OnDragListener} may be registered via {@link #addOnDragListener(OnDragListener)} in
- * order to receive callbacks about <b>started</b>, <b>finished</b> or <b>canceled</b> drag gesture
- * for a particular {@link RecyclerView.ViewHolder ViewHolder}. If the listener is no more needed it
- * should be unregistered via {@link #removeOnDragListener(OnDragListener)}.
+ * A {@link OnDragListener} may be registered for the helper's {@link ItemDragHelper.Interactor} via
+ * {@link ItemDragHelper.Interactor#addOnDragListener(OnDragListener)} in order to receive callbacks
+ * about <b>started</b>, <b>finished</b> or <b>canceled</b> drag gesture for a particular
+ * {@link RecyclerView.ViewHolder ViewHolder}. If the listener is no more needed it should be
+ * unregistered via {@link ItemDragHelper.Interactor#removeOnDragListener(OnDragListener)}.
  *
  * @author Martin Albedinsky
  */
-public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.DragInteractor> {
+public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.Interactor> {
 
     /*
 	 * Constants ===================================================================================
@@ -229,7 +230,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * Creates a new instance of ItemDragHelper.
 	 */
 	public ItemDragHelper() {
-		this(new DragInteractor());
+		this(new Interactor());
 	}
 
 	/**
@@ -237,7 +238,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 *
 	 * @param interactor The interactor that will receive and handle drag gesture related events.
 	 */
-	private ItemDragHelper(@NonNull DragInteractor interactor) {
+	private ItemDragHelper(@NonNull Interactor interactor) {
 		super(interactor);
 	}
 	 
@@ -254,72 +255,9 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * @see ItemDragHelper.Callback#makeMovementFlags(int, int)
 	 */
 	public static int makeDragFlags(@Movement final int movementFlags) {
-		return DragInteractor.makeMovementFlags(movementFlags, 0);
+		return Interactor.makeMovementFlags(movementFlags, 0);
 	}
 
-	/**
-	 * Sets a fraction that the user should move the holder's {@link android.view.View View} to be
-	 * considered as it is dragged.
-	 * <p>
-	 * Default value: {@link #MOVE_THRESHOLD}
-	 *
-	 * @param threshold The desired threshold from the range {@code [0.0, 1.0]}.
-	 * @see #getDragThreshold()
-	 * @see ItemDragHelper.Callback#getMoveThreshold(RecyclerView.ViewHolder)
-	 */
-	public void setDragThreshold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
-		this.mInteractor.dragThreshold = threshold;
-	}
-
-	/**
-	 * Returns the fraction that the user should move the holder's {@link android.view.View View} to
-	 * be considered as it is dragged.
-	 *
-	 * @return The drag threshold from the range {@code [0.0, 1.0]}.
-	 * @see #setDragThreshold(float)
-	 */
-	@FloatRange(from = 0.0f, to = 1.0f)
-	public float getDragThreshold() {
-		return mInteractor.dragThreshold;
-	}
-
-	/**
-	 * Registers a callback to be invoked whenever drag gesture is <b>started</b>, <b>finished</b>
-	 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
-	 *
-	 * @param listener The desired listener callback to add.
-	 * @see #removeOnDragListener(OnDragListener)
-	 */
-	public void addOnDragListener(@NonNull final OnDragListener listener) {
-		mInteractor.addListener(listener);
-	}
-
-	/**
-	 * Removes the given swipe <var>listener</var> from the registered listeners.
-	 *
-	 * @param listener The desired listener to remove.
-	 * @see #addOnDragListener(OnDragListener)
-	 */
-	public void removeOnDragListener(@NonNull final OnDragListener listener) {
-		mInteractor.removeListener(listener);
-	}
-
-	/**
-	 * Starts tracking of the drag gesture if it is not active at this time.
-	 * <p>
-	 * This method should be called whenever a drag handle associated with a specific {@link RecyclerView.ViewHolder}
-	 * has been selected by the user in order to initiate drag for the view of that holder.
-	 * <p>
-	 * The gesture tracking will be stopped automatically whenever the user releases the dragged
-	 * view so this method need to be called for each new "drag session".
-	 *
-	 * @return {@code True} if drag gesture tracking has been started, {@code false} otherwise.
-	 * @see #isActive()
-	 */
-	public boolean startDragTracking() {
-		return mInteractor.startTracking();
-	}
-	 
 	/*
 	 * Inner classes ===============================================================================
 	 */
@@ -329,14 +267,22 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * related callbacks and to delegate drag events to the view holder that is being dragged and
 	 * also to it parent adapter in order to properly move dragged items in the adapter's data set.
 	 */
-	static final class DragInteractor extends RecyclerViewItemHelper.ItemInteractor {
+	public static final class Interactor extends RecyclerViewItemHelper.ItemInteractor {
 
 		/**
 		 * Fraction that the user should move the View to be considered as it is dragged.
 		 *
 		 * @see #getMoveThreshold(RecyclerView.ViewHolder)
 		 */
-		float dragThreshold = MOVE_THRESHOLD;
+		private float dragThreshold = MOVE_THRESHOLD;
+
+		/**
+		 * Boolean flag indicating whether drag should be started whenever an item view is long
+		 * pressed or not.
+		 *
+		 * @see #setLongPressDragEnabled(boolean)
+		 */
+		private boolean longPressDragEnabled = true;
 
 		/**
 		 * Adapter providing draggable item views attached to this interactor.
@@ -348,19 +294,10 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		/**
 		 * List containing all registered {@link OnDragListener}.
 		 *
-		 * @see #addListener(OnDragListener)
-		 * @see #removeListener(OnDragListener)
+		 * @see #addOnDragListener(OnDragListener)
+		 * @see #removeOnDragListener(OnDragListener)
 		 */
 		private List<OnDragListener> listeners;
-
-		/**
-		 * Boolean flag indicating whether tracking of the drag gesture is active or not.
-		 * If active, {@link #getMovementFlags(RecyclerView, RecyclerView.ViewHolder)} is delegated
-		 * to the attached adapter.
-		 *
-		 * @see #startDragTracking()
-		 */
-		private boolean tracking;
 
 		/**
 		 * Boolean flag indicating whether the drag gesture is active at this time or not.
@@ -395,9 +332,132 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		private int movingToPosition;
 
 		/**
+		 * Creates a new instance of drag gesture Interactor.
+		 */
+		Interactor() {
+			super();
+		}
+
+		/**
+		 * Sets a boolean flag indicating whether the drag should be started whenever an item view
+		 * is long pressed or not.
+		 * <p>
+		 * If disabled, a drag for a particular view holder needs to be started via
+		 * {@link ItemDragHelper#startDrag(RecyclerView.ViewHolder)} manually.
+		 * <p>
+		 * Default value: {@code true}
+		 *
+		 * @param enabled {@code True} to enable automatic drag on long press, {@code false} to
+		 *                disable it.
+		 * @see #isLongPressDragEnabled()
+		 */
+		public void setLongPressDragEnabled(boolean enabled) {
+			this.longPressDragEnabled = enabled;
+		}
+
+		/**
 		 */
 		@Override
-		protected boolean canAttachToAdapter(@NonNull final RecyclerView.Adapter adapter) {
+		public boolean isLongPressDragEnabled() {
+			return longPressDragEnabled;
+		}
+
+		/**
+		 * Sets a fraction that the user should move the holder's {@link android.view.View View} to
+		 * be considered as it is dragged.
+		 * <p>
+		 * Default value: {@link #MOVE_THRESHOLD}
+		 *
+		 * @param threshold The desired threshold from the range {@code [0.0, 1.0]}.
+		 * @see #getDragThreshold()
+		 * @see Interactor#getMoveThreshold(RecyclerView.ViewHolder)
+		 */
+		public void setDragThreshold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
+			this.dragThreshold = Math.max(Math.min(1.0f, threshold), 0.0f);
+		}
+
+		/**
+		 * Returns the fraction that the user should move the holder's {@link android.view.View View}
+		 * to be considered as it is dragged.
+		 *
+		 * @return The drag threshold from the range {@code [0.0, 1.0]}.
+		 * @see #setDragThreshold(float)
+		 */
+		@FloatRange(from = 0.0f, to = 1.0f)
+		public float getDragThreshold() {
+			return dragThreshold;
+		}
+
+		/**
+		 * Registers a callback to be invoked whenever drag gesture is <b>started</b>, <b>finished</b>
+		 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
+		 *
+		 * @param listener The desired listener callback to add.
+		 * @see #removeOnDragListener(OnDragListener)
+		 */
+		public void addOnDragListener(@NonNull final OnDragListener listener) {
+			if (listeners == null) listeners = new ArrayList<>(1);
+			if (!listeners.contains(listener)) listeners.add(listener);
+		}
+
+		/**
+		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
+		 * <var>viewHolder</var> has been started.
+		 *
+		 * @param viewHolder The view holder for which the drag has started.
+		 */
+		@VisibleForTesting void notifyDragStarted(final RecyclerView.ViewHolder viewHolder) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnDragListener listener : listeners) {
+					listener.onDragStarted((ItemDragHelper) helper, viewHolder);
+				}
+			}
+		}
+
+		/**
+		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
+		 * <var>viewHolder</var> has been finished/completed.
+		 *
+		 * @param viewHolder   The view holder for which the drag has finished.
+		 * @param fromPosition The position from which has been the view holder dragged.
+		 * @param toPosition   The position at which has been the view holder dropped.
+		 */
+		@VisibleForTesting void notifyDragFinished(final RecyclerView.ViewHolder viewHolder, final int fromPosition, final int toPosition) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnDragListener listener : listeners) {
+					listener.onDragFinished((ItemDragHelper) helper, viewHolder, fromPosition, toPosition);
+				}
+			}
+		}
+
+		/**
+		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
+		 * <var>viewHolder</var> has been canceled.
+		 *
+		 * @param viewHolder The view holder for which the drag has canceled.
+		 */
+		@VisibleForTesting void notifyDragCanceled(final RecyclerView.ViewHolder viewHolder) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnDragListener listener : listeners) {
+					listener.onDragCanceled((ItemDragHelper) helper, viewHolder);
+				}
+			}
+		}
+
+		/**
+		 * Removes the given drag <var>listener</var> from the registered listeners.
+		 *
+		 * @param listener The desired listener to remove.
+		 * @see #addOnDragListener(OnDragListener)
+		 */
+		public void removeOnDragListener(@NonNull final OnDragListener listener) {
+			if (listeners != null) listeners.remove(listener);
+		}
+
+		/**
+		 */
+		@Override
+		protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
 			return adapter instanceof DragAdapter;
 		}
 
@@ -418,96 +478,11 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		}
 
 		/**
-		 * Registers a callback to be invoked whenever drag gesture is <b>started</b>, <b>finished</b>
-		 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
-		 *
-		 * @param listener The desired listener to add.
-		 * @see #removeListener(OnDragListener)
-		 */
-		void addListener(@NonNull final OnDragListener listener) {
-			if (listeners == null) listeners = new ArrayList<>(1);
-			if (!listeners.contains(listener)) listeners.add(listener);
-		}
-
-		/**
-		 * Removes the given drag <var>listener</var> from the registered listeners.
-		 *
-		 * @param listener The desired listener to remove.
-		 * @see #addListener(OnDragListener)
-		 */
-		void removeListener(@NonNull final OnDragListener listener) {
-			if (listeners != null) listeners.remove(listener);
-		}
-
-		/**
-		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
-		 * <var>viewHolder</var> has been started.
-		 *
-		 * @param viewHolder The view holder for which the drag has started.
-		 */
-		@VisibleForTesting
-		void notifyDragFStarted(final RecyclerView.ViewHolder viewHolder) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnDragListener listener : listeners) {
-					listener.onDragStarted((ItemDragHelper) helper, viewHolder);
-				}
-			}
-		}
-
-		/**
-		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
-		 * <var>viewHolder</var> has been finished/completed.
-		 *
-		 * @param viewHolder   The view holder for which the drag has finished.
-		 * @param fromPosition The position from which has been the view holder dragged.
-		 * @param toPosition   The position at which has been the view holder dropped.
-		 */
-		@VisibleForTesting
-		void notifyDragFinished(final RecyclerView.ViewHolder viewHolder, final int fromPosition, final int toPosition) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnDragListener listener : listeners) {
-					listener.onDragFinished((ItemDragHelper) helper, viewHolder, fromPosition, toPosition);
-				}
-			}
-		}
-
-		/**
-		 * Notifies all registered {@link OnDragListener} that the drag gesture for the given
-		 * <var>viewHolder</var> has been canceled.
-		 *
-		 * @param viewHolder The view holder for which the drag has canceled.
-		 */
-		@VisibleForTesting
-		@SuppressWarnings("unused")
-		void notifyDragFCanceled(final RecyclerView.ViewHolder viewHolder) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnDragListener listener : listeners) {
-					listener.onDragCanceled((ItemDragHelper) helper, viewHolder);
-				}
-			}
-		}
-
-		/**
 		 */
 		@Override
-		protected void setEnabled(final boolean enabled) {
+		public void setEnabled(final boolean enabled) {
 			super.setEnabled(enabled);
-			this.tracking = false;
 			this.dragging = false;
-		}
-
-		/**
-		 * Starts tracking of the drag gesture if it is not active at this time. This method should
-		 * be called whenever a drag gesture is about to be initiated.
-		 *
-		 * @return {@code True} if tracking has been activated, {@code false} otherwise.
-		 * @see #isActive()
-		 */
-		boolean startTracking() {
-			if (enabled && !tracking) {
-				this.tracking = true;
-			}
-			return tracking;
 		}
 
 		/**
@@ -521,7 +496,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 */
 		@Override
 		public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			return tracking && dragAdapter != null ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
+			return enabled && dragAdapter != null ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
@@ -535,7 +510,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 						this.dragging = true;
 						((DragViewHolder) viewHolder).onDragStarted();
 						this.dragAdapter.onItemDragStarted(draggingFromPosition = viewHolder.getAdapterPosition());
-						notifyDragFStarted(viewHolder);
+						notifyDragStarted(viewHolder);
 					}
 					break;
 				default:
@@ -598,7 +573,6 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 			super.clearView(recyclerView, viewHolder);
 			if (viewHolder instanceof DragViewHolder) {
 				this.dragging = false;
-				this.tracking = false;
 				final int draggingToPosition = viewHolder.getAdapterPosition();
 				((DragViewHolder) viewHolder).onDragFinished(draggingFromPosition, draggingToPosition);
 				this.dragAdapter.onItemDragFinished(draggingFromPosition, draggingToPosition);

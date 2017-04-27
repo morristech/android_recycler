@@ -54,7 +54,6 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 
 	private RecyclerView mMockRecyclerView;
 	private RecyclerView.State mMockRecyclerViewState;
-	private RecyclerViewItemDecoration mDecoration;
 
 	public RecyclerViewItemDecorationTest() {
 		this.mMockRecyclerView = mock(RecyclerView.class);
@@ -64,17 +63,10 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 	@Override
 	public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mDecoration = new Decoration();
 		resetMock(mMockRecyclerView);
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mContext));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
-	}
-
-	@Override
-	public void afterTest() throws Exception {
-		super.afterTest();
-		this.mDecoration = null;
 	}
 
 	@Test
@@ -148,33 +140,35 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 
 	@Test
 	public void testSetSkipFirst() {
-		mDecoration.setSkipFirst(true);
-		assertThat(mDecoration.skipsFirst(), is(true));
-		mDecoration.setSkipFirst(false);
-		assertThat(mDecoration.skipsFirst(), is(false));
+		final RecyclerViewItemDecoration decoration = new Decoration();
+		decoration.setSkipFirst(true);
+		assertThat(decoration.skipsFirst(), is(true));
+		decoration.setSkipFirst(false);
+		assertThat(decoration.skipsFirst(), is(false));
 	}
 
 	@Test
 	public void testSkipsFirstDefault() {
-		assertThat(mDecoration.skipsFirst(), is(false));
+		assertThat(new Decoration().skipsFirst(), is(false));
 	}
 
 	@Test
 	public void testSetSkipLast() {
-		mDecoration.setSkipLast(true);
-		assertThat(mDecoration.skipsLast(), is(true));
-		mDecoration.setSkipLast(false);
-		assertThat(mDecoration.skipsLast(), is(false));
+		final RecyclerViewItemDecoration decoration = new Decoration();
+		decoration.setSkipLast(true);
+		assertThat(decoration.skipsLast(), is(true));
+		decoration.setSkipLast(false);
+		assertThat(decoration.skipsLast(), is(false));
 	}
 
 	@Test
 	public void testSkipsLastDefault() {
-		assertThat(mDecoration.skipsLast(), is(false));
+		assertThat(new Decoration().skipsLast(), is(false));
 	}
 
 	@Test
 	public void testShouldDecorate() {
-		assertThat(mDecoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(true));
+		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(true));
 		verify(mMockRecyclerView, times(1)).getLayoutManager();
 		verify(mMockRecyclerViewState, times(1)).getItemCount();
 	}
@@ -182,7 +176,7 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 	@Test
 	public void testShouldDecorateForRecyclerViewWithoutLayoutManager() {
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
-		assertThat(mDecoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
 		verify(mMockRecyclerView, times(1)).getLayoutManager();
 		verify(mMockRecyclerViewState, times(0)).getItemCount();
 	}
@@ -190,7 +184,7 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 	@Test
 	public void testShouldDecorateForRecyclerViewStateWithoutItems() {
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(0);
-		assertThat(mDecoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
 		verify(mMockRecyclerView, times(1)).getLayoutManager();
 		verify(mMockRecyclerViewState, times(1)).getItemCount();
 	}
@@ -199,7 +193,7 @@ public final class RecyclerViewItemDecorationTest extends BaseInstrumentedTest {
 	public void testShouldDecorateForRecyclerViewWithoutLayoutManagerAndStateWithoutItems() {
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(0);
-		assertThat(mDecoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
 		verify(mMockRecyclerView, times(1)).getLayoutManager();
 		verify(mMockRecyclerViewState, times(0)).getItemCount();
 	}

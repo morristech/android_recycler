@@ -18,50 +18,34 @@
  */
 package universum.studios.android.recycler.helper;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.helper.ItemTouchHelper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-
 /**
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class ItemDragHelperTest extends BaseInstrumentedTest {
+public final class ItemSwipeHelperInteractorTest extends BaseInstrumentedTest {
     
 	@SuppressWarnings("unused")
-	private static final String TAG = "ItemDragHelperTest";
+	private static final String TAG = "ItemSwipeHelperInteractorTest";
 
-	@Test
-	public void testInteractionConstant() {
-		assertThat(ItemDragHelper.INTERACTION, is(ItemTouchHelper.ACTION_STATE_DRAG));
+
+	@Override
+	public void beforeTest() throws Exception {
+		super.beforeTest();
 	}
 
-	@Test
-	public void testMoveTresholdConstant() {
-		assertThat(ItemDragHelper.MOVE_THRESHOLD, is(0.5f));
+	@Override
+	public void afterTest() throws Exception {
+		super.afterTest();
 	}
 
-	@Test
-	public void testMakeDragFlags() {
-		assertThat(
-				ItemDragHelper.makeDragFlags(ItemDragHelper.UP),
-				is(ItemTouchHelper.Callback.makeMovementFlags(ItemTouchHelper.UP, 0))
-		);
-		assertThat(
-				ItemDragHelper.makeDragFlags(ItemDragHelper.START | ItemDragHelper.END),
-				is(ItemTouchHelper.Callback.makeMovementFlags(ItemTouchHelper.START | ItemTouchHelper.END, 0))
-		);
-	}
-
-	@Test
-	public void testGetInteractor() {
-		assertThat(new ItemDragHelper().getInteractor(), instanceOf(ItemDragHelper.Interactor.class));
+    @Test
+	public void test() {
+		// todo:
 	}
 }

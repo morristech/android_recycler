@@ -188,7 +188,6 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 * @param interactor The interactor that will be used by the new helper to support is specific
 	 *                   feature.
 	 */
-	@SuppressWarnings("unchecked")
 	protected RecyclerViewItemHelper(@NonNull final I interactor) {
 		super(interactor);
 		this.mInteractor = interactor;
@@ -200,6 +199,19 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 */
 
 	/**
+	 * Returns the interactor instance used by this helper to support its specific feature for
+	 * items of the {@link RecyclerView} to which is this helper instance attached.
+	 * <p>
+	 * The returned interactor may be used to configure the provided feature.
+	 *
+	 * @return This helper's interactor.
+	 */
+	@NonNull
+	public final I getInteractor() {
+		return mInteractor;
+	}
+
+	/**
 	 */
 	@Override
 	public void attachToRecyclerView(@Nullable final RecyclerView recyclerView) {
@@ -208,48 +220,12 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 			this.mInteractor.attachAdapter(null);
 		} else {
 			final RecyclerView.Adapter adapter = recyclerView.getAdapter();
-			if (adapter == null || mInteractor.canAttachToAdapter(adapter)) {
+			if (adapter == null || mInteractor.canAttachAdapter(adapter)) {
 				this.mInteractor.attachAdapter(adapter);
 			} else {
 				throw new IllegalArgumentException("Cannot attach adapter(" + adapter + ") to this(" + this + ") item helper.");
 			}
 		}
-	}
-
-	/**
-	 * Sets a boolean flag indicating whether this helper should be enabled or not.
-	 * <p>
-	 * When a specific instance of helper is disabled it should not provide any functionality.
-	 * <p>
-	 * Default value: {@code true}
-	 *
-	 * @param enabled {@code True} to enable this helper, {@code false} otherwise.
-	 * @see #isEnabled()
-	 * @see ItemInteractor#setEnabled(boolean)
-	 */
-	public final void setEnabled(final boolean enabled) {
-		mInteractor.setEnabled(enabled);
-	}
-
-	/**
-	 * Returns boolean flag indicating whether this helper is enabled or not.
-	 *
-	 * @return {@code True} if this helper instance is enabled, {@code false} otherwise.
-	 * @see #setEnabled(boolean)
-	 * @see ItemInteractor#isEnabled()
-	 */
-	public final boolean isEnabled() {
-		return mInteractor.isEnabled();
-	}
-
-	/**
-	 * Returns boolean flag indicating whether this helper is currently active or not.
-	 *
-	 * @return {@code True} if this helper instance performs some interaction logic at this time,
-	 * {@code false} if it is in the idle state.
-	 */
-	public final boolean isActive() {
-		return mInteractor.isActive();
 	}
 
 	/*
@@ -262,7 +238,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 *
 	 * @author Martin Albedinsky
 	 */
-	protected static abstract class ItemInteractor extends ItemTouchHelper.Callback {
+	public static abstract class ItemInteractor extends ItemTouchHelper.Callback {
 
 		/**
 		 * Boolean flag indicating whether this interactor is enabled or not. If interactor is
@@ -314,7 +290,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * @return {@code True} if the parent helper may attach the adapter to this interactor,
 		 * {@code false} otherwise.
 		 */
-		protected abstract boolean canAttachToAdapter(@NonNull RecyclerView.Adapter adapter);
+		protected abstract boolean canAttachAdapter(@NonNull RecyclerView.Adapter adapter);
 
 		/**
 		 * Attaches the given <var>adapter</var> to this interactor.
@@ -367,7 +343,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * @param enabled {@code True} to enable this interactor, {@code false} otherwise.
 		 * @see #isEnabled()
 		 */
-		protected void setEnabled(final boolean enabled) {
+		public void setEnabled(final boolean enabled) {
 			this.enabled = enabled;
 		}
 
@@ -378,7 +354,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 *
 		 * @see #setEnabled(boolean)
 		 */
-		protected boolean isEnabled() {
+		public boolean isEnabled() {
 			return enabled;
 		}
 
@@ -388,7 +364,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * @return {@code True} if this interactor performs some interaction logic at this time,
 		 * {@code false} otherwise.
 		 */
-		protected abstract boolean isActive();
+		public abstract boolean isActive();
 
 		/**
 		 */

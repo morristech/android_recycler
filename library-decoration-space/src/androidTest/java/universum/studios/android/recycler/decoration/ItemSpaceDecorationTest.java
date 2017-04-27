@@ -54,7 +54,6 @@ public final class ItemSpaceDecorationTest extends BaseInstrumentedTest {
 	private RecyclerView mMockRecyclerView;
 	private RecyclerView.State mMockRecyclerViewState;
 	private View mItemView;
-	private ItemSpaceDecoration mDecoration;
 
 	public ItemSpaceDecorationTest() {
 		this.mMockCanvas = mock(Canvas.class);
@@ -65,19 +64,12 @@ public final class ItemSpaceDecorationTest extends BaseInstrumentedTest {
 	@Override
 	public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mDecoration = new ItemSpaceDecoration();
 		this.mItemView = new TextView(mContext);
 		resetMock(mMockCanvas);
 		resetMock(mMockRecyclerView);
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mContext));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
-	}
-
-	@Override
-	public void afterTest() throws Exception {
-		super.afterTest();
-		this.mDecoration = null;
 	}
 
 	@Test
@@ -197,12 +189,12 @@ public final class ItemSpaceDecorationTest extends BaseInstrumentedTest {
 
 	@Test
 	public void testSkipsFirstDefault() {
-		assertThat(mDecoration.skipsFirst(), is(false));
+		assertThat(new ItemSpaceDecoration().skipsFirst(), is(false));
 	}
 
 	@Test
 	public void testSkipsLastDefault() {
-		assertThat(mDecoration.skipsLast(), is(false));
+		assertThat(new ItemSpaceDecoration().skipsLast(), is(false));
 	}
 
 	@Test
