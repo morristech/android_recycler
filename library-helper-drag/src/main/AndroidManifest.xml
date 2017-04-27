@@ -19,29 +19,6 @@
  * =================================================================================================
  */
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-	<group android:checkableBehavior="single">
-
-		<item
-			android:id="@+id/navigation_item_home"
-			android:checked="true"
-			android:title="@string/navigation_item_home" />
-
-		<item
-			android:id="@+id/navigation_item_decoration_divider"
-			android:title="@string/navigation_item_decoration_divider" />
-
-		<item
-			android:id="@+id/navigation_item_decoration_space"
-			android:title="@string/navigation_item_decoration_space" />
-
-		<item
-			android:id="@+id/navigation_item_helper_drag"
-			android:title="@string/navigation_item_helper_drag" />
-
-		<item
-			android:id="@+id/navigation_item_helper_swipe"
-			android:title="@string/navigation_item_helper_swipe" />
-	</group>
-</menu>
+<manifest package="universum.studios.android.recycler.helper.drag">
+	<application/>
+</manifest>

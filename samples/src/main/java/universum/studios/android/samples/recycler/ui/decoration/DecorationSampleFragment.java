@@ -71,7 +71,7 @@ public abstract class DecorationSampleFragment extends RecyclerSampleFragment<Sa
 	@Override
 	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.recycler, mMenu = menu);
+		inflater.inflate(R.menu.recycler_decoration, mMenu = menu);
 	}
 
 	@Override

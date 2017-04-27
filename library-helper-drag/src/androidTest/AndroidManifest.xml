@@ -19,11 +19,11 @@
  * =================================================================================================
  */
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-	  xmlns:app="http://schemas.android.com/apk/res-auto">
+<manifest package="universum.studios.android.recycler.helper.drag"
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  xmlns:tools="http://schemas.android.com/tools">
 
-	<item
-		android:id="@+id/menu_refresh"
-		android:title="@string/menu_refresh"
-		app:showAsAction="always"/>
-</menu>
+	<application
+		android:label="Recycler-Helper-Drag Tests"
+		tools:replace="android:label" />
+</manifest>

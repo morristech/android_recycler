@@ -52,6 +52,7 @@ android {
                 '../library-decoration-divider/src/main/java',
                 '../library-decoration-space/src/main/java',
                 '../library-helper-core/src/main/java',
+                '../library-helper-drag/src/main/java',
                 '../library-helper-swipe/src/main/java'
         ]
         debug.java.srcDirs = release.java.srcDirs
@@ -68,16 +69,13 @@ android {
                 '../library-decoration-divider/src/androidTest/java',
                 '../library-decoration-space/src/androidTest/java',
                 '../library-helper-core/src/androidTest/java',
+                '../library-helper-drag/src/androidTest/java',
                 '../library-helper-swipe/src/androidTest/java'
         ]
         androidTest.res.srcDirs = [
-                '../library/src/androidTest/res',
-                '../library-core/src/androidTest/res',
                 '../library-decoration-core/src/androidTest/res',
                 '../library-decoration-divider/src/androidTest/res',
-                '../library-decoration-space/src/androidTest/res',
-                '../library-helper-core/src/androidTest/res',
-                '../library-helper-swipe/src/androidTest/res'
+                '../library-decoration-space/src/androidTest/res'
         ]
     }
 

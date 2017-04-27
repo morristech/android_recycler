@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
 /*
  * =================================================================================================
  *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
- * *************************************************************************************************
+ * -------------------------------------------------------------------------------------------------
  * You may use this file only in compliance with the License. More details and copy of this License
  * you may obtain at
  *
@@ -18,30 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
--->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-	<group android:checkableBehavior="single">
-
-		<item
-			android:id="@+id/navigation_item_home"
-			android:checked="true"
-			android:title="@string/navigation_item_home" />
-
-		<item
-			android:id="@+id/navigation_item_decoration_divider"
-			android:title="@string/navigation_item_decoration_divider" />
-
-		<item
-			android:id="@+id/navigation_item_decoration_space"
-			android:title="@string/navigation_item_decoration_space" />
-
-		<item
-			android:id="@+id/navigation_item_helper_drag"
-			android:title="@string/navigation_item_helper_drag" />
-
-		<item
-			android:id="@+id/navigation_item_helper_swipe"
-			android:title="@string/navigation_item_helper_swipe" />
-	</group>
-</menu>
+/**
+ * @author Martin Albedinsky
+ */
+package universum.studios.android.samples.recycler.ui.helper.drag;

@@ -16,14 +16,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.samples.recycler.ui.helper.swipe;
+package universum.studios.android.samples.recycler.ui.helper.drag;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -31,26 +28,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import universum.studios.android.recycler.helper.ItemDragHelper;
 import universum.studios.android.recycler.helper.ItemSwipeHelper;
-import universum.studios.android.recycler.helper.RecyclerViewItemHelper;
 import universum.studios.android.samples.recycler.R;
 import universum.studios.android.samples.recycler.data.AdapterItems;
 import universum.studios.android.samples.recycler.ui.RecyclerSampleFragment;
 import universum.studios.android.samples.recycler.ui.adapter.SampleViewHolder;
-import universum.studios.android.ui.util.ResourceUtils;
 import universum.studios.android.widget.adapter.holder.AdapterHolder;
 
 /**
  * @author Martin Albedinsky
  */
-public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapter>
+public class DragHelperFragment extends RecyclerSampleFragment<SampleDragAdapter>
 		implements
-		ItemSwipeHelper.OnSwipeListener {
+		ItemDragHelper.OnDragListener {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = "SwipeHelperFragment";
+	private static final String TAG = "DragHelperFragment";
 
-	private ItemSwipeHelper mSwipeHelper;
+	private ItemDragHelper mDragHelper;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,8 +56,8 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 
 	@NonNull
 	@Override
-	protected SampleSwipeAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
-		final SampleSwipeAdapter adapter = new SampleSwipeAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
+	protected SampleDragAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
+		final SampleDragAdapter adapter = new SampleDragAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
 		return adapter;
 	}
@@ -70,23 +66,15 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		this.collectionView.setItemAnimator(new ItemSwipeHelper.SwipeItemAnimator());
-		this.mSwipeHelper = new ItemSwipeHelper();
-		this.mSwipeHelper.addOnSwipeListener(this);
-		this.mSwipeHelper.attachToRecyclerView(collectionView);
+		this.mDragHelper = new ItemDragHelper();
+		this.mDragHelper.addOnDragListener(this);
+		this.mDragHelper.attachToRecyclerView(collectionView);
 	}
 
 	@Override
-	@SuppressWarnings("ConstantConditions")
 	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.recycler_helper_swipe, menu);
-		final Drawable refreshIcon = ResourceUtils.getVectorDrawable(
-				getResources(),
-				R.drawable.vc_ic_refresh_24dp,
-				getActivity().getTheme()
-		);
-		DrawableCompat.setTint(refreshIcon, Color.WHITE);
-		menu.findItem(R.id.menu_refresh).setIcon(refreshIcon);
+		inflater.inflate(R.menu.recycler_helper, menu);
 	}
 
 	@Override
@@ -94,39 +82,33 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 		switch (item.getItemId()) {
 			case R.id.menu_enabled:
 				item.setChecked(!item.isChecked());
-				mSwipeHelper.setEnabled(item.isChecked());
-				return true;
-			case R.id.menu_refresh:
-				adapter.changeItems(AdapterItems.createSampleList(getResources()));
+				mDragHelper.setEnabled(item.isChecked());
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
-	public void onSwipeStarted(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
-		Log.d(TAG, "Swipe STARTED for position(" + viewHolder.getAdapterPosition() + ").");
-	}
-
-	@Override
-	public void onSwipeFinished(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder, @RecyclerViewItemHelper.Direction int direction) {
-		Log.d(TAG, "Swipe FINISHED for position(" + viewHolder.getAdapterPosition() + ").");
-		final int itemPosition = viewHolder.getAdapterPosition();
-		switch (direction) {
-			// Delete item.
-			case ItemSwipeHelper.START:
-				adapter.removeItem(itemPosition);
-				break;
-			// Done with the item.
-			case ItemSwipeHelper.END:
-				adapter.removeItem(itemPosition);
-				break;
+	public boolean onDataSetActionSelected(int action, int position, long id, @Nullable Object payload) {
+		switch (action) {
+			case SampleDragAdapter.ACTION_DRAG_INITIATE:
+				return mDragHelper.startDrag();
 		}
+		return super.onDataSetActionSelected(action, position, id, payload);
 	}
 
 	@Override
-	public void onSwipeCanceled(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
-		Log.d(TAG, "Swipe CANCELED for position(" + viewHolder.getAdapterPosition() + ").");
-		swipeHelper.restoreHolder(viewHolder, ItemSwipeHelper.START);
+	public void onDragStarted(@NonNull ItemDragHelper dragHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
+		Log.d(TAG, "Drag STARTED for position(" + viewHolder.getAdapterPosition() + ").");
+	}
+
+	@Override
+	public void onDragFinished(@NonNull ItemDragHelper dragHelper, @NonNull RecyclerView.ViewHolder viewHolder, int fromPosition, int toPosition) {
+		Log.d(TAG, "Drag FINISHED from position(" + fromPosition + ") to position(" + toPosition + ").");
+	}
+
+	@Override
+	public void onDragCanceled(@NonNull ItemDragHelper dragHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
+		Log.d(TAG, "Drag CANCELED for position(" + viewHolder.getAdapterPosition() + ").");
 	}
 }

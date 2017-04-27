@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +23,9 @@ import universum.studios.android.samples.recycler.ui.adapter.SampleViewHolder;
  * @author Martin Albedinsky
  */
 final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.SwipeAdapter {
+
+	@SuppressWarnings("unused")
+	private static final String TAG = "SampleSwipeAdapter";
 
 	SampleSwipeAdapter(@NonNull Context context, @NonNull List<AdapterItem> items) {
 		super(context, items);
@@ -44,7 +48,7 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 		private static final int ACTION_DELETE = 0x02;
 
 		private final int actionColorDone, actionColorDelete;
-		private int actionState = ACTION_NONE;
+		private int activeAction = ACTION_NONE;
 
 		@SuppressWarnings("deprecation")
 		ItemHolder(@NonNull View itemView) {
@@ -54,20 +58,35 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			this.actionColorDelete = resources.getColor(R.color.action_tint_delete);
 		}
 
-		@NonNull
+		@Nullable
 		@Override
-		public View getSwipeView() {
-			return binding.itemContentContainer;
+		public View getInteractiveView(@RecyclerViewItemHelper.Interaction int interaction) {
+			return interaction == RecyclerViewItemHelper.ACTION_STATE_SWIPE ? binding.itemContentContainer : null;
 		}
 
 		@Override
-		public void onDraw(@NonNull Canvas canvas, float dX, float dY, boolean isCurrentlyActive) {
+		public void onSwipeStarted() {
+			// Ignored.
+		}
+
+		@Override
+		public void onSwipeFinished(@RecyclerViewItemHelper.Direction int direction) {
+			this.activeAction = ACTION_NONE;
+		}
+
+		@Override
+		public void onSwipeCanceled() {
+			this.activeAction = ACTION_NONE;
+		}
+
+		@Override
+		public void onDraw(@NonNull Canvas canvas, float dX, float dY, @RecyclerViewItemHelper.Interaction int interaction, boolean isCurrentlyActive) {
 			if (isCurrentlyActive) {
-				final View swipeView = getSwipeView();
-				if (swipeView.getTranslationX() < 0 && actionState != ACTION_DELETE) {
-					setVisibleAction(actionState = ACTION_DELETE);
-				} else if (swipeView.getTranslationX() > 0 && actionState != ACTION_DONE) {
-					setVisibleAction(actionState = ACTION_DONE);
+				final View swipeView = binding.itemContentContainer;
+				if (swipeView.getTranslationX() < 0 && activeAction != ACTION_DELETE) {
+					setVisibleAction(activeAction = ACTION_DELETE);
+				} else if (swipeView.getTranslationX() > 0 && activeAction != ACTION_DONE) {
+					setVisibleAction(activeAction = ACTION_DONE);
 				}
 			}
 		}
@@ -94,23 +113,8 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 		}
 
 		@Override
-		public void onDrawOver(@NonNull Canvas canvas, float dX, float dY, boolean isCurrentlyActive) {
+		public void onDrawOver(@NonNull Canvas canvas, float dX, float dY, @RecyclerViewItemHelper.Interaction int interaction, boolean isCurrentlyActive) {
 			// Ignored.
-		}
-
-		@Override
-		public void onSwipeStarted() {
-			// Ignored.
-		}
-
-		@Override
-		public void onSwipeFinished(@RecyclerViewItemHelper.Direction int direction) {
-			this.actionState = ACTION_NONE;
-		}
-
-		@Override
-		public void onSwipeCanceled() {
-			this.actionState = ACTION_NONE;
 		}
 	}
 }
