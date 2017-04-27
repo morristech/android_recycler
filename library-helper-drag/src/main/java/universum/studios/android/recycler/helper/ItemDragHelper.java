@@ -531,6 +531,9 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 						notifyDragFStarted(viewHolder);
 					}
 					break;
+				default:
+					// Do not handle other action states.
+					break;
 			}
 		}
 
