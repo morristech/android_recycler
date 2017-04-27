@@ -93,7 +93,7 @@ final class SampleDragAdapter extends SampleAdapter implements ItemDragHelper.Dr
 		}
 
 		@Override
-		public void onDragFinished() {
+		public void onDragFinished(int fromPosition, int toPosition) {
 			itemView.setAlpha(1.0f);
 		}
 

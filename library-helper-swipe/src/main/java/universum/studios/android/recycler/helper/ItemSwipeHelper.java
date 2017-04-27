@@ -25,7 +25,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.Interpolator;
@@ -44,7 +43,7 @@ import java.util.List;
  * automatically. Also all {@link RecyclerView.ViewHolder ViewHolders} of that adapter of which item
  * views are desired to be swiped, must implement {@link SwipeViewHolder} interface as other view
  * holder implementations will be ignored by the ItemSwipeHelper API. When the {@link SwipeAdapter}
- * is properly attached, the item helper will delegate to it all swipe related callbacks/events
+ * is properly attached, the item helper will delegate to it all swipe gesture related callbacks/events
  * whenever appropriate via the adapter's interface.
  *
  * <h3>Swipe Callbacks</h3>
@@ -83,15 +82,16 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 */
 
 	/**
-	 * Required interface for adapters which want to support swipe feature for its {@link RecyclerView.ViewHolder ViewHolders}.
+	 * Required interface for adapters which want to support swipe feature for theirs
+	 * {@link RecyclerView.ViewHolder ViewHolders}.
 	 *
 	 * @author Martin Albedinsky
 	 */
 	public interface SwipeAdapter {
 
 		/**
-		 * Called by the swipe helper to which is this adapter attached to obtain swipe flags for
-		 * an item at the specified <var>position</var>.
+		 * Called by the swipe helper to obtain swipe movement flags for an item at the specified
+		 * <var>position</var>.
 		 *
 		 * @param position Position of the item for which to obtain its swipe flags.
 		 * @return Movement flags determining in which direction can be the item swiped.
@@ -113,7 +113,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 *
 		 * @see #onSwipeFinished(int)
 		 * @see #onSwipeCanceled()
-		 * @see ItemTouchHelper.Callback#onSelectedChanged(RecyclerView.ViewHolder, int)
+		 * @see ItemSwipeHelper.Callback#onSelectedChanged(RecyclerView.ViewHolder, int)
 		 */
 		void onSwipeStarted();
 
@@ -124,7 +124,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 * @param direction The direction in which has the swipe gestured finished. One of directions
 		 *                  defined by {@link Direction @Direction} annotation.
 		 * @see #onSwipeStarted()
-		 * @see ItemTouchHelper.Callback#onSwiped(RecyclerView.ViewHolder, int)
+		 * @see ItemSwipeHelper.Callback#onSwiped(RecyclerView.ViewHolder, int)
 		 */
 		void onSwipeFinished(@Direction int direction);
 
@@ -132,7 +132,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 * Called by the swipe helper whenever swipe gesture for view of this holder is canceled.
 		 *
 		 * @see #onSwipeStarted()
-		 * @see ItemTouchHelper.Callback#clearView(RecyclerView, RecyclerView.ViewHolder)
+		 * @see ItemSwipeHelper.Callback#clearView(RecyclerView, RecyclerView.ViewHolder)
 		 */
 		void onSwipeCanceled();
 	}
@@ -150,6 +150,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 *
 		 * @param swipeHelper The item helper controlling the swipe gesture for the view holder.
 		 * @param viewHolder  The view holder for which has been the swipe gesture started.
+		 * @see #onSwipeFinished(ItemSwipeHelper, RecyclerView.ViewHolder, int)
 		 */
 		void onSwipeStarted(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder);
 
@@ -160,6 +161,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 * @param viewHolder  The view holder for which has been the swipe gesture finished.
 		 * @param direction   The direction in which has been the swipe gesture finished. One of
 		 *                    directions defined by {@link Direction @Direction} annotation.
+		 * @see #onSwipeStarted(ItemSwipeHelper, RecyclerView.ViewHolder)
 		 */
 		void onSwipeFinished(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder, @Direction int direction);
 
@@ -220,7 +222,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * @param movementFlags The desired movement flags. One of flags defined by
 	 *                      {@link Movement @Movement} annotation.
 	 * @return Swipe flags according to the given movement flags.
-	 * @see android.support.v7.widget.helper.ItemTouchHelper.Callback#makeMovementFlags(int, int)
+	 * @see ItemSwipeHelper.Callback#makeMovementFlags(int, int)
 	 */
 	public static int makeSwipeFlags(@Movement final int movementFlags) {
 		return SwipeInteractor.makeMovementFlags(0, movementFlags);
@@ -411,18 +413,22 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 */
 
 	/**
-	 * A {@link ItemInteractor} implementation used by {@link ItemSwipeHelper}
-	 * to control swipe gesture and delegate swipe events to the view holder that is being swiped.
+	 * A {@link ItemInteractor} implementation used by {@link ItemSwipeHelper} to handle swipe
+	 * gesture related callbacks and to delegate swipe events to the view holder that is being swiped.
 	 */
 	static final class SwipeInteractor extends RecyclerViewItemHelper.ItemInteractor {
 
 		/**
 		 * Fraction that the user should move the View to be considered as swiped.
+		 *
+		 * @see #getSwipeThreshold(RecyclerView.ViewHolder)
 		 */
 		float swipeThreshold = SWIPE_THRESHOLD;
 
 		/**
-		 * Adapter, attached to the parent helper, providing swipe item views.
+		 * Adapter providing swipeable item views attached to this interactor.
+		 *
+		 * @see #onAdapterAttached(RecyclerView.Adapter)
 		 */
 		private SwipeAdapter swipeAdapter;
 
@@ -436,7 +442,11 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 
 		/**
 		 * Boolean flag indicating whether the swipe gesture is active at this time or not.
-		 * If active, the user is interacting with the items in the parent {@link RecyclerView}.
+		 * If active, the user is swiping one of items in the associated {@link RecyclerView}.
+		 *
+		 * @see #onSelectedChanged(RecyclerView.ViewHolder, int)
+		 * @see #onSwiped(RecyclerView.ViewHolder, int)
+		 * @see #clearView(RecyclerView, RecyclerView.ViewHolder)
 		 */
 		private boolean swiping;
 
@@ -552,6 +562,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 			switch (actionState) {
 				case ItemSwipeHelper.ACTION_STATE_SWIPE:
 					if (viewHolder instanceof SwipeViewHolder) {
+						this.swiping = true;
 						final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
 						final View interactiveView = swipeViewHolder.getInteractiveView(ACTION_STATE_SWIPE);
 						if (interactiveView == null) {
@@ -560,7 +571,6 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 							getDefaultUIUtil().onSelected(interactiveView);
 						}
 						swipeViewHolder.onSwipeStarted();
-						this.swiping = true;
 						notifySwipeStarted(viewHolder);
 						break;
 					}
@@ -594,9 +604,9 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		@Override
 		public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
 			if (viewHolder instanceof SwipeViewHolder) {
+				this.swiping = false;
 				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
 				swipeViewHolder.onSwipeFinished(direction);
-				this.swiping = false;
 				notifySwipeFinished(viewHolder, direction);
 			}
 		}
@@ -605,8 +615,8 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public void clearView(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			this.swiping = false;
 			if (viewHolder instanceof SwipeViewHolder) {
+				this.swiping = false;
 				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
 				final View interactiveView = swipeViewHolder.getInteractiveView(ACTION_STATE_SWIPE);
 				if (interactiveView == null) {

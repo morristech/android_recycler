@@ -92,7 +92,7 @@ public class DragHelperFragment extends RecyclerSampleFragment<SampleDragAdapter
 	public boolean onDataSetActionSelected(int action, int position, long id, @Nullable Object payload) {
 		switch (action) {
 			case SampleDragAdapter.ACTION_DRAG_INITIATE:
-				return mDragHelper.startDrag();
+				return mDragHelper.startDragTracking();
 		}
 		return super.onDataSetActionSelected(action, position, id, payload);
 	}
