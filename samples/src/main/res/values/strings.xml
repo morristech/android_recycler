@@ -35,10 +35,12 @@
 	<string name="navigation_item_decoration_divider">Divider Decoration</string>
 	<string name="navigation_item_decoration_space">Space Decoration</string>
 	<string name="navigation_header_helper">Helper</string>
+	<string name="navigation_item_helper_drag">Drag Helper</string>
 	<string name="navigation_item_helper_swipe">Swipe Helper</string>
 
 	<!-- ### MENU ============================================================================== -->
 
+	<string name="menu_enabled">Enabled</string>
 	<string name="menu_refresh">Refresh</string>
 
 	<!-- ### RECYCLER ========================================================================== -->

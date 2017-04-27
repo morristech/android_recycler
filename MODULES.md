@@ -27,7 +27,10 @@ as usually.
 
 - **[Core](https://github.com/universum-studios/android_recycler/tree/master/library-core)**
 - **[@Decoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration)**
+- **[Decoration-Core](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-core)**
 - **[Decoration-Divider](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-divider)**
 - **[Decoration-Space](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-space)**
 - **[@Helper](https://github.com/universum-studios/android_recycler/tree/master/library-helper)**
+- **[Helper-Core](https://github.com/universum-studios/android_recycler/tree/master/library-helper-core)**
+- **[Helper-Drag](https://github.com/universum-studios/android_recycler/tree/master/library-helper-drag)**
 - **[Helper-Swipe](https://github.com/universum-studios/android_recycler/tree/master/library-helper-swipe)**

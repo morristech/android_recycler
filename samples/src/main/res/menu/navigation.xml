@@ -28,20 +28,6 @@
 			android:checked="true"
 			android:title="@string/navigation_item_home" />
 
-		<!--<item
-			android:id="@+id/navigation_header_decoration"
-			android:title="@string/navigation_header_decoration">
-
-			<menu>
-				<item
-					android:id="@+id/navigation_item_decoration_divider"
-					android:title="@string/navigation_item_decoration_divider" />
-
-				<item
-					android:id="@+id/navigation_item_decoration_space"
-					android:title="@string/navigation_item_decoration_space" />
-			</menu>
-		</item>-->
 		<item
 			android:id="@+id/navigation_item_decoration_divider"
 			android:title="@string/navigation_item_decoration_divider" />
@@ -50,16 +36,10 @@
 			android:id="@+id/navigation_item_decoration_space"
 			android:title="@string/navigation_item_decoration_space" />
 
-		<!--<item
-			android:id="@+id/navigation_header_helper"
-			android:title="@string/navigation_header_helper">
+		<item
+			android:id="@+id/navigation_item_helper_drag"
+			android:title="@string/navigation_item_helper_drag" />
 
-			<menu>
-				<item
-					android:id="@+id/navigation_item_helper_swipe"
-					android:title="@string/navigation_item_helper_swipe" />
-			</menu>
-		</item>-->
 		<item
 			android:id="@+id/navigation_item_helper_swipe"
 			android:title="@string/navigation_item_helper_swipe" />

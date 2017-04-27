@@ -18,9 +18,12 @@
  */
 package universum.studios.android.samples.recycler.ui.helper.swipe;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +43,7 @@ import universum.studios.android.widget.adapter.holder.AdapterHolder;
 /**
  * @author Martin Albedinsky
  */
-public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAdapter>
+public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapter>
 		implements
 		ItemSwipeHelper.OnSwipeListener {
 
@@ -57,8 +60,8 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAd
 
 	@NonNull
 	@Override
-	protected SwipeableItemsAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
-		final SwipeableItemsAdapter adapter = new SwipeableItemsAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
+	protected SampleSwipeAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
+		final SampleSwipeAdapter adapter = new SampleSwipeAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
 		return adapter;
 	}
@@ -68,25 +71,31 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAd
 		super.onViewCreated(view, savedInstanceState);
 		this.collectionView.setItemAnimator(new ItemSwipeHelper.SwipeItemAnimator());
 		this.mSwipeHelper = new ItemSwipeHelper();
-		this.mSwipeHelper.attachAdapter(adapter);
 		this.mSwipeHelper.addOnSwipeListener(this);
 		this.mSwipeHelper.attachToRecyclerView(collectionView);
 	}
 
 	@Override
+	@SuppressWarnings("ConstantConditions")
 	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.recycler_swipeable, menu);
-		menu.findItem(R.id.menu_refresh).setIcon(ResourceUtils.getVectorDrawable(
+		inflater.inflate(R.menu.recycler_helper_swipe, menu);
+		final Drawable refreshIcon = ResourceUtils.getVectorDrawable(
 				getResources(),
 				R.drawable.vc_ic_refresh_24dp,
 				getActivity().getTheme()
-		));
+		);
+		DrawableCompat.setTint(refreshIcon, Color.WHITE);
+		menu.findItem(R.id.menu_refresh).setIcon(refreshIcon);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_enabled:
+				item.setChecked(!item.isChecked());
+				mSwipeHelper.setEnabled(item.isChecked());
+				return true;
 			case R.id.menu_refresh:
 				adapter.changeItems(AdapterItems.createSampleList(getResources()));
 				return true;
@@ -96,11 +105,12 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAd
 
 	@Override
 	public void onSwipeStarted(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
-		Log.d(TAG, "Swipe started for position(" + viewHolder.getAdapterPosition() + ").");
+		Log.d(TAG, "Swipe STARTED for position(" + viewHolder.getAdapterPosition() + ").");
 	}
 
 	@Override
 	public void onSwipeFinished(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder, @RecyclerViewItemHelper.Direction int direction) {
+		Log.d(TAG, "Swipe FINISHED for position(" + viewHolder.getAdapterPosition() + ").");
 		final int itemPosition = viewHolder.getAdapterPosition();
 		switch (direction) {
 			// Delete item.
@@ -116,6 +126,7 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SwipeableItemsAd
 
 	@Override
 	public void onSwipeCanceled(@NonNull ItemSwipeHelper swipeHelper, @NonNull RecyclerView.ViewHolder viewHolder) {
+		Log.d(TAG, "Swipe CANCELED for position(" + viewHolder.getAdapterPosition() + ").");
 		swipeHelper.restoreHolder(viewHolder, ItemSwipeHelper.START);
 	}
 }

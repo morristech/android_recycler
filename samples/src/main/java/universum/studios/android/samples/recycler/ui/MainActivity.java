@@ -31,6 +31,7 @@ import universum.studios.android.fragment.manage.FragmentRequestInterceptor;
 import universum.studios.android.fragment.transition.FragmentTransitions;
 import universum.studios.android.samples.recycler.ui.decoration.divider.DividerDecorationFragment;
 import universum.studios.android.samples.recycler.ui.decoration.space.SpaceDecorationFragment;
+import universum.studios.android.samples.recycler.ui.helper.drag.DragHelperFragment;
 import universum.studios.android.samples.recycler.ui.helper.swipe.SwipeHelperFragment;
 import universum.studios.android.samples.ui.SamplesMainFragment;
 import universum.studios.android.samples.ui.SamplesNavigationActivity;
@@ -70,6 +71,9 @@ public final class MainActivity extends SamplesNavigationActivity implements Fra
 				return true;
 			case R.id.navigation_item_decoration_space:
 				fragmentController.newRequest(new SpaceDecorationFragment()).execute();
+				return true;
+			case R.id.navigation_item_helper_drag:
+				fragmentController.newRequest(new DragHelperFragment()).execute();
 				return true;
 			case R.id.navigation_item_helper_swipe:
 				fragmentController.newRequest(new SwipeHelperFragment()).execute();
