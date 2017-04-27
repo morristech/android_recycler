@@ -61,6 +61,13 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	// private static final String TAG = "ItemDragHelper";
 
 	/**
+	 * Interaction constant specific for {@link ItemDragHelper}.
+	 *
+	 * @see #ACTION_STATE_DRAG
+	 */
+	public static final int INTERACTION = ACTION_STATE_DRAG;
+
+	/**
 	 * Default move threshold for the drag gesture.
 	 */
 	public static final float MOVE_THRESHOLD = 0.5f;

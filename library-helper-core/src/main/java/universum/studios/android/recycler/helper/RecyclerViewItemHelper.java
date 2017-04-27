@@ -208,7 +208,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 			this.mInteractor.attachAdapter(null);
 		} else {
 			final RecyclerView.Adapter adapter = recyclerView.getAdapter();
-			if (mInteractor.canAttachToAdapter(adapter)) {
+			if (adapter == null || mInteractor.canAttachToAdapter(adapter)) {
 				this.mInteractor.attachAdapter(adapter);
 			} else {
 				throw new IllegalArgumentException("Cannot attach adapter(" + adapter + ") to this(" + this + ") item helper.");

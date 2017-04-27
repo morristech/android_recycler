@@ -122,6 +122,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
 	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
+		super();
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration, defStyleAttr, defStyleRes);
 			for (int i = 0; i < attributes.getIndexCount(); i++) {

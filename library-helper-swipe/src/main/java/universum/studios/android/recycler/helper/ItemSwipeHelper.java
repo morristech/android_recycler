@@ -66,6 +66,13 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	// private static final String TAG = "ItemSwipeHelper";
 
 	/**
+	 * Interaction constant specific for {@link ItemSwipeHelper}.
+	 *
+	 * @see #ACTION_STATE_SWIPE
+	 */
+	public static final int INTERACTION = ACTION_STATE_SWIPE;
+
+	/**
 	 * Default swipe threshold for the swipe gesture.
 	 */
 	public static final float SWIPE_THRESHOLD = 0.5f;
