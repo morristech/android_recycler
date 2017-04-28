@@ -367,6 +367,20 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		public abstract boolean isActive();
 
 		/**
+		 * Checks whether this interactor should handle interaction due to received callback from
+		 * the parent helper.
+		 * <p>
+		 * This implementation checks whether this interactor instance is enabled at this time and
+		 * also has valid adapter attached. However inheritance hierarchies may override this behaviour
+		 * as they desire.
+		 *
+		 * @return {@code True} if interaction should be handled, {@code false} otherwise.
+		 */
+		protected boolean shouldHandleInteraction() {
+			return enabled && adapter != null;
+		}
+
+		/**
 		 */
 		@Override
 		public void onChildDraw(
