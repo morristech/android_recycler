@@ -34,6 +34,8 @@ import universum.studios.android.test.BaseInstrumentedTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -159,7 +161,11 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 			interactor.notifyDragStarted(mockViewHolder);
 		}
 		verify(firstMockListener, times(10)).onDragStarted(helper, mockViewHolder);
+		verify(firstMockListener, times(0)).onDragFinished(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class), anyInt(), anyInt());
+		verify(firstMockListener, times(0)).onDragCanceled(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
 		verify(secondMockListener, times(10)).onDragStarted(helper, mockViewHolder);
+		verify(secondMockListener, times(0)).onDragFinished(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class), anyInt(), anyInt());
+		verify(secondMockListener, times(0)).onDragCanceled(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
 		interactor.removeOnDragListener(firstMockListener);
 		interactor.removeOnDragListener(secondMockListener);
 		interactor.notifyDragStarted(mockViewHolder);
@@ -189,6 +195,10 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 			verify(firstMockListener, times(1)).onDragFinished(helper, mockViewHolder, i, i + 1);
 			verify(secondMockListener, times(1)).onDragFinished(helper, mockViewHolder, i, i + 1);
 		}
+		verify(firstMockListener, times(0)).onDragStarted(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
+		verify(firstMockListener, times(0)).onDragCanceled(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
+		verify(secondMockListener, times(0)).onDragStarted(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
+		verify(secondMockListener, times(0)).onDragCanceled(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
 		interactor.removeOnDragListener(firstMockListener);
 		interactor.removeOnDragListener(secondMockListener);
 		interactor.notifyDragFinished(mockViewHolder, 0, 1);
@@ -217,7 +227,11 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 			interactor.notifyDragCanceled(mockViewHolder);
 		}
 		verify(firstMockListener, times(10)).onDragCanceled(helper, mockViewHolder);
+		verify(firstMockListener, times(0)).onDragStarted(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
+		verify(firstMockListener, times(0)).onDragFinished(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class), anyInt(), anyInt());
 		verify(secondMockListener, times(10)).onDragCanceled(helper, mockViewHolder);
+		verify(secondMockListener, times(0)).onDragStarted(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class));
+		verify(secondMockListener, times(0)).onDragFinished(any(ItemDragHelper.class), any(RecyclerView.ViewHolder.class), anyInt(), anyInt());
 		interactor.removeOnDragListener(firstMockListener);
 		interactor.removeOnDragListener(secondMockListener);
 		interactor.notifyDragCanceled(mockViewHolder);
@@ -305,10 +319,19 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 		interactor.attachAdapter(mockAdapter);
 		when(mockAdapter.getItemDragFlags(RecyclerView.NO_POSITION)).thenReturn(ItemDragHelper.makeDragFlags(ItemDragHelper.UP));
 		assertThat(
-				interactor.getMovementFlags(mMockRecyclerView, mock(RecyclerView.ViewHolder.class)),
+				interactor.getMovementFlags(mMockRecyclerView, mock(Holder.class)),
 				is(ItemDragHelper.makeDragFlags(ItemDragHelper.UP))
 		);
 		verify(mockAdapter, times(1)).getItemDragFlags(RecyclerView.NO_POSITION);
+	}
+
+	@Test
+	public void testGetMovementFlagsForNotDragHolder() {
+		final Adapter mockAdapter = mock(Adapter.class);
+		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
+		interactor.attachAdapter(mockAdapter);
+		assertThat(interactor.getMovementFlags(mMockRecyclerView, mock(RecyclerView.ViewHolder.class)), is(0));
+		verifyZeroInteractions(mockAdapter);
 	}
 
 	@Test
@@ -329,9 +352,9 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 	}
 
 	@Test
-	public void testOnSelectedChanged() {
+	public void testOnSelectedChanged() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final Holder mockHolder = mock(Holder.class);
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
 		final ItemDragHelper helper = new ItemDragHelper();
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
@@ -347,9 +370,25 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 	}
 
 	@Test
-	public void testOnSelectedChangedForNotDragHolder() {
+	public void testOnSelectedChangedForNotDragInteraction() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final RecyclerView.ViewHolder mockHolder = mock(RecyclerView.ViewHolder.class);
+		final Holder mockHolder = createMockHolder(new View(mContext));
+		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
+		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
+		interactor.attachAdapter(mockAdapter);
+		interactor.addOnDragListener(mockListener);
+		interactor.onSelectedChanged(mockHolder, ItemTouchHelper.ACTION_STATE_SWIPE);
+		assertThat(interactor.isActive(), is(false));
+		assertThat(interactor.draggingFromPosition, is(RecyclerView.NO_POSITION));
+		verifyZeroInteractions(mockHolder);
+		verifyZeroInteractions(mockAdapter);
+		verifyZeroInteractions(mockListener);
+	}
+
+	@Test
+	public void testOnSelectedChangedForNotDragHolder() throws Exception {
+		final Adapter mockAdapter = mock(Adapter.class);
+		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(mContext));
 		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -363,9 +402,9 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 	}
 
 	@Test
-	public void testOnSelectedChangedWhenDisabled() {
+	public void testOnSelectedChangedWhenDisabled() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final Holder mockHolder = mock(Holder.class);
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -380,24 +419,8 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 	}
 
 	@Test
-	public void testOnSelectedChangedForNotDragInteraction() {
-		final Adapter mockAdapter = mock(Adapter.class);
-		final Holder mockHolder = mock(Holder.class);
-		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
-		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
-		interactor.attachAdapter(mockAdapter);
-		interactor.addOnDragListener(mockListener);
-		interactor.onSelectedChanged(mockHolder, ItemTouchHelper.ACTION_STATE_SWIPE);
-		assertThat(interactor.isActive(), is(false));
-		assertThat(interactor.draggingFromPosition, is(RecyclerView.NO_POSITION));
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockAdapter);
-		verifyZeroInteractions(mockListener);
-	}
-
-	@Test
-	public void testOnSelectedChangedWithoutAttachedAdapter() {
-		final Holder mockHolder = mock(Holder.class);
+	public void testOnSelectedChangedWithoutAttachedAdapter() throws Exception {
+		final Holder mockHolder = createMockHolder(new View(mContext));
 		final ItemDragHelper.OnDragListener mockListener = mock(ItemDragHelper.OnDragListener.class);
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
 		interactor.addOnDragListener(mockListener);
@@ -635,7 +658,7 @@ public final class ItemDragHelperInteractorTest extends BaseInstrumentedTest {
 
 	private static RecyclerView.ViewHolder createMockViewHolder(View itemView) throws Exception {
 		final RecyclerView.ViewHolder mockHolder = mock(RecyclerView.ViewHolder.class);
-		final Field itemViewField = Holder.class.getField("itemView");
+		final Field itemViewField = RecyclerView.ViewHolder.class.getField("itemView");
 		itemViewField.setAccessible(true);
 		itemViewField.set(mockHolder, itemView);
 		return mockHolder;

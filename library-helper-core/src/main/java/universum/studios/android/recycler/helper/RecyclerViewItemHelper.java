@@ -350,8 +350,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		/**
 		 * Returns boolean flag indicating whether this interactor is enabled or not.
 		 *
-		 * {@code True} if this interactor is enabled, {@code false} otherwise.
-		 *
+		 * @return {@code True} if this interactor is enabled, {@code false} otherwise.
 		 * @see #setEnabled(boolean)
 		 */
 		public boolean isEnabled() {

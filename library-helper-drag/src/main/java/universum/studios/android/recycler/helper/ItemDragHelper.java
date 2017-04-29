@@ -381,7 +381,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @see Interactor#getMoveThreshold(RecyclerView.ViewHolder)
 		 */
 		public void setDragThreshold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
-			this.dragThreshold = Math.max(Math.min(1.0f, threshold), 0.0f);
+			this.dragThreshold = Math.min(Math.max(threshold, 0.0f), 1.0f);
 		}
 
 		/**
@@ -523,7 +523,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 */
 		@Override
 		public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			return shouldHandleInteraction() ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
+			return shouldHandleInteraction() && viewHolder instanceof DragViewHolder ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
@@ -531,15 +531,13 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		@Override
 		public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
 			super.onSelectedChanged(viewHolder, actionState);
-			if (shouldHandleInteraction()) {
+			if (shouldHandleInteraction() && viewHolder instanceof DragViewHolder) {
 				switch (actionState) {
 					case INTERACTION:
-						if (viewHolder instanceof DragViewHolder) {
-							this.dragging = true;
-							((DragViewHolder) viewHolder).onDragStarted();
-							this.dragAdapter.onItemDragStarted(draggingFromPosition = viewHolder.getAdapterPosition());
-							notifyDragStarted(viewHolder);
-						}
+						this.dragging = true;
+						((DragViewHolder) viewHolder).onDragStarted();
+						this.dragAdapter.onItemDragStarted(draggingFromPosition = viewHolder.getAdapterPosition());
+						notifyDragStarted(viewHolder);
 						break;
 					default:
 						// Do not handle other action states.
