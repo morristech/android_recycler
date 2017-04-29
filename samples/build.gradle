@@ -31,6 +31,7 @@ android {
         targetSdkVersion config.build.targetSdkVersion
         versionCode Integer.valueOf((String) project.property('samples.versionCode'))
         versionName project.property('samples.versionName')
+        vectorDrawables.useSupportLibrary = true
     }
 
     dataBinding {
@@ -78,9 +79,14 @@ dependencies {
     compile deps.androidSupport.design
     compile deps.androidSupport.vectorDrawable
     compile deps.androidSupport.recyclerView
+    compile deps.androidSupport.cardView
     compile deps.other.butterknife
     annotationProcessor deps.apt.butterknife
     compile deps.universumStudios.samples
     compile deps.universumStudios.fragments
     compile deps.universumStudios.widgetAdapters
+    compile deps.universumStudios.logger
+    compile deps.universumStudios.ui
+    compile deps.universumStudios.fontCore
+    compile deps.universumStudios.fontUtil
 }

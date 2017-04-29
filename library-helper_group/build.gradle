@@ -47,7 +47,8 @@ android {
     sourceSets {
         release.java.srcDirs = [
                 '../library-helper-core/src/main/java',
-                '../library-helper-swipe/src/main/java'
+                '../library-helper-swipe/src/main/java',
+                '../library-helper-drag/src/main/java'
         ]
         debug.java.srcDirs = release.java.srcDirs
     }
@@ -67,6 +68,7 @@ android {
  */
 repositories {
     maven { url repos.project.artifacts }
+    mavenLocal()
 }
 
 dependencies {

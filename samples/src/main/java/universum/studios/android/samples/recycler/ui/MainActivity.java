@@ -29,6 +29,10 @@ import universum.studios.android.fragment.manage.FragmentController;
 import universum.studios.android.fragment.manage.FragmentRequest;
 import universum.studios.android.fragment.manage.FragmentRequestInterceptor;
 import universum.studios.android.fragment.transition.FragmentTransitions;
+import universum.studios.android.samples.recycler.ui.decoration.divider.DividerDecorationFragment;
+import universum.studios.android.samples.recycler.ui.decoration.space.SpaceDecorationFragment;
+import universum.studios.android.samples.recycler.ui.helper.drag.DragHelperFragment;
+import universum.studios.android.samples.recycler.ui.helper.swipe.SwipeHelperFragment;
 import universum.studios.android.samples.ui.SamplesMainFragment;
 import universum.studios.android.samples.ui.SamplesNavigationActivity;
 
@@ -61,6 +65,18 @@ public final class MainActivity extends SamplesNavigationActivity implements Fra
 		switch (item.getItemId()) {
 			case R.id.navigation_item_home:
 				fragmentController.newRequest(new SamplesMainFragment()).execute();
+				return true;
+			case R.id.navigation_item_decoration_divider:
+				fragmentController.newRequest(new DividerDecorationFragment()).execute();
+				return true;
+			case R.id.navigation_item_decoration_space:
+				fragmentController.newRequest(new SpaceDecorationFragment()).execute();
+				return true;
+			case R.id.navigation_item_helper_drag:
+				fragmentController.newRequest(new DragHelperFragment()).execute();
+				return true;
+			case R.id.navigation_item_helper_swipe:
+				fragmentController.newRequest(new SwipeHelperFragment()).execute();
 				return true;
 		}
 		return false;

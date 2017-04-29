@@ -52,6 +52,7 @@ android {
                 '../library-decoration-divider/src/main/java',
                 '../library-decoration-space/src/main/java',
                 '../library-helper-core/src/main/java',
+                '../library-helper-drag/src/main/java',
                 '../library-helper-swipe/src/main/java'
         ]
         debug.java.srcDirs = release.java.srcDirs
@@ -68,7 +69,13 @@ android {
                 '../library-decoration-divider/src/androidTest/java',
                 '../library-decoration-space/src/androidTest/java',
                 '../library-helper-core/src/androidTest/java',
+                '../library-helper-drag/src/androidTest/java',
                 '../library-helper-swipe/src/androidTest/java'
+        ]
+        androidTest.res.srcDirs = [
+                '../library-decoration-core/src/androidTest/res',
+                '../library-decoration-divider/src/androidTest/res',
+                '../library-decoration-space/src/androidTest/res'
         ]
     }
 
@@ -98,8 +105,7 @@ dependencies {
     androidTestCompile project(':test-core')
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
-
-// Apply CODACY script.
+// Apply additional scripts.
+apply from: 'analysis.gradle'
 apply from: 'codacy.gradle'
+apply from: '../deploy/deploy.gradle'

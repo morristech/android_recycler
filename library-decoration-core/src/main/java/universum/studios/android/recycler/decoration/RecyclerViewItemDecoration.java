@@ -19,21 +19,33 @@
 package universum.studios.android.recycler.decoration;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import universum.studios.android.recycler.R;
+
 /**
- * A {@link RecyclerView.ItemDecoration} implementation that should be used as base class for all
- * item decorations from the Recycler library.
+ * A {@link RecyclerView.ItemDecoration} implementation that is used as base class by all item
+ * decorations from the Recycler library and is also encouraged to be used as base class by custom
+ * decoration implementations.
+ *
+ * <h3>Xml attributes</h3>
+ * {@link R.styleable#Recycler_ItemDecoration ItemDecoration Attributes}
+ *
+ * <h3>Default style attribute</h3>
+ * {@code none}
  *
  * @author Martin Albedinsky
+ * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
  */
 public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -42,19 +54,31 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 	// private static final String TAG = "RecyclerViewItemDecoration";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
 	/**
+	 * Boolean flag indicating whether this decoration should be skipped for the first item from the
+	 * data set or not.
+	 */
+	boolean mSkipFirst;
+
+	/**
+	 * Boolean flag indicating whether this decoration should be skipped for the last item from the
+	 * data set or not.
+	 */
+	boolean mSkipLast;
+
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -68,7 +92,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	/**
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet)} with {@code null} <var>attrs</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context) {
+	public RecyclerViewItemDecoration(@Nullable final Context context) {
 		this(context, null);
 	}
 
@@ -76,7 +100,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int)} with {@code 0}
 	 * <var>defStyleAttr</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
@@ -84,7 +108,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int, int)} with {@code 0}
 	 * <var>defStyleRes</var>.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
 		this(context, attrs, defStyleAttr, 0);
 	}
 
@@ -97,15 +121,96 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
 	 */
-	public RecyclerViewItemDecoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
-		// No configuration required for the base implementation.
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
+		super();
+		if (context != null) {
+			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration, defStyleAttr, defStyleRes);
+			for (int i = 0; i < attributes.getIndexCount(); i++) {
+				final int index = attributes.getIndex(i);
+				if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipFirst) {
+					this.mSkipFirst = attributes.getBoolean(index, false);
+				} else if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipLast) {
+					this.mSkipLast = attributes.getBoolean(index, false);
+				}
+			}
+			attributes.recycle();
+		}
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
 	/**
+	 * Sets a boolean flag indicating whether this decoration should be skipped for the first item
+	 * from data set of the associated {@link RecyclerView}.
+	 * <p>
+	 * Default value: {@code false}
+	 *
+	 * @param skip {@code True} to not apply this decoration for the first item, {@code false} to
+	 *             apply it.
+	 * @see #skipsFirst()
+	 * @see #setSkipLast(boolean)
+	 */
+	public void setSkipFirst(final boolean skip) {
+		this.mSkipFirst = skip;
+	}
+
+	/**
+	 * Checks whether this decoration is skipped for the first item.
+	 *
+	 * @return {@code True} if this decoration is not applied for the first item, {@code false} if
+	 * it is.
+	 * @see #setSkipFirst(boolean)
+	 */
+	public boolean skipsFirst() {
+		return mSkipFirst;
+	}
+
+	/**
+	 * Sets a boolean flag indicating whether this decoration should be skipped for the last item
+	 * from data set of the associated {@link RecyclerView}.
+	 * <p>
+	 * Default value: {@code false}
+	 *
+	 * @param skip {@code True} to not apply this decoration for the last item, {@code false} to
+	 *             apply it.
+	 * @see #skipsFirst()
+	 * @see #setSkipFirst(boolean)
+	 */
+	public void setSkipLast(final boolean skip) {
+		this.mSkipLast = skip;
+	}
+
+	/**
+	 * Checks whether this decoration is skipped for the last item.
+	 *
+	 * @return {@code True} if this decoration is not applied for the last item, {@code false} if
+	 * it is.
+	 * @see #setSkipLast(boolean)
+	 */
+	public boolean skipsLast() {
+		return mSkipLast;
+	}
+
+	/**
+	 * Checks whether any subsequent decoration algorithm should be applied by this decoration for
+	 * the given <var>parent</var> RecyclerView and its current <var>state</var>.
+	 * <p>
+	 * This implementation checks whether the given RecyclerView has its {@link RecyclerView.LayoutManager}
+	 * specified by {@code RecyclerView.getLayoutManager() != null} and if there are any items to be
+	 * decorated by {@code RecyclerView.State.getItemCount() > 0}. If both conditions are met, this
+	 * method returns {@code true}, if not, {@code false} is returned.
+	 *
+	 * @param parent The RecyclerView into which is this decoration added.
+	 * @param state  Current state of the parent RecyclerView.
+	 * @return {@code True} if decorating should be performed, {@code false} otherwise.
+	 */
+	protected boolean shouldDecorate(@NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+		return parent.getLayoutManager() != null && state.getItemCount() > 0;
+	}
+
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
