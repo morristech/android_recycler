@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RecyclerViewItemDecoration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.recycler.decoration</a> &gt; <span class="el_source">RecyclerViewItemDecoration.java</span></div><h1>RecyclerViewItemDecoration.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License 
+ * you may obtain at
+ * 
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * You can redistribute, modify or publish any part of the code written within this file but as it 
+ * is described in the License, the software distributed under the License is distributed on an 
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * 
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.recycler.decoration;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
+import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
+
+import universum.studios.android.recycler.R;
+
+/**
+ * A {@link RecyclerView.ItemDecoration} implementation that is used as base class by all item
+ * decorations from the Recycler library and is also encouraged to be used as base class by custom
+ * decoration implementations.
+ *
+ * &lt;h3&gt;Xml attributes&lt;/h3&gt;
+ * {@link R.styleable#Recycler_ItemDecoration ItemDecoration Attributes}
+ *
+ * &lt;h3&gt;Default style attribute&lt;/h3&gt;
+ * {@code none}
+ *
+ * @author Martin Albedinsky
+ * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
+ */
+public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
+
+	/*
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;RecyclerViewItemDecoration&quot;;
+
+	/*
+	 * Interface ===================================================================================
+	 */
+
+	/*
+	 * Static members ==============================================================================
+	 */
+
+	/*
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Boolean flag indicating whether this decoration should be skipped for the first item from the
+	 * data set or not.
+	 */
+	boolean mSkipFirst;
+
+	/**
+	 * Boolean flag indicating whether this decoration should be skipped for the last item from the
+	 * data set or not.
+	 */
+	boolean mSkipLast;
+
+	/*
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Same as {@link #RecyclerViewItemDecoration(Context)} with {@code null} &lt;var&gt;context&lt;/var&gt;.
+	 */
+	public RecyclerViewItemDecoration() {
+<span class="fc" id="L89">		this(null);</span>
+<span class="fc" id="L90">	}</span>
+
+	/**
+	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet)} with {@code null} &lt;var&gt;attrs&lt;/var&gt;.
+	 */
+	public RecyclerViewItemDecoration(@Nullable final Context context) {
+<span class="fc" id="L96">		this(context, null);</span>
+<span class="fc" id="L97">	}</span>
+
+	/**
+	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int)} with {@code 0}
+	 * &lt;var&gt;defStyleAttr&lt;/var&gt;.
+	 */
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
+<span class="fc" id="L104">		this(context, attrs, 0);</span>
+<span class="fc" id="L105">	}</span>
+
+	/**
+	 * Same as {@link #RecyclerViewItemDecoration(Context, AttributeSet, int, int)} with {@code 0}
+	 * &lt;var&gt;defStyleRes&lt;/var&gt;.
+	 */
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
+<span class="fc" id="L112">		this(context, attrs, defStyleAttr, 0);</span>
+<span class="fc" id="L113">	}</span>
+
+	/**
+	 * Creates a new instance of RecyclerViewItemDecoration for the given context.
+	 *
+	 * @param context      Context in which will be the new decoration presented.
+	 * @param attrs        Set of Xml attributes used to configure the new instance of this decoration.
+	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
+	 *                     this decoration within a theme of the given context.
+	 * @param defStyleRes  Resource id of the default style for the new decoration.
+	 */
+	public RecyclerViewItemDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
+<span class="fc" id="L125">		super();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		if (context != null) {</span>
+<span class="fc" id="L127">			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration, defStyleAttr, defStyleRes);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">			for (int i = 0; i &lt; attributes.getIndexCount(); i++) {</span>
+<span class="fc" id="L129">				final int index = attributes.getIndex(i);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">				if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipFirst) {</span>
+<span class="fc" id="L131">					this.mSkipFirst = attributes.getBoolean(index, false);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">				} else if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipLast) {</span>
+<span class="fc" id="L133">					this.mSkipLast = attributes.getBoolean(index, false);</span>
+				}
+			}
+<span class="fc" id="L136">			attributes.recycle();</span>
+		}
+<span class="fc" id="L138">	}</span>
+
+	/*
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * Sets a boolean flag indicating whether this decoration should be skipped for the first item
+	 * from data set of the associated {@link RecyclerView}.
+	 * &lt;p&gt;
+	 * Default value: {@code false}
+	 *
+	 * @param skip {@code True} to not apply this decoration for the first item, {@code false} to
+	 *             apply it.
+	 * @see #skipsFirst()
+	 * @see #setSkipLast(boolean)
+	 */
+	public void setSkipFirst(final boolean skip) {
+<span class="fc" id="L156">		this.mSkipFirst = skip;</span>
+<span class="fc" id="L157">	}</span>
+
+	/**
+	 * Checks whether this decoration is skipped for the first item.
+	 *
+	 * @return {@code True} if this decoration is not applied for the first item, {@code false} if
+	 * it is.
+	 * @see #setSkipFirst(boolean)
+	 */
+	public boolean skipsFirst() {
+<span class="fc" id="L167">		return mSkipFirst;</span>
+	}
+
+	/**
+	 * Sets a boolean flag indicating whether this decoration should be skipped for the last item
+	 * from data set of the associated {@link RecyclerView}.
+	 * &lt;p&gt;
+	 * Default value: {@code false}
+	 *
+	 * @param skip {@code True} to not apply this decoration for the last item, {@code false} to
+	 *             apply it.
+	 * @see #skipsFirst()
+	 * @see #setSkipFirst(boolean)
+	 */
+	public void setSkipLast(final boolean skip) {
+<span class="fc" id="L182">		this.mSkipLast = skip;</span>
+<span class="fc" id="L183">	}</span>
+
+	/**
+	 * Checks whether this decoration is skipped for the last item.
+	 *
+	 * @return {@code True} if this decoration is not applied for the last item, {@code false} if
+	 * it is.
+	 * @see #setSkipLast(boolean)
+	 */
+	public boolean skipsLast() {
+<span class="fc" id="L193">		return mSkipLast;</span>
+	}
+
+	/**
+	 * Checks whether any subsequent decoration algorithm should be applied by this decoration for
+	 * the given &lt;var&gt;parent&lt;/var&gt; RecyclerView and its current &lt;var&gt;state&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This implementation checks whether the given RecyclerView has its {@link RecyclerView.LayoutManager}
+	 * specified by {@code RecyclerView.getLayoutManager() != null} and if there are any items to be
+	 * decorated by {@code RecyclerView.State.getItemCount() &gt; 0}. If both conditions are met, this
+	 * method returns {@code true}, if not, {@code false} is returned.
+	 *
+	 * @param parent The RecyclerView into which is this decoration added.
+	 * @param state  Current state of the parent RecyclerView.
+	 * @return {@code True} if decorating should be performed, {@code false} otherwise.
+	 */
+	protected boolean shouldDecorate(@NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+<span class="fc bfc" id="L210" title="All 4 branches covered.">		return parent.getLayoutManager() != null &amp;&amp; state.getItemCount() &gt; 0;</span>
+	}
+
+	/*
+	 * Inner classes ===============================================================================
+	 */
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
