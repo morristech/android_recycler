@@ -67,7 +67,8 @@ public class DragHelperFragment extends RecyclerSampleFragment<SampleDragAdapter
 		super.onViewCreated(view, savedInstanceState);
 		this.collectionView.setItemAnimator(new ItemSwipeHelper.SwipeItemAnimator());
 		this.mDragHelper = new ItemDragHelper();
-		this.mDragHelper.addOnDragListener(this);
+		this.mDragHelper.getInteractor().setLongPressDragEnabled(false);
+		this.mDragHelper.getInteractor().addOnDragListener(this);
 		this.mDragHelper.attachToRecyclerView(collectionView);
 	}
 
@@ -82,7 +83,7 @@ public class DragHelperFragment extends RecyclerSampleFragment<SampleDragAdapter
 		switch (item.getItemId()) {
 			case R.id.menu_enabled:
 				item.setChecked(!item.isChecked());
-				mDragHelper.setEnabled(item.isChecked());
+				mDragHelper.getInteractor().setEnabled(item.isChecked());
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -92,7 +93,8 @@ public class DragHelperFragment extends RecyclerSampleFragment<SampleDragAdapter
 	public boolean onDataSetActionSelected(int action, int position, long id, @Nullable Object payload) {
 		switch (action) {
 			case SampleDragAdapter.ACTION_DRAG_INITIATE:
-				return mDragHelper.startDragTracking();
+				mDragHelper.startDrag((RecyclerView.ViewHolder) payload);
+				return true;
 		}
 		return super.onDataSetActionSelected(action, position, id, payload);
 	}

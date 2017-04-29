@@ -18,8 +18,10 @@
  */
 package universum.studios.android.test;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.support.annotation.CallSuper;
+import android.support.annotation.WorkerThread;
 import android.support.test.InstrumentationRegistry;
 
 import org.junit.After;
@@ -63,5 +65,13 @@ public abstract class BaseInstrumentedTest {
 	public void afterTest() throws Exception {
 		// Inheritance hierarchies may for example release here resources acquired in beforeTest() call.
 		this.mContext = null;
+	}
+
+	/**
+	 * Delegates to {@link Instrumentation#waitForIdleSync()}.
+	 */
+	@WorkerThread
+	protected static void waitForIdleSync() {
+		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 	}
 }

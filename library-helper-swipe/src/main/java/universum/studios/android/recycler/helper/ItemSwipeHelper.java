@@ -19,6 +19,7 @@
 package universum.studios.android.recycler.helper;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -47,14 +48,15 @@ import java.util.List;
  * whenever appropriate via the adapter's interface.
  *
  * <h3>Swipe Callbacks</h3>
- * A {@link OnSwipeListener} may be registered via {@link #addOnSwipeListener(OnSwipeListener)} in
- * order to receive callbacks about <b>started</b>, <b>finished</b> or <b>canceled</b> swipe gesture
- * for a particular {@link RecyclerView.ViewHolder ViewHolder}. If the listener is no more needed it
- * should be unregistered via {@link #removeOnSwipeListener(OnSwipeListener)}.
+ * A {@link OnSwipeListener} may be registered for the helper's {@link ItemSwipeHelper.Interactor}
+ * via {@link ItemSwipeHelper.Interactor#addOnSwipeListener(OnSwipeListener)} in order to receive
+ * callbacks about <b>started</b>, <b>finished</b> or <b>canceled</b> swipe gesture for a particular
+ * {@link RecyclerView.ViewHolder ViewHolder}. If the listener is no more needed it should be
+ * unregistered via {@link ItemSwipeHelper.Interactor#removeOnSwipeListener(OnSwipeListener)}.
  *
  * @author Martin Albedinsky
  */
-public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelper.SwipeInteractor> {
+public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelper.Interactor> {
 
 	/*
 	 * Constants ===================================================================================
@@ -64,6 +66,13 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ItemSwipeHelper";
+
+	/**
+	 * Interaction constant specific for {@link ItemSwipeHelper}.
+	 *
+	 * @see #ACTION_STATE_SWIPE
+	 */
+	public static final int INTERACTION = ACTION_STATE_SWIPE;
 
 	/**
 	 * Default swipe threshold for the swipe gesture.
@@ -200,7 +209,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * Creates a new instance of ItemSwipeHelper.
 	 */
 	public ItemSwipeHelper() {
-		this(new SwipeInteractor());
+		this(new Interactor());
 	}
 
 	/**
@@ -208,7 +217,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 *
 	 * @param interactor The interactor that will receive and handle swipe gesture related events.
 	 */
-	private ItemSwipeHelper(final SwipeInteractor interactor) {
+	private ItemSwipeHelper(final Interactor interactor) {
 		super(interactor);
 	}
 
@@ -225,53 +234,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * @see ItemSwipeHelper.Callback#makeMovementFlags(int, int)
 	 */
 	public static int makeSwipeFlags(@Movement final int movementFlags) {
-		return SwipeInteractor.makeMovementFlags(0, movementFlags);
-	}
-
-	/**
-	 * Sets a fraction that the user should move the holder's {@link View} to be considered as swiped.
-	 * <p>
-	 * Default value: {@link #SWIPE_THRESHOLD}
-	 *
-	 * @param threshold The desired threshold from the range {@code [0.0, 1.0]}.
-	 * @see #getSwipeThreshold()
-	 * @see ItemSwipeHelper.Callback#getSwipeThreshold(RecyclerView.ViewHolder)
-	 */
-	public void setSwipeThreshold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
-		this.mInteractor.swipeThreshold = threshold;
-	}
-
-	/**
-	 * Returns the fraction that the user should move the holder's {@link View} to be considered as
-	 * swiped.
-	 *
-	 * @return The swipe threshold from the range {@code [0.0, 1.0]}.
-	 * @see #setSwipeThreshold(float)
-	 */
-	@FloatRange(from = 0.0f, to = 1.0f)
-	public float getSwipeThreshold() {
-		return mInteractor.swipeThreshold;
-	}
-
-	/**
-	 * Registers a callback to be invoked whenever swipe gesture is <b>started</b>, <b>finished</b>
-	 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
-	 *
-	 * @param listener The desired listener callback to add.
-	 * @see #removeOnSwipeListener(OnSwipeListener)
-	 */
-	public void addOnSwipeListener(@NonNull final OnSwipeListener listener) {
-		mInteractor.addListener(listener);
-	}
-
-	/**
-	 * Removes the given swipe <var>listener</var> from the registered listeners.
-	 *
-	 * @param listener The desired listener to remove.
-	 * @see #addOnSwipeListener(OnSwipeListener)
-	 */
-	public void removeOnSwipeListener(@NonNull final OnSwipeListener listener) {
-		mInteractor.removeListener(listener);
+		return Interactor.makeMovementFlags(0, movementFlags);
 	}
 
 	/**
@@ -285,8 +248,8 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * @see #restoreHolder(RecyclerView.ViewHolder, int, Runnable)
 	 * @see OnSwipeListener#onSwipeCanceled(ItemSwipeHelper, RecyclerView.ViewHolder)
 	 */
-	public void setRestoreHolderAnimationDuration(final long duration) {
-		this.mRestoreHolderAnimationDuration = duration;
+	public void setRestoreHolderAnimationDuration(@IntRange(from = 0) final long duration) {
+		this.mRestoreHolderAnimationDuration = Math.max(0L, duration);
 	}
 
 	/**
@@ -354,11 +317,12 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 			@Direction final int direction,
 			@Nullable final Runnable animationCallback
 	) {
-		if (viewHolder instanceof SwipeViewHolder) {
+		final int holderPosition = viewHolder.getAdapterPosition();
+		if (viewHolder instanceof SwipeViewHolder && holderPosition != RecyclerView.NO_POSITION) {
 			// Restore holder's swipe view and when restore animation finishes notify the adapter
 			// that item at the holder's position has changed so view for the item is again properly
 			// drawn by the parent RecyclerView.
-			final View swipeView = ((SwipeViewHolder) viewHolder).getInteractiveView(ACTION_STATE_SWIPE);
+			final View swipeView = ((SwipeViewHolder) viewHolder).getInteractiveView(INTERACTION);
 			if (swipeView == null) {
 				return false;
 			}
@@ -380,9 +344,8 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 					break;
 				default:
 					// Unknown direction specified.
-					break;
+					return false;
 			}
-			final int itemPosition = viewHolder.getAdapterPosition();
 			final Runnable notify = new Runnable() {
 
 				/**
@@ -390,7 +353,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 				@Override
 				public void run() {
 					if (mInteractor.adapter != null) {
-						mInteractor.adapter.notifyItemChanged(itemPosition);
+						mInteractor.adapter.notifyItemChanged(holderPosition);
 					}
 					if (animationCallback != null) {
 						animationCallback.run();
@@ -416,27 +379,35 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 	 * A {@link ItemInteractor} implementation used by {@link ItemSwipeHelper} to handle swipe
 	 * gesture related callbacks and to delegate swipe events to the view holder that is being swiped.
 	 */
-	static final class SwipeInteractor extends RecyclerViewItemHelper.ItemInteractor {
+	public static final class Interactor extends RecyclerViewItemHelper.ItemInteractor {
 
 		/**
 		 * Fraction that the user should move the View to be considered as swiped.
 		 *
 		 * @see #getSwipeThreshold(RecyclerView.ViewHolder)
 		 */
-		float swipeThreshold = SWIPE_THRESHOLD;
+		private float swipeThreshold = SWIPE_THRESHOLD;
+
+		/**
+		 * Boolean flag indicating whether swipe should be started whenever a pointer is swiped
+		 * over an item view or not.
+		 *
+		 * @see #setItemViewSwipeEnabled(boolean)
+		 */
+		private boolean itemSwipeEnabled = true;
 
 		/**
 		 * Adapter providing swipeable item views attached to this interactor.
 		 *
 		 * @see #onAdapterAttached(RecyclerView.Adapter)
 		 */
-		private SwipeAdapter swipeAdapter;
+		@VisibleForTesting SwipeAdapter swipeAdapter;
 
 		/**
 		 * List containing all registered {@link OnSwipeListener}.
 		 *
-		 * @see #addListener(OnSwipeListener)
-		 * @see #removeListener(OnSwipeListener)
+		 * @see #addOnSwipeListener(OnSwipeListener)
+		 * @see #removeOnSwipeListener(OnSwipeListener)
 		 */
 		private List<OnSwipeListener> listeners;
 
@@ -448,12 +419,140 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 * @see #onSwiped(RecyclerView.ViewHolder, int)
 		 * @see #clearView(RecyclerView, RecyclerView.ViewHolder)
 		 */
-		private boolean swiping;
+		@VisibleForTesting boolean swiping;
+
+		/**
+		 * Creates a new instance of swipe gesture Interactor.
+		 */
+		Interactor() {
+			super();
+		}
+
+		/**
+		 * Sets a boolean flag indicating whether the swipe should be started whenever an active
+		 * pointer is swiped over an item view or not.
+		 * <p>
+		 * If disabled, a swipe for a particular view holder needs to be started via
+		 * {@link ItemSwipeHelper#startSwipe(RecyclerView.ViewHolder)} manually.
+		 * <p>
+		 * Default value: {@code true}
+		 *
+		 * @param enabled {@code True} to enable automatic swipe, {@code false} to disable it.
+		 * @see #isItemViewSwipeEnabled()
+		 */
+		public void setItemViewSwipeEnabled(boolean enabled) {
+			this.itemSwipeEnabled = enabled;
+		}
 
 		/**
 		 */
 		@Override
-		protected boolean canAttachToAdapter(@NonNull final RecyclerView.Adapter adapter) {
+		public boolean isItemViewSwipeEnabled() {
+			return itemSwipeEnabled;
+		}
+
+		/**
+		 * Sets a fraction that the user should move the holder's {@link View} to be considered as
+		 * swiped.
+		 * <p>
+		 * Default value: {@link #SWIPE_THRESHOLD}
+		 *
+		 * @param threshold The desired threshold from the range {@code [0.0, 1.0]}.
+		 * @see #getSwipeThreshold()
+		 * @see ItemSwipeHelper.Callback#getSwipeThreshold(RecyclerView.ViewHolder)
+		 */
+		public void setSwipeThreshold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
+			this.swipeThreshold = Math.min(Math.max(threshold, 0.0f), 1.0f);
+		}
+
+		/**
+		 * Returns the fraction that the user should move the holder's {@link View} to be considered
+		 * as swiped.
+		 *
+		 * @return The swipe threshold from the range {@code [0.0, 1.0]}.
+		 * @see #setSwipeThreshold(float)
+		 */
+		@FloatRange(from = 0.0f, to = 1.0f)
+		public float getSwipeThreshold() {
+			return swipeThreshold;
+		}
+
+		/**
+		 */
+		@Override
+		public float getSwipeThreshold(@NonNull final RecyclerView.ViewHolder viewHolder) {
+			return swipeThreshold;
+		}
+
+		/**
+		 * Registers a callback to be invoked whenever swipe gesture is <b>started</b>, <b>finished</b>
+		 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
+		 *
+		 * @param listener The desired listener callback to add.
+		 * @see #removeOnSwipeListener(OnSwipeListener)
+		 */
+		public void addOnSwipeListener(@NonNull final OnSwipeListener listener) {
+			if (listeners == null) listeners = new ArrayList<>(1);
+			if (!listeners.contains(listener)) listeners.add(listener);
+		}
+
+		/**
+		 * Removes the given swipe <var>listener</var> from the registered listeners.
+		 *
+		 * @param listener The desired listener to remove.
+		 * @see #addOnSwipeListener(OnSwipeListener)
+		 */
+		public void removeOnSwipeListener(@NonNull final OnSwipeListener listener) {
+			if (listeners != null) listeners.remove(listener);
+		}
+
+		/**
+		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
+		 * <var>viewHolder</var> has been started.
+		 *
+		 * @param viewHolder The view holder for which the swipe has started.
+		 */
+		@VisibleForTesting void notifySwipeStarted(final RecyclerView.ViewHolder viewHolder) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnSwipeListener listener : listeners) {
+					listener.onSwipeStarted((ItemSwipeHelper) helper, viewHolder);
+				}
+			}
+		}
+
+		/**
+		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
+		 * <var>viewHolder</var> has been finished/completed.
+		 *
+		 * @param viewHolder The view holder for which the swipe has finished.
+		 * @param direction  Direction in which the holder has been swiped.
+		 */
+		@VisibleForTesting void notifySwipeFinished(final RecyclerView.ViewHolder viewHolder, final int direction) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnSwipeListener listener : listeners) {
+					listener.onSwipeFinished((ItemSwipeHelper) helper, viewHolder, direction);
+				}
+			}
+		}
+
+		/**
+		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
+		 * <var>viewHolder</var> has been canceled.
+		 *
+		 * @param viewHolder The view holder for which the swipe has canceled.
+		 */
+		@VisibleForTesting void notifySwipeCanceled(final RecyclerView.ViewHolder viewHolder) {
+			if (listeners != null && !listeners.isEmpty()) {
+				for (final OnSwipeListener listener : listeners) {
+					listener.onSwipeCanceled((ItemSwipeHelper) helper, viewHolder);
+				}
+			}
+		}
+
+		/**
+		 */
+		@Override
+		protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
 			return adapter instanceof SwipeAdapter;
 		}
 
@@ -471,74 +570,22 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		protected void onAdapterDetached(@NonNull final RecyclerView.Adapter adapter) {
 			super.onAdapterDetached(adapter);
 			this.swipeAdapter = null;
+			this.resetState();
 		}
 
 		/**
-		 * Registers a callback to be invoked whenever swipe gesture is <b>started</b>, <b>finished</b>
-		 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
-		 *
-		 * @param listener The desired listener to add.
-		 * @see #removeListener(OnSwipeListener)
 		 */
-		void addListener(@NonNull final OnSwipeListener listener) {
-			if (listeners == null) listeners = new ArrayList<>(1);
-			if (!listeners.contains(listener)) listeners.add(listener);
+		@Override
+		public void setEnabled(boolean enabled) {
+			super.setEnabled(enabled);
+			this.resetState();
 		}
 
 		/**
-		 * Removes the given swipe <var>listener</var> from the registered listeners.
-		 *
-		 * @param listener The desired listener to remove.
-		 * @see #addListener(OnSwipeListener)
+		 * Resets current state of this interactor to the idle one.
 		 */
-		void removeListener(@NonNull final OnSwipeListener listener) {
-			if (listeners != null) listeners.remove(listener);
-		}
-
-		/**
-		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
-		 * <var>viewHolder</var> has been started.
-		 *
-		 * @param viewHolder The view holder for which the swipe has started.
-		 */
-		@VisibleForTesting
-		void notifySwipeStarted(final RecyclerView.ViewHolder viewHolder) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnSwipeListener listener : listeners) {
-					listener.onSwipeStarted((ItemSwipeHelper) helper, viewHolder);
-				}
-			}
-		}
-
-		/**
-		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
-		 * <var>viewHolder</var> has been finished/completed.
-		 *
-		 * @param viewHolder The view holder for which the swipe has finished.
-		 * @param direction  Direction in which the holder has been swiped.
-		 */
-		@VisibleForTesting
-		void notifySwipeFinished(final RecyclerView.ViewHolder viewHolder, final int direction) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnSwipeListener listener : listeners) {
-					listener.onSwipeFinished((ItemSwipeHelper) helper, viewHolder, direction);
-				}
-			}
-		}
-
-		/**
-		 * Notifies all registered {@link OnSwipeListener} that the swipe gesture for the given
-		 * <var>viewHolder</var> has been canceled.
-		 *
-		 * @param viewHolder The view holder for which the swipe has canceled.
-		 */
-		@VisibleForTesting
-		void notifySwipeCanceled(final RecyclerView.ViewHolder viewHolder) {
-			if (listeners != null && !listeners.isEmpty()) {
-				for (final OnSwipeListener listener : listeners) {
-					listener.onSwipeCanceled((ItemSwipeHelper) helper, viewHolder);
-				}
-			}
+		private void resetState() {
+			this.swiping = false;
 		}
 
 		/**
@@ -552,19 +599,19 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			return enabled && swipeAdapter != null && viewHolder instanceof SwipeViewHolder ? swipeAdapter.getItemSwipeFlags(viewHolder.getAdapterPosition()) : 0;
+			return shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder ? swipeAdapter.getItemSwipeFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
 		 */
 		@Override
 		public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
-			switch (actionState) {
-				case ItemSwipeHelper.ACTION_STATE_SWIPE:
-					if (viewHolder instanceof SwipeViewHolder) {
+			if (shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder) {
+				switch (actionState) {
+					case INTERACTION:
 						this.swiping = true;
 						final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-						final View interactiveView = swipeViewHolder.getInteractiveView(ACTION_STATE_SWIPE);
+						final View interactiveView = swipeViewHolder.getInteractiveView(INTERACTION);
 						if (interactiveView == null) {
 							super.onSelectedChanged(viewHolder, actionState);
 						} else {
@@ -573,10 +620,13 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 						swipeViewHolder.onSwipeStarted();
 						notifySwipeStarted(viewHolder);
 						break;
-					}
-				default:
-					super.onSelectedChanged(viewHolder, actionState);
-					break;
+					default:
+						// Handle other action states via default behavior.
+						super.onSelectedChanged(viewHolder, actionState);
+						break;
+				}
+			} else {
+				super.onSelectedChanged(viewHolder, actionState);
 			}
 		}
 
@@ -595,19 +645,12 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		/**
 		 */
 		@Override
-		public float getSwipeThreshold(@NonNull final RecyclerView.ViewHolder viewHolder) {
-			return swipeThreshold;
-		}
-
-		/**
-		 */
-		@Override
 		public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
-			if (viewHolder instanceof SwipeViewHolder) {
-				this.swiping = false;
+			if (shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder) {
 				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
 				swipeViewHolder.onSwipeFinished(direction);
 				notifySwipeFinished(viewHolder, direction);
+				this.resetState();
 			}
 		}
 
@@ -615,10 +658,9 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public void clearView(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			if (viewHolder instanceof SwipeViewHolder) {
-				this.swiping = false;
+			if (shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder) {
 				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
-				final View interactiveView = swipeViewHolder.getInteractiveView(ACTION_STATE_SWIPE);
+				final View interactiveView = swipeViewHolder.getInteractiveView(INTERACTION);
 				if (interactiveView == null) {
 					super.clearView(recyclerView, viewHolder);
 				} else {
@@ -629,6 +671,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 					swipeViewHolder.onSwipeCanceled();
 					notifySwipeCanceled(viewHolder);
 				}
+				this.resetState();
 			} else {
 				super.clearView(recyclerView, viewHolder);
 			}
@@ -651,14 +694,14 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		 */
 		@Override
 		public boolean animateChange(
-				@Nullable final RecyclerView.ViewHolder oldHolder,
-				@Nullable final RecyclerView.ViewHolder newHolder,
+				@NonNull final RecyclerView.ViewHolder oldHolder,
+				@NonNull final RecyclerView.ViewHolder newHolder,
 				final int fromX,
 				final int fromY,
 				final int toX,
 				final int toY
 		) {
-			if (fromX == toX && fromY == toY && oldHolder != null && newHolder != null) {
+			if (fromX == toX && fromY == toY) {
 				if (newHolder.equals(oldHolder)) {
 					dispatchChangeFinished(newHolder, false);
 				} else {

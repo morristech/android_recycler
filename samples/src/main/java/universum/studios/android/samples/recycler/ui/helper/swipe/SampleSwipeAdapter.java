@@ -61,7 +61,7 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 		@Nullable
 		@Override
 		public View getInteractiveView(@RecyclerViewItemHelper.Interaction int interaction) {
-			return interaction == RecyclerViewItemHelper.ACTION_STATE_SWIPE ? binding.itemContentContainer : null;
+			return interaction == ItemSwipeHelper.INTERACTION ? binding.itemContentContainer : null;
 		}
 
 		@Override

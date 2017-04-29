@@ -47,8 +47,9 @@ final class SampleDragAdapter extends SampleAdapter implements ItemDragHelper.Dr
 	}
 
 	@Override
-	public void onMoveItem(int fromPosition, int toPosition) {
-		moveItem(fromPosition, toPosition);
+	public boolean onMoveItem(int currentPosition, int targetPosition) {
+		moveItem(currentPosition, targetPosition);
+		return true;
 	}
 
 	@Override
@@ -78,7 +79,7 @@ final class SampleDragAdapter extends SampleAdapter implements ItemDragHelper.Dr
 
 		@Override
 		public boolean onLongClick(@NonNull View view) {
-			return notifyDataSetActionSelected(ACTION_DRAG_INITIATE, getAdapterPosition(), null);
+			return notifyDataSetActionSelected(ACTION_DRAG_INITIATE, getAdapterPosition(), this);
 		}
 
 		@Nullable
