@@ -4,6 +4,7 @@ Recycler
 [![Build Status](https://travis-ci.org/universum-studios/android_recycler.svg?branch=master)](https://travis-ci.org/universum-studios/android_recycler)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_recycler&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&utm_medium=referral&utm_content=universum-studios/android_recycler&utm_campaign=Badge_Coverage)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Recycler-green.svg?style=flat)](https://android-arsenal.com/details/1/5664)
 
 Common RecyclerView decorations and helpers for the Android platform.
 
