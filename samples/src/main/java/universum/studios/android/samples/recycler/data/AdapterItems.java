@@ -58,14 +58,14 @@ public final class AdapterItems {
 			"Phi",
 			"Chi",
 			"Psi",
-			"Omega",
+			"Omega"
 	};
 
 	@NonNull
 	public static List<AdapterItem> createSampleList(@NonNull Resources resources) {
 		final List<AdapterItem> items = new ArrayList<>();
 		for (String item : sItems) {
-			items.add(new AdapterItem.Builder(resources).title(item).build());
+			items.add(new AdapterItem.Builder(resources).id(item.hashCode()).title(item).build());
 		}
 		return items;
 	}

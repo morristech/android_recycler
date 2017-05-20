@@ -568,7 +568,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 */
 		@Override
 		public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
-			// Ignored for this interactor-callback implementation.
+			// Ignored for this interactor implementation.
 		}
 
 		/**

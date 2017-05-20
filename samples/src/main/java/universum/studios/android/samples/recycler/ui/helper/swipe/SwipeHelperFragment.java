@@ -63,6 +63,13 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 	protected SampleSwipeAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
 		final SampleSwipeAdapter adapter = new SampleSwipeAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
+		adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+			@Override
+			public void onItemRangeRemoved(int positionStart, int itemCount) {
+				Log.d(TAG, "onItemRangeRemoved(positionStart: " + positionStart + ", itemCount: " + itemCount + ", remainingItemCount: " + adapter.getItemCount() + ")");
+			}
+		});
 		return adapter;
 	}
 

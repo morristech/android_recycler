@@ -18,7 +18,7 @@ def mavenConfig = [
         localUrl                 : System.getenv('MAVEN_URL_LOCAL'),
         groupId                  : 'universum.studios.android',
         artifactId               : 'recycler',
-        version                  : libraryConfig.version,
+        version                  : /*libraryConfig.version*/'1.0.1',
         packaging                : 'pom',
         projectName              : 'Android Recycler',
         projectDescription       : 'Common RecyclerView decorations and helpers for the Android platform.',
@@ -32,7 +32,7 @@ def bintrayConfig = [
         packageName              : mavenConfig.groupId + ':' + mavenConfig.artifactId,
         packageLabels            : ['android', 'recycler', 'item-decoration', 'item-helper'],
         packageVersionName       : mavenConfig.version,
-        packageVersionDescription: 'First production release.',
+        packageVersionDescription: 'Release patch.',
         packageVersionTag        : mavenConfig.version
 ]
 

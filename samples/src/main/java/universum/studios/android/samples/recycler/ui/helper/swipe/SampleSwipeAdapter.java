@@ -29,6 +29,12 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 
 	SampleSwipeAdapter(@NonNull Context context, @NonNull List<AdapterItem> items) {
 		super(context, items);
+		setHasStableIds(true);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return getItem(position).getId();
 	}
 
 	@Override
@@ -56,6 +62,12 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			final Resources resources = itemView.getResources();
 			this.actionColorDone = resources.getColor(R.color.action_tint_done);
 			this.actionColorDelete = resources.getColor(R.color.action_tint_delete);
+		}
+
+		@Override
+		public void bind(@NonNull SampleAdapter adapter, int position, @Nullable List<Object> payloads) {
+			super.bind(adapter, position, payloads);
+			setVisibleAction(activeAction);
 		}
 
 		@Nullable
