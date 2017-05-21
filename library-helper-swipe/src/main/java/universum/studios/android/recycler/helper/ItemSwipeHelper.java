@@ -638,7 +638,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 				@NonNull final RecyclerView.ViewHolder viewHolder,
 				@NonNull final RecyclerView.ViewHolder target
 		) {
-			// Ignored for this interactor-callback implementation.
+			// Ignored for this interactor implementation.
 			return false;
 		}
 
@@ -667,7 +667,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 					getDefaultUIUtil().clearView(interactiveView);
 				}
 				final int adapterPosition = viewHolder.getAdapterPosition();
-				if (adapterPosition != RecyclerView.NO_POSITION) {
+				if (adapterPosition != RecyclerView.NO_POSITION && !recyclerView.isComputingLayout()) {
 					swipeViewHolder.onSwipeCanceled();
 					notifySwipeCanceled(viewHolder);
 				}

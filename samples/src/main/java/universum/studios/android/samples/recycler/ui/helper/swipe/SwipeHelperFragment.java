@@ -63,6 +63,13 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 	protected SampleSwipeAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
 		final SampleSwipeAdapter adapter = new SampleSwipeAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
+		adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+			@Override
+			public void onItemRangeRemoved(int positionStart, int itemCount) {
+				Log.d(TAG, "onItemRangeRemoved(positionStart: " + positionStart + ", itemCount: " + itemCount + ", remainingItemCount: " + adapter.getItemCount() + ")");
+			}
+		});
 		return adapter;
 	}
 
@@ -92,12 +99,20 @@ public class SwipeHelperFragment extends RecyclerSampleFragment<SampleSwipeAdapt
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_refresh:
+				adapter.changeItems(AdapterItems.createSampleList(getResources()));
+				return true;
 			case R.id.menu_enabled:
 				item.setChecked(!item.isChecked());
 				mSwipeHelper.getInteractor().setEnabled(item.isChecked());
 				return true;
-			case R.id.menu_refresh:
-				adapter.changeItems(AdapterItems.createSampleList(getResources()));
+			case R.id.menu_swipe_interaction_via_draw:
+				item.setChecked(true);
+				adapter.setInteractionHandling(SampleSwipeAdapter.INTERACTION_HANDLING_VIA_DRAW);
+				return true;
+			case R.id.menu_swipe_interaction_via_swipe_view:
+				item.setChecked(true);
+				adapter.setInteractionHandling(SampleSwipeAdapter.INTERACTION_HANDLING_VIA_SWIPE_VIEW);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

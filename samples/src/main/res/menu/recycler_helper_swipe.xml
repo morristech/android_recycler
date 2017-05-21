@@ -33,4 +33,20 @@
 		android:checkable="true"
 		android:checked="true"
 		app:showAsAction="never"/>
+
+	<item android:title="@string/swipe_menu_interaction">
+		<menu>
+			<group android:checkableBehavior="single">
+
+				<item
+					android:id="@+id/menu_swipe_interaction_via_draw"
+					android:checked="true"
+					android:title="@string/swipe_menu_interaction_via_draw" />
+
+				<item
+					android:id="@+id/menu_swipe_interaction_via_swipe_view"
+					android:title="@string/swipe_menu_interaction_via_swipe_view" />
+			</group>
+		</menu>
+	</item>
 </menu>
