@@ -18,17 +18,17 @@
  */
 package universum.studios.android.samples.recycler.ui;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
 import android.view.MenuItem;
 
-import universum.studios.android.samples.recycler.R;
 import universum.studios.android.fragment.manage.FragmentController;
 import universum.studios.android.fragment.manage.FragmentRequest;
 import universum.studios.android.fragment.manage.FragmentRequestInterceptor;
 import universum.studios.android.fragment.transition.FragmentTransitions;
+import universum.studios.android.samples.recycler.R;
 import universum.studios.android.samples.recycler.ui.decoration.divider.DividerDecorationFragment;
 import universum.studios.android.samples.recycler.ui.decoration.space.SpaceDecorationFragment;
 import universum.studios.android.samples.recycler.ui.helper.drag.DragHelperFragment;
