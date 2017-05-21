@@ -56,4 +56,10 @@
 	<string name="recycler_menu_orientation">Orientation</string>
 	<string name="recycler_menu_orientation_vertical">Vertical</string>
 	<string name="recycler_menu_orientation_horizontal">Horizontal</string>
+
+	<!-- ### SWIPE ============================================================================= -->
+	
+	<string name="swipe_menu_interaction">Swipe interaction</string>
+	<string name="swipe_menu_interaction_via_draw">Via draw</string>
+	<string name="swipe_menu_interaction_via_swipe_view">Via swipe view</string>
 </resources>
