@@ -46,15 +46,15 @@ android {
 
     sourceSets {
         release.java.srcDirs = [
-                '../library-decoration-core/src/main/java',
-                '../library-decoration-divider/src/main/java',
-                '../library-decoration-space/src/main/java'
+                "${rootProject.rootDir}/library-decoration-core/src/main/java",
+                "${rootProject.rootDir}/library-decoration-divider/src/main/java",
+                "${rootProject.rootDir}/library-decoration-space/src/main/java"
         ]
         debug.java.srcDirs = release.java.srcDirs
         release.res.srcDirs = [
-                '../library-decoration-core/src/main/res',
-                '../library-decoration-divider/src/main/res',
-                '../library-decoration-space/src/main/res'
+                "${rootProject.rootDir}/library-decoration-core/src/main/res",
+                "${rootProject.rootDir}/library-decoration-divider/src/main/res",
+                "${rootProject.rootDir}/library-decoration-space/src/main/res"
         ]
         debug.res.srcDirs = release.res.srcDirs
     }
@@ -85,5 +85,4 @@ dependencies {
     compile deps.androidSupport.recyclerView
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
+apply from: "${rootProject.rootDir}/deploy/deploy.gradle"
