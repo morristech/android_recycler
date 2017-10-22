@@ -16,33 +16,41 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.test;
+package universum.studios.android.test.local;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.test.rule.ActivityTestRule;
-import android.view.View;
+import android.support.annotation.CallSuper;
+
+import org.junit.After;
+import org.junit.Before;
 
 /**
- * Simple activity that may be used in <b>Android Instrumented Tests</b> in order to set up
- * {@link ActivityTestRule}.
+ * Class that may be used to group <b>suite of tests</b> to be executed on a local <i>JVM</i>.
  *
  * @author Martin Albedinsky
  */
-public final class TestActivity extends Activity {
+public abstract class LocalTestCase {
 
 	/**
 	 * Log TAG.
 	 */
 	@SuppressWarnings("unused")
-	private static final String TAG = "TestActivity";
+	private static final String TAG = "LocalTestCase";
 
 	/**
+	 * Called before execution of each test method starts.
 	 */
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(new View(this));
+	@Before
+	@CallSuper
+	public void beforeTest() throws Exception {
+		// Inheritance hierarchies may for example acquire here resources needed for each test.
+	}
+
+	/**
+	 * Called after execution of each test method finishes.
+	 */
+	@After
+	@CallSuper
+	public void afterTest() throws Exception {
+		// Inheritance hierarchies may for example release here resources acquired in beforeTest() call.
 	}
 }

@@ -1,17 +1,13 @@
 // Defines dependencies used across the library project.
 def versions = [
-        androidSupport                : '26.0.0',
-        androidSupportTest            : '1.0',
-        androidSupportTestEspresso    : '3.0.0',
-        universumStudiosSamples       : '0.1.4',
-        universumStudiosFragments     : '1.2.0',
-        universumStudiosWidgetAdapters: '2.0.0',
-        universumStudiosLogger        : '1.0.0',
-        universumStudiosUI            : '0.9.4',
-        universumStudiosFont          : '1.1.1',
-        butterknife                   : '8.5.1',
-        junit                         : '4.12',
-        mockito                       : '2.7.20'
+        androidSupport            : '26.0.0',
+        androidSupportTest        : '1.0',
+        androidSupportTestEspresso: '3.0.0',
+        butterknife               : '8.5.1',
+        junit                     : '4.12',
+        mockito                   : '2.7.20',
+        robolectric               : '3.5',
+        robolectricFallback       : '3.3.2'
 ]
 
 ext.versions = versions
@@ -27,29 +23,33 @@ def androidSupport = [
 ]
 
 def test = [
-        androidSupportAnnotations: androidSupport.annotations,
-        androidRunner            : "com.android.support.test:runner:${versions.androidSupportTest}",
-        androidRules             : "com.android.support.test:rules:${versions.androidSupportTest}",
-        androidEspressoCore      : "com.android.support.test.espresso:espresso-core:${versions.androidSupportTestEspresso}",
-        androidEspressoIntents   : "com.android.support.test.espresso:espresso-intents:${versions.androidSupportTestEspresso}",
-        androidEspressoContrib   : "com.android.support.test.espresso:espresso-contrib:${versions.androidSupportTestEspresso}",
-        junit                    : "junit:junit:${versions.junit}",
-        mockitoCore              : "org.mockito:mockito-core:${versions.mockito}",
-        mockitoAndroid           : "org.mockito:mockito-android:${versions.mockito}"
+        junit                      : "junit:junit:${versions.junit}",
+        mockitoCore                : "org.mockito:mockito-core:${versions.mockito}",
+        mockitoAndroid             : "org.mockito:mockito-android:${versions.mockito}",
+        robolectric                : "org.robolectric:robolectric:${versions.robolectric}",
+        robolectricMultidex        : "org.robolectric:shadows-multidex:${versions.robolectric}",
+        robolectricShadowsSupportV4: "org.robolectric:shadows-support-v4:${versions.robolectricFallback}",
+        androidRunner              : "com.android.support.test:runner:${versions.androidSupportTest}",
+        androidRules               : "com.android.support.test:rules:${versions.androidSupportTest}",
+        androidEspressoCore        : "com.android.support.test.espresso:espresso-core:${versions.androidSupportTestEspresso}",
+        androidEspressoIntents     : "com.android.support.test.espresso:espresso-intents:${versions.androidSupportTestEspresso}",
+        androidEspressoContrib     : "com.android.support.test.espresso:espresso-contrib:${versions.androidSupportTestEspresso}",
+        androidSupportAnnotations  : androidSupport.annotations,
+        androidSupportV4           : androidSupport.v4
 ]
 
 def universumStudios = [
-        samples       : "universum.studios.android:samples:${versions.universumStudiosSamples}@aar",
-        fragments     : "universum.studios.android:fragments:${versions.universumStudiosFragments}@aar",
-        widgetAdapters: "universum.studios.android:widget-adapters:${versions.universumStudiosWidgetAdapters}@aar",
-        logger        : "universum.studios.android:logger:${versions.universumStudiosLogger}@aar",
-        ui            : "universum.studios.android:ui:${versions.universumStudiosUI}@aar",
-        fontCore      : "universum.studios.android:font-core:${versions.universumStudiosFont}@aar",
-        fontUtil      : "universum.studios.android:font-util:${versions.universumStudiosFont}@aar"
+        samples       : 'universum.studios.android:samples:0.1.4@aar',
+        fragments     : 'universum.studios.android:fragments:1.2.0@aar',
+        widgetAdapters: 'universum.studios.android:widget-adapters:2.0.0@aar',
+        logger        : 'universum.studios.android:logger:1.0.0@aar',
+        ui            : 'universum.studios.android:ui:0.9.4@aar',
+        fontCore      : 'universum.studios.android:font-core:1.1.1@aar',
+        fontUtil      : 'universum.studios.android:font-util:1.1.1@aar'
 ]
 
 def other = [
-        butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
+        butterknife         : "com.jakewharton:butterknife:${versions.butterknife}",
         butterknifeProcessor: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 ]
 

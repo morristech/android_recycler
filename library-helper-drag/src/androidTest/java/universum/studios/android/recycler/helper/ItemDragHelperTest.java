@@ -23,7 +23,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -33,7 +33,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class ItemDragHelperTest extends BaseInstrumentedTest {
+public final class ItemDragHelperTest extends InstrumentedTestCase {
     
 	@SuppressWarnings("unused")
 	private static final String TAG = "ItemDragHelperTest";

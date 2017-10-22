@@ -16,62 +16,57 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.test;
+package universum.studios.android.test.local;
 
-import android.app.Instrumentation;
-import android.content.Context;
+import android.app.Application;
 import android.support.annotation.CallSuper;
-import android.support.annotation.WorkerThread;
-import android.support.test.InstrumentationRegistry;
+import android.support.annotation.NonNull;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 /**
- * Class that may be used as base for <b>Android Instrumented Tests</b>.
+ * Class that may be used to group <b>suite of Android tests</b> to be executed on a local <i>JVM</i>
+ * with shadowed <i>Android environment</i> using {@link RobolectricTestRunner}.
  *
  * @author Martin Albedinsky
  */
-public abstract class BaseInstrumentedTest {
+@Config(manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+@SuppressWarnings({"NullableProblems", "ConstantConditions"})
+public abstract class RobolectricTestCase extends LocalTestCase {
 
 	/**
 	 * Log TAG.
 	 */
 	@SuppressWarnings("unused")
-	private static final String TAG = "BaseInstrumentedTest";
+	private static final String TAG = "RobolectricTestCase";
 
 	/**
-	 * Target context obtained from the {@link InstrumentationRegistry}.
+	 * Application instance accessible via {@link RuntimeEnvironment#application}.
 	 * <p>
 	 * It is always valid between calls to {@link #beforeTest()} and {@link #afterTest()}.
 	 */
-	protected Context mContext;
+	@NonNull
+	protected Application mApplication;
 
 	/**
-	 * Called before execution of each test method starts.
 	 */
-	@Before
+	@Override
 	@CallSuper
 	public void beforeTest() throws Exception {
-		// Inheritance hierarchies may for example acquire here resources needed for each test.
-		this.mContext = InstrumentationRegistry.getTargetContext();
+		super.beforeTest();
+		this.mApplication = RuntimeEnvironment.application;
 	}
 
 	/**
-	 * Called after execution of each test method finishes.
 	 */
-	@After
+	@Override
 	@CallSuper
 	public void afterTest() throws Exception {
-		// Inheritance hierarchies may for example release here resources acquired in beforeTest() call.
-		this.mContext = null;
-	}
-
-	/**
-	 * Delegates to {@link Instrumentation#waitForIdleSync()}.
-	 */
-	@WorkerThread
-	protected static void waitForIdleSync() {
-		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+		super.afterTest();
+		this.mApplication = null;
 	}
 }

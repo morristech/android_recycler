@@ -20,15 +20,13 @@ package universum.studios.android.recycler.helper;
 
 import android.support.annotation.NonNull;
 import android.support.test.annotation.UiThreadTest;
-import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -44,13 +42,10 @@ import static org.mockito.Mockito.when;
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class RecyclerViewItemHelperTest extends BaseInstrumentedTest {
+public final class RecyclerViewItemHelperTest extends InstrumentedTestCase {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "RecyclerViewItemHelperTest";
-
-	@Rule
-	public final UiThreadTestRule UI_RULE = new UiThreadTestRule();
 
 	@Test
 	public void testInstantiation() {
