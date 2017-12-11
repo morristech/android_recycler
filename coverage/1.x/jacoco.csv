@@ -1,0 +1,12 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+library,universum.studios.android.recycler.helper,ItemSwipeHelper.new Runnable() {...},0,33,0,4,0,6,0,4,0,2
+library,universum.studios.android.recycler.helper,RecyclerViewItemHelper.ItemInteractor,0,152,0,18,0,39,0,20,0,11
+library,universum.studios.android.recycler.helper,ItemDragHelper.Interactor,4,327,4,54,0,77,3,49,0,23
+library,universum.studios.android.recycler.helper,RecyclerViewItemHelper,33,25,5,1,4,9,3,3,0,3
+library,universum.studios.android.recycler.helper,ItemSwipeHelper.Interactor,0,295,1,49,0,82,1,46,0,22
+library,universum.studios.android.recycler.helper,ItemSwipeHelper.SwipeItemAnimator,0,37,0,6,0,8,0,5,0,2
+library,universum.studios.android.recycler.helper,ItemDragHelper,0,14,0,0,0,5,0,3,0,3
+library,universum.studios.android.recycler.helper,ItemSwipeHelper,0,120,0,15,0,33,0,17,0,9
+library,universum.studios.android.recycler.decoration,ItemDividerDecoration,57,402,11,59,11,105,6,48,0,19
+library,universum.studios.android.recycler.decoration,ItemSpaceDecoration,67,134,13,17,13,38,7,21,0,13
+library,universum.studios.android.recycler.decoration,RecyclerViewItemDecoration,25,66,5,7,5,21,3,13,0,10
