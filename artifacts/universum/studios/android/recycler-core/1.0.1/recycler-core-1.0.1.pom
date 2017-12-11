@@ -29,7 +29,7 @@
       <name>Martin Albedinsky</name>
       <email>martin.albedinsky@gmail.com</email>
       <roles>
-        <role>Android Software Engineer</role>
+        <role>Software Engineer</role>
       </roles>
     </developer>
   </developers>
@@ -37,7 +37,7 @@
     <dependency>
       <groupId>com.android.support</groupId>
       <artifactId>support-annotations</artifactId>
-      <version>25.3.0</version>
+      <version>27.0.0</version>
     </dependency>
   </dependencies>
 </project>
