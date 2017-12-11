@@ -31,7 +31,7 @@ android {
         versionCode Integer.valueOf((String) project.property('samples.versionCode'))
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        vectorDrawables.useSupportLibrary
+        vectorDrawables.useSupportLibrary = true
     }
 
     final String keyDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
