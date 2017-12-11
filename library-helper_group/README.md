@@ -8,8 +8,8 @@ This module groups the following modules into one **single group**:
 - [Helper-Swipe](https://github.com/universum-studios/android_recycler/tree/master/library-helper-swipe)
 
 ## Download ##
-[![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
+[![Bintray](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
 
 ### Gradle ###
 
-    compile "universum.studios.android:recycler-helper:${DESIRED_VERSION}@aar"
+    implementation "universum.studios.android:recycler-helper:${DESIRED_VERSION}@aar"
