@@ -507,7 +507,8 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		/**
 		 * Resets current state of this interactor to the idle one.
 		 */
-		private void resetState() {
+		@VisibleForTesting
+		void resetState() {
 			this.dragging = false;
 			this.draggingFromPosition = movingFromPosition = movingToPosition = RecyclerView.NO_POSITION;
 		}

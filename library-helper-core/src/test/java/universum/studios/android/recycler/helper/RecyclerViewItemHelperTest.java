@@ -19,55 +19,38 @@
 package universum.studios.android.recycler.helper;
 
 import android.support.annotation.NonNull;
-import android.support.test.annotation.UiThreadTest;
 import android.support.v7.widget.RecyclerView;
 
 import org.junit.Test;
 
-import universum.studios.android.test.instrumented.InstrumentedTestCase;
+import universum.studios.android.test.local.RobolectricTestCase;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Martin Albedinsky
  */
-public final class RecyclerViewItemHelperTest extends InstrumentedTestCase {
+public final class RecyclerViewItemHelperTest extends RobolectricTestCase {
 
 	@Test
-	@UiThreadTest
-	public void testAttachToRecyclerView() {
+	public void testInstantiation() {
 		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
-		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
-		recyclerView.setAdapter(mockAdapter);
-		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(true);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
-		verify(mockInteractor, times(1)).canAttachAdapter(mockAdapter);
-		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapter);
-		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
-	}
-
-	@UiThreadTest
-	@Test(expected = IllegalArgumentException.class)
-	public void testAttachToRecyclerViewWithUnsupportedAdapter() {
-		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
-		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
-		recyclerView.setAdapter(mockAdapter);
-		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(false);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+		final Helper helper = new Helper(mockInteractor);
+		assertThat(helper.getInteractor(), is(not(nullValue())));
+		verify(mockInteractor, times(1)).onAttachedToHelper(helper);
 	}
 
 	@Test
-	@UiThreadTest
-	public void testAttachToRecyclerViewWithoutAdapter() {
+	public void testAttachToNullRecyclerView() {
 		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+		new Helper(mockInteractor).attachToRecyclerView(null);
 		verify(mockInteractor, times(0)).canAttachAdapter(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterAttached(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
