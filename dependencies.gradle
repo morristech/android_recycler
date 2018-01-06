@@ -9,7 +9,20 @@ def versions = [
         robolectric               : '3.5.1'
 ]
 
-ext.versions = versions
+def modulesPrimaryId = "${config.pom.groupId}:${config.pom.artifactId}"
+def modulesVersion = "${config.library.version.production}"
+def modules = [
+        library                 : "${modulesPrimaryId}:${modulesVersion}@aar",
+        libraryCore             : "${modulesPrimaryId}-core:${modulesVersion}@aar",
+        libraryDecoration       : "${modulesPrimaryId}-decoration:${modulesVersion}@aar",
+        libraryDecorationCore   : "${modulesPrimaryId}-decoration-core:${modulesVersion}@aar",
+        libraryDecorationDivider: "${modulesPrimaryId}-decoration-divider:${modulesVersion}@aar",
+        libraryDecorationSpace  : "${modulesPrimaryId}-decoration-space:${modulesVersion}@aar",
+        libraryHelper           : "${modulesPrimaryId}-helper:${modulesVersion}@aar",
+        libraryHelperCore       : "${modulesPrimaryId}-helper-core:${modulesVersion}@aar",
+        libraryHelperDrag       : "${modulesPrimaryId}-helper-drag:${modulesVersion}@aar",
+        libraryHelperSwipe      : "${modulesPrimaryId}-helper-swipe:${modulesVersion}@aar"
+]
 
 def androidSupport = [
         annotations   : "com.android.support:support-annotations:${versions.androidSupport}",
@@ -51,7 +64,9 @@ def other = [
         butterknifeProcessor: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 ]
 
+ext.versions = versions
 ext.deps = [
+        "modules"         : modules,
         "androidSupport"  : androidSupport,
         "test"            : test,
         "universumStudios": universumStudios,
