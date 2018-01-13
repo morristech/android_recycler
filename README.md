@@ -1,4 +1,4 @@
-Recycler
+Android Recycler
 ===============
 
 [![CircleCI](https://circleci.com/gh/universum-studios/android_recycler.svg?style=svg)](https://circleci.com/gh/universum-studios/android_recycler)
