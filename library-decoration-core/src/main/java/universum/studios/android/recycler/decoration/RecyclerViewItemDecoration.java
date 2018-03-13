@@ -125,12 +125,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 		super();
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration, defStyleAttr, defStyleRes);
-			for (int i = 0; i < attributes.getIndexCount(); i++) {
-				final int index = attributes.getIndex(i);
-				if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipFirst) {
-					this.mSkipFirst = attributes.getBoolean(index, false);
-				} else if (index == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipLast) {
-					this.mSkipLast = attributes.getBoolean(index, false);
+			final int attributeCount = attributes.getIndexCount();
+			for (int i = 0; i < attributeCount; i++) {
+				final int attrIndex = attributes.getIndex(i);
+				if (attrIndex == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipFirst) {
+					this.mSkipFirst = attributes.getBoolean(attrIndex, false);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipLast) {
+					this.mSkipLast = attributes.getBoolean(attrIndex, false);
 				}
 			}
 			attributes.recycle();

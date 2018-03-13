@@ -158,20 +158,21 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
-			for (int i = 0; i < attributes.getIndexCount(); i++) {
-				final int index = attributes.getIndex(i);
-				if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
-					this.mHorizontalStart = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
-					this.mHorizontalEnd = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
-					this.mVerticalStart = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
-					this.mVerticalEnd = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
-					setSkipFirst(attributes.getBoolean(index, skipsFirst()));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
-					setSkipLast(attributes.getBoolean(index, skipsLast()));
+			final int attributeCount = attributes.getIndexCount();
+			for (int i = 0; i < attributeCount; i++) {
+				final int attrIndex = attributes.getIndex(i);
+				if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
+					this.mHorizontalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
+					this.mHorizontalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
+					this.mVerticalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
+					this.mVerticalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
+					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
+					setSkipLast(attributes.getBoolean(attrIndex, skipsLast()));
 				}
 			}
 			attributes.recycle();
