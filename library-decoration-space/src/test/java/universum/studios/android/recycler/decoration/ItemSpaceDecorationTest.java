@@ -20,6 +20,7 @@ package universum.studios.android.recycler.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -115,12 +116,22 @@ public final class ItemSpaceDecorationTest extends RobolectricTestCase {
 	@Test
 	public void testGetItemOffsets() {
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
-		decoration.setSkipFirst(false);
-		decoration.setSkipLast(false);
 		final Rect rect = new Rect();
 		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
 		assertThat(rect.left, is(decoration.getHorizontalStart()));
 		assertThat(rect.right, is(decoration.getHorizontalEnd()));
+		assertThat(rect.top, is(decoration.getVerticalStart()));
+		assertThat(rect.bottom, is(decoration.getVerticalEnd()));
+	}
+
+	@Test
+	public void testGetItemOffsetsForRTLLayoutDirection() {
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
+		final Rect rect = new Rect();
+		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		assertThat(rect.left, is(decoration.getHorizontalEnd()));
+		assertThat(rect.right, is(decoration.getHorizontalStart()));
 		assertThat(rect.top, is(decoration.getVerticalStart()));
 		assertThat(rect.bottom, is(decoration.getVerticalEnd()));
 	}

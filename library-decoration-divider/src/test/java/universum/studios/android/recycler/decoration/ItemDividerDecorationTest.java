@@ -22,6 +22,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -217,14 +218,28 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 	@Test
 	public void testGetItemOffsetsForVerticalOrientation() {
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
-		decoration.setSkipFirst(false);
-		decoration.setSkipLast(false);
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		decoration.setDividerThickness(4);
+		decoration.setDividerOffset(10, 5);
 		final Rect rect = new Rect();
 		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
-		assertThat(rect.left, is(0));
-		assertThat(rect.right, is(0));
+		assertThat(rect.left, is(10));
+		assertThat(rect.right, is(5));
+		assertThat(rect.top, is(0));
+		assertThat(rect.bottom, is(decoration.getDividerThickness()));
+	}
+
+	@Test
+	public void testGetItemOffsetsForVerticalOrientationAndRTLLayoutDirection() {
+		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
+		decoration.setDividerThickness(4);
+		decoration.setDividerOffset(10, 5);
+		final Rect rect = new Rect();
+		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		assertThat(rect.left, is(5));
+		assertThat(rect.right, is(10));
 		assertThat(rect.top, is(0));
 		assertThat(rect.bottom, is(decoration.getDividerThickness()));
 	}
@@ -232,16 +247,15 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 	@Test
 	public void testGetItemOffsetsForHorizontalOrientation() {
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
-		decoration.setSkipFirst(false);
-		decoration.setSkipLast(false);
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		decoration.setDividerThickness(4);
+		decoration.setDividerOffset(10, 5);
 		final Rect rect = new Rect();
 		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
 		assertThat(rect.left, is(0));
 		assertThat(rect.right, is(decoration.getDividerThickness()));
-		assertThat(rect.top, is(0));
-		assertThat(rect.bottom, is(0));
+		assertThat(rect.top, is(10));
+		assertThat(rect.bottom, is(5));
 	}
 
 	@Test
@@ -396,6 +410,31 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 	}
 
 	@Test
+	public void testOnDrawHorizontallyForRTLLayoutDirection() {
+		final Drawable mockDivider = mock(Drawable.class);
+		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		decoration.setDivider(mockDivider);
+		decoration.setDividerThickness(4);
+		// todo: set offsets
+		when(mMockRecyclerView.getChildCount()).thenReturn(10);
+		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(new View(mApplication));
+		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mMockCanvas).save();
+		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
+		verify(mMockRecyclerView).getChildCount();
+		final int verifyTimes = mMockRecyclerView.getChildCount() - 1;
+		verify(mockDivider, times(verifyTimes)).setBounds(
+				-decoration.getDividerThickness(),
+				0,
+				0,
+				0
+		);
+		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
+		verify(mMockCanvas).restore();
+	}
+
+	@Test
 	public void testOnDrawHorizontallySkipFirst() {
 		this.testOnDrawHorizontallyInner(true, false);
 	}
@@ -420,7 +459,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getChildCount()).thenReturn(10);
 		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(new View(mApplication));
 		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas, times(1)).save();
+		verify(mMockCanvas).save();
 		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
 		verify(mMockRecyclerView, times(1)).getChildCount();
 		int verifyTimes = mMockRecyclerView.getChildCount();
@@ -433,7 +472,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				0
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mMockCanvas, times(1)).restore();
+		verify(mMockCanvas).restore();
 	}
 
 	@Test
@@ -445,19 +484,43 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getPaddingTop()).thenReturn(8);
 		when(mMockRecyclerView.getPaddingBottom()).thenReturn(8);
 		new ItemDividerDecoration().onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas, times(1)).save();
-		verify(mMockCanvas, times(1)).clipRect(
+		verify(mMockCanvas).save();
+		verify(mMockCanvas).clipRect(
 				mMockRecyclerView.getPaddingLeft(),
 				mMockRecyclerView.getPaddingTop(),
 				mMockRecyclerView.getWidth() - mMockRecyclerView.getPaddingRight(),
 				mMockRecyclerView.getHeight() - mMockRecyclerView.getPaddingBottom()
 		);
-		verify(mMockCanvas, times(1)).restore();
+		verify(mMockCanvas).restore();
 	}
 
 	@Test
 	public void testOnDrawVertically() {
 		this.testOnDrawVerticallyInner(false, false);
+	}
+
+	@Test
+	public void testOnDrawVerticallyForRTLLayoutDirection() {
+		final Drawable mockDivider = mock(Drawable.class);
+		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		decoration.setDivider(mockDivider);
+		decoration.setDividerThickness(4);
+		// todo: set offsets
+		when(mMockRecyclerView.getChildCount()).thenReturn(10);
+		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(new View(mApplication));
+		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mMockCanvas).save();
+		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
+		verify(mMockRecyclerView).getChildCount();
+		int verifyTimes = mMockRecyclerView.getChildCount() - 1;
+		verify(mockDivider, times(verifyTimes)).setBounds(
+				0,
+				-decoration.getDividerThickness(),
+				0,
+				0
+		);
+		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
+		verify(mMockCanvas).restore();
 	}
 
 	@Test
@@ -485,9 +548,9 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getChildCount()).thenReturn(10);
 		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(new View(mApplication));
 		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas, times(1)).save();
+		verify(mMockCanvas).save();
 		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
-		verify(mMockRecyclerView, times(1)).getChildCount();
+		verify(mMockRecyclerView).getChildCount();
 		int verifyTimes = mMockRecyclerView.getChildCount();
 		verifyTimes -= skipFirst ? 1 : 0;
 		verifyTimes -= skipLast ? 1 : 0;
@@ -498,7 +561,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				0
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mMockCanvas, times(1)).restore();
+		verify(mMockCanvas).restore();
 	}
 
 	@Test
@@ -510,13 +573,13 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getPaddingTop()).thenReturn(8);
 		when(mMockRecyclerView.getPaddingBottom()).thenReturn(8);
 		new ItemDividerDecoration().onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas, times(1)).save();
-		verify(mMockCanvas, times(1)).clipRect(
+		verify(mMockCanvas).save();
+		verify(mMockCanvas).clipRect(
 				mMockRecyclerView.getPaddingLeft(),
 				mMockRecyclerView.getPaddingTop(),
 				mMockRecyclerView.getWidth() - mMockRecyclerView.getPaddingRight(),
 				mMockRecyclerView.getHeight() - mMockRecyclerView.getPaddingBottom()
 		);
-		verify(mMockCanvas, times(1)).restore();
+		verify(mMockCanvas).restore();
 	}
 }

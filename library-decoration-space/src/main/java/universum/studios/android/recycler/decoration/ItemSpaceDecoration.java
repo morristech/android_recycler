@@ -25,6 +25,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -68,12 +69,20 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 
 	/**
-	 * Amount of space to apply at the start of an item in horizontal direction.
+	 * Amount of space by which to offset an item at the start in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
 	 */
 	private int mHorizontalStart;
 
 	/**
-	 * Amount of space to apply at the end of an item in horizontal direction.
+	 * Amount of space by which to offset an item at the end in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
 	 */
 	private int mHorizontalEnd;
 
@@ -227,6 +236,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 	@Override
 	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		if (mSkipFirst || mSkipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {
@@ -235,20 +245,23 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
 				rect.set(0, 0, 0, 0);
 			} else {
-				this.updateRectWithOffsets(rect);
+				this.updateItemOffsets(rect, hasRtlDirection);
 			}
 		} else {
-			this.updateRectWithOffsets(rect);
+			this.updateItemOffsets(rect, hasRtlDirection);
 		}
 	}
 
 	/**
-	 * Updates the given <var>rect</var> with the current spacing amounts specified for this decoration.
+	 * Updates the given <var>rect</var> with the current spacing offsets specified for this
+	 * decoration.
 	 *
-	 * @param rect The rect to be updated.
+	 * @param rect         The desired item offsets rect to be updated.
+	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
+	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
-	private void updateRectWithOffsets(final Rect rect) {
-		rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+	private void updateItemOffsets(final Rect rect, final boolean rtlDirection) {
+		rect.set(rtlDirection ? mHorizontalEnd : mHorizontalStart, mVerticalStart, rtlDirection ? mHorizontalStart : mHorizontalEnd, mVerticalEnd);
 	}
 
 	/*

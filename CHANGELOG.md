@@ -5,6 +5,9 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 ## Version 1.x ##
 
+### 1.0.2 ###
+> upcoming
+
 ### [1.0.1](https://github.com/universum-studios/android_recycler/releases/tag/v1.0.1) ###
 > 21.05.2017
 
