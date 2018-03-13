@@ -29,6 +29,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import universum.studios.android.recycler.R;
+
 /**
  * A {@link RecyclerViewItemDecoration} implementation that may be used to add a <b>space</b>,
  * vertically and horizontally, between items displayed in a {@link RecyclerView}.

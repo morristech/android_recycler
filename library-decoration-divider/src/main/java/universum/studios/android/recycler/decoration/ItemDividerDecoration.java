@@ -40,6 +40,8 @@ import android.widget.LinearLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import universum.studios.android.recycler.R;
+
 /**
  * A {@link RecyclerViewItemDecoration} implementation that may be used to draw a <b>divider</b>
  * (drawable or color), vertically or horizontally, between items displayed in a {@link RecyclerView}

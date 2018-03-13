@@ -27,6 +27,8 @@ import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import universum.studios.android.recycler.R;
+
 /**
  * A {@link RecyclerView.ItemDecoration} implementation that is used as base class by all item
  * decorations from the Recycler library and is also encouraged to be used as base class by custom
