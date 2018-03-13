@@ -40,8 +40,6 @@ import android.widget.LinearLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import universum.studios.android.recycler.R;
-
 /**
  * A {@link RecyclerViewItemDecoration} implementation that may be used to draw a <b>divider</b>
  * (drawable or color), vertically or horizontally, between items displayed in a {@link RecyclerView}
@@ -193,18 +191,19 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 		setSkipLast(true);
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Divider, defStyleAttr, defStyleRes);
-			for (int i = 0; i < attributes.getIndexCount(); i++) {
-				final int index = attributes.getIndex(i);
-				if (index == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOrientation) {
-					setOrientation(attributes.getInt(index, mOrientation));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Divider_recyclerDivider) {
-					setDivider(attributes.getDrawable(index));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerThickness) {
-					setDividerThickness(attributes.getDimensionPixelSize(index, 0));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipFirst) {
-					setSkipFirst(attributes.getBoolean(index, skipsFirst()));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipLast) {
-					setSkipLast(attributes.getBoolean(index, skipsLast()));
+			final int attributeCount = attributes.getIndexCount();
+			for (int i = 0; i < attributeCount; i++) {
+				final int attrIndex = attributes.getIndex(i);
+				if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOrientation) {
+					setOrientation(attributes.getInt(attrIndex, mOrientation));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDivider) {
+					setDivider(attributes.getDrawable(attrIndex));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerThickness) {
+					setDividerThickness(attributes.getDimensionPixelSize(attrIndex, 0));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipFirst) {
+					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipLast) {
+					setSkipLast(attributes.getBoolean(attrIndex, skipsLast()));
 				}
 			}
 			attributes.recycle();
