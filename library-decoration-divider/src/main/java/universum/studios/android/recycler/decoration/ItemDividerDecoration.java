@@ -335,14 +335,45 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * todo:
+	 * Specifies amounts by which to offset the divider.
+	 * <p>
+	 * Both values are used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
 	 *
-	 * @param start
-	 * @param end
+	 * @param start The desired amount in pixels by which to offset the divider at the start.
+	 * @param end   The desired amount in pixels by which to offset the divider at the end.
+	 * @see #getDividerOffsetStart()
+	 * @see #getDividerOffsetEnd()
 	 */
 	public void setDividerOffset(@IntRange(from = 0) final int start, @IntRange(from = 0) final int end) {
 		this.mDividerOffsetStart = start;
 		this.mDividerOffsetEnd = end;
+	}
+
+	/**
+	 * Returns the amount by which to offset the divider at the start.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @return Offset in pixels.
+	 * @see #setDividerOffset(int, int)
+	 */
+	public int getDividerOffsetStart() {
+		return mDividerOffsetStart;
+	}
+
+	/**
+	 * Returns the amount by which to offset the divider at the end.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @return Offset in pixels.
+	 * @see #setDividerOffset(int, int)
+	 */
+	public int getDividerOffsetEnd() {
+		return mDividerOffsetEnd;
 	}
 
 	/**

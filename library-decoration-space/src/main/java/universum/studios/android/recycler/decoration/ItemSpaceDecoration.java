@@ -87,12 +87,12 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	private int mHorizontalEnd;
 
 	/**
-	 * Amount of space to apply at the start of an item in vertical direction.
+	 * Amount of space by which to offset an item at the start in vertical direction.
 	 */
 	private int mVerticalStart;
 
 	/**
-	 * Amount of space to apply at the end of an item in vertical direction.
+	 * Amount of space by which to offset an item at the end in vertical direction.
 	 */
 	private int mVerticalEnd;
 
@@ -193,7 +193,9 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 
 	/**
-	 * Returns the amount of space that will be applied at the start of each item in horizontal direction.
+	 * Returns the amount of space by which to offset each item at the start in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getHorizontalEnd()
@@ -203,7 +205,9 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the end of each item in horizontal direction.
+	 * Returns the amount of space by which to offset each item at the end in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getHorizontalStart()
@@ -213,7 +217,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the start of each item in vertical direction.
+	 * Returns the amount of space by which to offset each item at the start in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getVerticalEnd()
@@ -223,7 +227,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the end of each item in vertical direction.
+	 * Returns the amount of space by which to offset each item at the end in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getVerticalStart()
