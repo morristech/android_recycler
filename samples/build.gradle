@@ -34,14 +34,14 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    final String keyDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
-    final File keyFile = file("${keyDirPath}/release.jks")
-    final File keyPropertiesFile = file("${keyDirPath}/key.properties")
-    if (keyFile.exists() && keyPropertiesFile.exists()) {
-        final Properties signingProperties = new Properties()
-        signingProperties.load(new FileInputStream(keyPropertiesFile))
+    final String keystoreDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
+    final File keystoreFile = new File("${keystoreDirPath}/keystore.jks")
+    final File accessPropertiesFile = new File("${keystoreDirPath}/access.properties")
+    if (keystoreFile.exists() && accessPropertiesFile.exists()) {
+        final Properties accessProperties = new Properties()
+        accessProperties.load(new FileInputStream(accessPropertiesFile))
         //
-        // The key.properties file should contain following data (each property at a single line):
+        // The access.properties file should contain following data (each property at a single line):
         // <pre>
         // store.password=STORE_PASSWORD
         // key.alias=ALIAS_OF_THE_KEY
@@ -49,17 +49,17 @@ android {
         // </pre>
         //
         signingConfigs {
-            release {
-                storeFile keyFile
-                storePassword signingProperties['store.password']
-                keyAlias signingProperties['key.alias']
-                keyPassword signingProperties['key.password']
+            production {
+                storeFile keystoreFile
+                storePassword accessProperties['store.password']
+                keyAlias accessProperties['key.alias']
+                keyPassword accessProperties['key.password']
             }
         }
 
         buildTypes {
             release {
-                signingConfig signingConfigs.release
+                signingConfig signingConfigs.production
                 minifyEnabled true
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }

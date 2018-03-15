@@ -128,7 +128,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.setRestoreHolderAnimationDuration(0L);
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(true));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
 	@Test
@@ -143,8 +143,8 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.getInteractor().attachAdapter(adapter);
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(true));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockAdapterObserver, times(1)).onItemRangeChanged(0, 1, null);
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockAdapterObserver).onItemRangeChanged(0, 1, null);
 	}
 
 	@Test
@@ -156,7 +156,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.setRestoreHolderAnimationDuration(0L);
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.DOWN), is(true));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
 	@Test
@@ -171,8 +171,8 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.getInteractor().attachAdapter(adapter);
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.DOWN), is(true));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockAdapterObserver, times(1)).onItemRangeChanged(0, 1, null);
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockAdapterObserver).onItemRangeChanged(0, 1, null);
 	}
 
 	@Test
@@ -184,8 +184,8 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START, mockAnimationCallback), is(true));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockAnimationCallback, times(1)).run();
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockAnimationCallback).run();
 	}
 
 	@Test
@@ -212,7 +212,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
-		verify(mockViewHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
 	@Test

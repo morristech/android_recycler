@@ -18,7 +18,6 @@
  */
 package universum.studios.android.recycler.decoration;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -114,9 +113,31 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	/**
 	 * Thickness in which should be the specified divider drawn. This is either one of
 	 * {@link Drawable#getIntrinsicWidth()} or {@link Drawable#getIntrinsicHeight()} depending on
-	 * the specified orientation.
+	 * the specified orientation or desired value specified via {@link #setDividerThickness(int)}.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
 	 */
 	private int mDividerThickness;
+
+	/**
+	 * Amount by which to offset the divider at the start.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
+	 */
+	private int mDividerOffsetStart;
+
+	/**
+	 * Amount by which to offset the divider at the end.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
+	 */
+	private int mDividerOffsetEnd;
 
 	/**
 	 * Bounds instance used when obtaining decorated bounds for a concrete item view when drawing
@@ -202,6 +223,10 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 					setDivider(attributes.getDrawable(attrIndex));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerThickness) {
 					setDividerThickness(attributes.getDimensionPixelSize(attrIndex, 0));
+				}  else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOffsetStart) {
+					setDividerOffset(attributes.getDimensionPixelSize(attrIndex, 0), mDividerOffsetEnd);
+				}  else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOffsetEnd) {
+					setDividerOffset(mDividerOffsetStart, attributes.getDimensionPixelSize(attrIndex, 0));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipFirst) {
 					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipLast) {
@@ -313,6 +338,48 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
+	 * Specifies amounts by which to offset the divider.
+	 * <p>
+	 * Both values are used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @param start The desired amount in pixels by which to offset the divider at the start.
+	 * @param end   The desired amount in pixels by which to offset the divider at the end.
+	 * @see #getDividerOffsetStart()
+	 * @see #getDividerOffsetEnd()
+	 */
+	public void setDividerOffset(@IntRange(from = 0) final int start, @IntRange(from = 0) final int end) {
+		this.mDividerOffsetStart = start;
+		this.mDividerOffsetEnd = end;
+	}
+
+	/**
+	 * Returns the amount by which to offset the divider at the start.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @return Offset in pixels.
+	 * @see #setDividerOffset(int, int)
+	 */
+	public int getDividerOffsetStart() {
+		return mDividerOffsetStart;
+	}
+
+	/**
+	 * Returns the amount by which to offset the divider at the end.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView} and
+	 * also with respect to the orientation specified for this decoration.
+	 *
+	 * @return Offset in pixels.
+	 * @see #setDividerOffset(int, int)
+	 */
+	public int getDividerOffsetEnd() {
+		return mDividerOffsetEnd;
+	}
+
+	/**
 	 */
 	@Override
 	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
@@ -320,33 +387,43 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			if (mSkipFirst || mSkipLast) {
 				final int position = parent.getChildAdapterPosition(view);
 				if (position == RecyclerView.NO_POSITION) {
+					rect.setEmpty();
 					return;
 				}
 				if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
-					rect.set(0, 0, 0, 0);
-				} else {
-					this.updateRectWithOffsets(rect);
+					rect.setEmpty();
+					return;
 				}
+			}
+			if (mPrecondition.check(view, parent, state)) {
+				this.updateItemOffsets(rect, ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL);
 			} else {
-				this.updateRectWithOffsets(rect);
+				rect.setEmpty();
 			}
 		}
 	}
 
 	/**
-	 * Updates the given <var>rect</var> with the current divider thickness specified for this
-	 * decoration according to the orientation also specified for this decoration.
+	 * Called to update the given <var>rect</var> with the current divider thickness and divider offsets
+	 * specified for this decoration according to the orientation also specified for this decoration.
 	 *
-	 * @param rect The rect to be updated.
+	 * @param rect         The desired item offsets rect to be updated.
+	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
+	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
-	private void updateRectWithOffsets(final Rect rect) {
+	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
 		switch (mOrientation) {
 			case HORIZONTAL:
-				rect.set(0, 0, mDividerThickness, 0);
+				rect.set(0, mDividerOffsetStart, mDividerThickness, mDividerOffsetEnd);
 				break;
 			case VERTICAL:
 			default:
-				rect.set(0, 0, 0, mDividerThickness);
+				rect.set(
+						rtlDirection ? mDividerOffsetEnd : mDividerOffsetStart,
+						0,
+						rtlDirection ? mDividerOffsetStart : mDividerOffsetEnd,
+						mDividerThickness
+				);
 				break;
 		}
 	}
@@ -383,11 +460,10 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param parent RecyclerView into which is this decoration added.
 	 * @param state  Current state of the parent RecyclerView.
 	 */
-	@SuppressLint("NewApi")
 	protected void onDrawHorizontally(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		canvas.save();
-		final int top;
-		final int bottom;
+		int top;
+		int bottom;
 		if (parent.getClipToPadding()) {
 			top = parent.getPaddingTop();
 			bottom = parent.getHeight() - parent.getPaddingBottom();
@@ -401,17 +477,21 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			top = 0;
 			bottom = parent.getHeight();
 		}
+		top += mDividerOffsetStart;
+		bottom += mDividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((mSkipFirst && childIndex == 0) || (mSkipLast && childIndex == childCount - 1)) {
 				continue;
 			}
 			final View child = parent.getChildAt(childIndex);
-			parent.getDecoratedBoundsWithMargins(child, mBounds);
-			final int right = mBounds.right + Math.round(ViewCompat.getTranslationX(child));
-			final int left = right - mDividerThickness;
-			mDivider.setBounds(left, top, right, bottom);
-			mDivider.draw(canvas);
+			if (mPrecondition.check(child, parent, state)) {
+				parent.getDecoratedBoundsWithMargins(child, mBounds);
+				final int right = mBounds.right + Math.round(child.getTranslationX());
+				final int left = right - mDividerThickness;
+				mDivider.setBounds(left, top, right, bottom);
+				mDivider.draw(canvas);
+			}
 		}
 		canvas.restore();
 	}
@@ -424,11 +504,10 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param parent RecyclerView into which is this decoration added.
 	 * @param state  Current state of the parent RecyclerView.
 	 */
-	@SuppressLint("NewApi")
 	protected void onDrawVertically(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		canvas.save();
-		final int left;
-		final int right;
+		int left;
+		int right;
 		if (parent.getClipToPadding()) {
 			left = parent.getPaddingLeft();
 			right = parent.getWidth() - parent.getPaddingRight();
@@ -442,17 +521,22 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			left = 0;
 			right = parent.getWidth();
 		}
+		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
+		left += hasRtlDirection ? mDividerOffsetEnd : mDividerOffsetStart;
+		right += hasRtlDirection ? mDividerOffsetStart : mDividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((mSkipFirst && childIndex == 0) || (mSkipLast && childIndex == childCount - 1)) {
 				continue;
 			}
 			final View child = parent.getChildAt(childIndex);
-			parent.getDecoratedBoundsWithMargins(child, mBounds);
-			final int bottom = mBounds.bottom + Math.round(ViewCompat.getTranslationY(child));
-			final int top = bottom - mDividerThickness;
-			mDivider.setBounds(left, top, right, bottom);
-			mDivider.draw(canvas);
+			if (mPrecondition.check(child, parent, state)) {
+				parent.getDecoratedBoundsWithMargins(child, mBounds);
+				final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
+				final int top = bottom - mDividerThickness;
+				mDivider.setBounds(left, top, right, bottom);
+				mDivider.draw(canvas);
+			}
 		}
 		canvas.restore();
 	}

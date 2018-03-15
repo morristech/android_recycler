@@ -2,8 +2,8 @@
 def libraryConfig = [
         name   : 'recycler',
         version: [
-                production : '1.0.1',
-                development: '1.0.1'
+                production : '1.0.2',
+                development: '1.0.2'
         ]
 ]
 

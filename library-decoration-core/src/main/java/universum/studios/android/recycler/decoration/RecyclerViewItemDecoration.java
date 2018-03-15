@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import universum.studios.android.recycler.R;
 
@@ -58,6 +59,44 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Interface ===================================================================================
 	 */
 
+	/**
+	 * Precondition represents a simple check which is performed by an item decoration before its
+	 * decoration logic is performed for a specific item view.
+	 * <p>
+	 * In general, preconditions may be used in order to perform more item specific decoration logic.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface Precondition {
+
+		/**
+		 * Empty implementation (NULL object) which is always satisfied, that is, every item view will
+		 * be decorated when using this precondition.
+		 */
+		@NonNull
+		Precondition EMPTY = new Precondition() {
+
+			/**
+			 */
+			@Override
+			public boolean check(@NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+				// Always decorate by default.
+				return true;
+			}
+		};
+
+		/**
+		 * Checks whether this precondition is satisfied for the specified parameters.
+		 *
+		 * @param view   The currently iterated item view.
+		 * @param parent The parent recycler view where is the specified item view presented.
+		 * @param state  State of the parent recycler view.
+		 * @return {@code True} if this precondition is satisfied and the item view can be decorated,
+		 * {@code false} otherwise.
+		 */
+		boolean check(@NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state);
+	}
+
 	/*
 	 * Static members ==============================================================================
 	 */
@@ -77,6 +116,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * data set or not.
 	 */
 	boolean mSkipLast;
+
+	/**
+	 * Precondition specified for this decoration. If not specified, this is an {@link Precondition#EMPTY}
+	 * precondition.
+	 */
+	@NonNull
+	Precondition mPrecondition = Precondition.EMPTY;
 
 	/*
 	 * Constructors ================================================================================
@@ -152,6 +198,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *             apply it.
 	 * @see #skipsFirst()
 	 * @see #setSkipLast(boolean)
+	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipFirst(final boolean skip) {
 		this.mSkipFirst = skip;
@@ -178,6 +225,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *             apply it.
 	 * @see #skipsFirst()
 	 * @see #setSkipFirst(boolean)
+	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipLast(final boolean skip) {
 		this.mSkipLast = skip;
@@ -192,6 +240,34 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 	public boolean skipsLast() {
 		return mSkipLast;
+	}
+
+	/**
+	 * Specifies a precondition that should be checked by this decoration for each item view before
+	 * it is decorated.
+	 * <p>
+	 * This precondition may be used in order to perform more item specific decoration logic.
+	 *
+	 * @param precondition The desired precondition which should be checked for each item view
+	 *                     of the parent recycler view before it is decorated.
+	 * @see #getPrecondition()
+	 * @see #setSkipFirst(boolean)
+	 * @see #setSkipLast(boolean)
+	 */
+	public final void setPrecondition(@NonNull final Precondition precondition) {
+		this.mPrecondition = precondition;
+	}
+
+	/**
+	 * Returns the precondition specified for this decoration.
+	 *
+	 * @return This decoration's precondition. If not specified, this is an {@link Precondition#EMPTY}
+	 * instance.
+	 * @see #setPrecondition(Precondition)
+	 */
+	@NonNull
+	public final Precondition getPrecondition() {
+		return mPrecondition;
 	}
 
 	/**

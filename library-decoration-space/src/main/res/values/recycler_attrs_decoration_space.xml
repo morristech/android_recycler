@@ -23,13 +23,19 @@
 
 	<!-- Attributes for RecyclerView item space decoration. -->
 	<declare-styleable name="Recycler.ItemDecoration.Space">
-		<!-- Amount of space to apply at the start of an item in horizontal direction. -->
+		<!--
+			Amount of space by which to offset an item at the start in horizontal direction
+			with respect to layout direction of the parent RecyclerView.
+		-->
 		<attr name="recyclerItemSpacingHorizontalStart" format="dimension"/>
-		<!-- Amount of space to apply at the end of an item in horizontal direction. -->
+		<!--
+			Amount of space by which to offset an item at the end in horizontal direction
+			with respect to layout direction of the parent RecyclerView.
+		-->
 		<attr name="recyclerItemSpacingHorizontalEnd" format="dimension"/>
-		<!-- Amount of space to apply at the start of an item in vertical direction. -->
+		<!-- Amount of space by which to offset an item at the start in vertical direction. -->
 		<attr name="recyclerItemSpacingVerticalStart" format="dimension"/>
-		<!-- Amount of space to apply at the end of an item in vertical direction. -->
+		<!-- Amount of space by which to offset an item at the end in vertical direction. -->
 		<attr name="recyclerItemSpacingVerticalEnd" format="dimension"/>
 		<!-- Indicates whether the space decoration should be skipped for the first item or not. -->
 		<attr name="recyclerItemSpacingSkipFirst" format="boolean"/>
