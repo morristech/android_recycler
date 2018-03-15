@@ -6,7 +6,7 @@ More **detailed changelog** for each respective version may be viewed by pressin
 ## Version 1.x ##
 
 ### 1.0.2 ###
-> upcoming
+> 15.03.2018
 
 - `ItemDividerDecoration` now accepts **offsets** for its divider either via `setDividerOffset(int, int)`
   or via _Xml_ attributes: `recyclerDividerOffsetStart`, `recyclerDividerOffsetEnd`.
