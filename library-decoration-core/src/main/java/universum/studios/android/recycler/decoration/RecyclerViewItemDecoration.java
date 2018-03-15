@@ -60,14 +60,18 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 
 	/**
-	 * todo:
+	 * Precondition represents a simple check which is performed by an item decoration before its
+	 * decoration logic is performed for a specific item view.
+	 * <p>
+	 * In general, preconditions may be used in order to perform more item specific decoration logic.
 	 *
 	 * @author Martin Albedinsky
 	 */
 	public interface Precondition {
 
 		/**
-		 * todo:
+		 * Empty implementation (NULL object) which is always satisfied, that is, every item view will
+		 * be decorated when using this precondition.
 		 */
 		@NonNull
 		Precondition EMPTY = new Precondition() {
@@ -82,12 +86,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 		};
 
 		/**
-		 * todo:
+		 * Checks whether this precondition is satisfied for the specified parameters.
 		 *
-		 * @param view
-		 * @param parent
-		 * @param state
-		 * @return
+		 * @param view   The currently iterated item view.
+		 * @param parent The parent recycler view where is the specified item view presented.
+		 * @param state  State of the parent recycler view.
+		 * @return {@code True} if this precondition is satisfied and the item view can be decorated,
+		 * {@code false} otherwise.
 		 */
 		boolean check(@NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state);
 	}
@@ -193,6 +198,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *             apply it.
 	 * @see #skipsFirst()
 	 * @see #setSkipLast(boolean)
+	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipFirst(final boolean skip) {
 		this.mSkipFirst = skip;
@@ -219,6 +225,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *             apply it.
 	 * @see #skipsFirst()
 	 * @see #setSkipFirst(boolean)
+	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipLast(final boolean skip) {
 		this.mSkipLast = skip;
@@ -236,18 +243,27 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	}
 
 	/**
-	 * todo:
+	 * Specifies a precondition that should be checked by this decoration for each item view before
+	 * it is decorated.
+	 * <p>
+	 * This precondition may be used in order to perform more item specific decoration logic.
 	 *
-	 * @param precondition
+	 * @param precondition The desired precondition which should be checked for each item view
+	 *                     of the parent recycler view before it is decorated.
+	 * @see #getPrecondition()
+	 * @see #setSkipFirst(boolean)
+	 * @see #setSkipLast(boolean)
 	 */
 	public final void setPrecondition(@NonNull final Precondition precondition) {
 		this.mPrecondition = precondition;
 	}
 
 	/**
-	 * todo:
+	 * Returns the precondition specified for this decoration.
 	 *
-	 * @return
+	 * @return This decoration's precondition. If not specified, this is an {@link Precondition#EMPTY}
+	 * instance.
+	 * @see #setPrecondition(Precondition)
 	 */
 	@NonNull
 	public final Precondition getPrecondition() {

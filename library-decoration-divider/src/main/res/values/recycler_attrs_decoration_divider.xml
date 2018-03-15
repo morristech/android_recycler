@@ -34,6 +34,16 @@
 		<attr name="recyclerDivider" format="reference|color"/>
 		<!-- Thickness in which should be the divider drawable drawn. -->
 		<attr name="recyclerDividerThickness" format="dimension"/>
+		<!--
+			Amount by which to offset the divider at the start with respect to layout direction of
+			the parent RecyclerView and also with respect to the orientation specified for decoration.
+		-->
+		<attr name="recyclerDividerOffsetStart" format="dimension"/>
+		<!--
+			Amount by which to offset the divider at the end with respect to layout direction of
+			the parent RecyclerView and also with respect to the orientation specified for decoration.
+		-->
+		<attr name="recyclerDividerOffsetEnd" format="dimension"/>
 		<!-- Indicates whether the divider decoration should be skipped for the first item or not. -->
 		<attr name="recyclerDividerSkipFirst" format="boolean"/>
 		<!-- Indicates whether the divider decoration should be skipped for the last item or not. -->

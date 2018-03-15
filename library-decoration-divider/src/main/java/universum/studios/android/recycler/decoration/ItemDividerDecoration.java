@@ -223,6 +223,10 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 					setDivider(attributes.getDrawable(attrIndex));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerThickness) {
 					setDividerThickness(attributes.getDimensionPixelSize(attrIndex, 0));
+				}  else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOffsetStart) {
+					setDividerOffset(attributes.getDimensionPixelSize(attrIndex, 0), mDividerOffsetEnd);
+				}  else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerOffsetEnd) {
+					setDividerOffset(mDividerOffsetStart, attributes.getDimensionPixelSize(attrIndex, 0));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipFirst) {
 					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Divider_recyclerDividerSkipLast) {
@@ -380,15 +384,19 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	@Override
 	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		if (mDividerThickness > 0) {
-			boolean updateOffsets = true;
 			if (mSkipFirst || mSkipLast) {
 				final int position = parent.getChildAdapterPosition(view);
-				final boolean shouldSkip = (mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1);
-				updateOffsets = position != RecyclerView.NO_POSITION && !shouldSkip;
+				if (position == RecyclerView.NO_POSITION) {
+					rect.setEmpty();
+					return;
+				}
+				if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
+					rect.setEmpty();
+					return;
+				}
 			}
-			if (updateOffsets && mPrecondition.check(view, parent, state)) {
-				final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
-				this.updateItemOffsets(rect, hasRtlDirection);
+			if (mPrecondition.check(view, parent, state)) {
+				this.updateItemOffsets(rect, ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL);
 			} else {
 				rect.setEmpty();
 			}
@@ -396,14 +404,14 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Updates the given <var>rect</var> with the current divider thickness specified for this
-	 * decoration according to the orientation also specified for this decoration.
+	 * Called to update the given <var>rect</var> with the current divider thickness and divider offsets
+	 * specified for this decoration according to the orientation also specified for this decoration.
 	 *
 	 * @param rect         The desired item offsets rect to be updated.
 	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
 	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
-	private void updateItemOffsets(final Rect rect, final boolean rtlDirection) {
+	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
 		switch (mOrientation) {
 			case HORIZONTAL:
 				rect.set(0, mDividerOffsetStart, mDividerThickness, mDividerOffsetEnd);

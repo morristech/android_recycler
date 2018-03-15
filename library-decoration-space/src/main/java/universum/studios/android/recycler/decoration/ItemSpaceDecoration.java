@@ -240,31 +240,33 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 	@Override
 	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
-		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		if (mSkipFirst || mSkipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {
+				rect.setEmpty();
 				return;
 			}
 			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
-				rect.set(0, 0, 0, 0);
-			} else {
-				this.updateItemOffsets(rect, hasRtlDirection);
+				rect.setEmpty();
+				return;
 			}
+		}
+		if (mPrecondition.check(view, parent, state)) {
+			this.updateItemOffsets(rect, ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL);
 		} else {
-			this.updateItemOffsets(rect, hasRtlDirection);
+			rect.setEmpty();
 		}
 	}
 
 	/**
-	 * Updates the given <var>rect</var> with the current spacing offsets specified for this
+	 * Called to update the given <var>rect</var> with the current spacing offsets specified for this
 	 * decoration.
 	 *
 	 * @param rect         The desired item offsets rect to be updated.
 	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
 	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
-	private void updateItemOffsets(final Rect rect, final boolean rtlDirection) {
+	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
 		rect.set(rtlDirection ? mHorizontalEnd : mHorizontalStart, mVerticalStart, rtlDirection ? mHorizontalStart : mHorizontalEnd, mVerticalEnd);
 	}
 
