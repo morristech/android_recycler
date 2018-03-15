@@ -18,7 +18,6 @@
  */
 package universum.studios.android.recycler.decoration;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -381,19 +380,17 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	@Override
 	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		if (mDividerThickness > 0) {
-			final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
+			boolean updateOffsets = true;
 			if (mSkipFirst || mSkipLast) {
 				final int position = parent.getChildAdapterPosition(view);
-				if (position == RecyclerView.NO_POSITION) {
-					return;
-				}
-				if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
-					rect.set(0, 0, 0, 0);
-				} else {
-					this.updateItemOffsets(rect, hasRtlDirection);
-				}
-			} else {
+				final boolean shouldSkip = (mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1);
+				updateOffsets = position != RecyclerView.NO_POSITION && !shouldSkip;
+			}
+			if (updateOffsets && mPrecondition.check(view, parent, state)) {
+				final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 				this.updateItemOffsets(rect, hasRtlDirection);
+			} else {
+				rect.setEmpty();
 			}
 		}
 	}
@@ -455,7 +452,6 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param parent RecyclerView into which is this decoration added.
 	 * @param state  Current state of the parent RecyclerView.
 	 */
-	@SuppressLint("NewApi")
 	protected void onDrawHorizontally(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 		canvas.save();
 		int top;
@@ -481,11 +477,13 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 				continue;
 			}
 			final View child = parent.getChildAt(childIndex);
-			parent.getDecoratedBoundsWithMargins(child, mBounds);
-			final int right = mBounds.right + Math.round(child.getTranslationX());
-			final int left = right - mDividerThickness;
-			mDivider.setBounds(left, top, right, bottom);
-			mDivider.draw(canvas);
+			if (mPrecondition.check(child, parent, state)) {
+				parent.getDecoratedBoundsWithMargins(child, mBounds);
+				final int right = mBounds.right + Math.round(child.getTranslationX());
+				final int left = right - mDividerThickness;
+				mDivider.setBounds(left, top, right, bottom);
+				mDivider.draw(canvas);
+			}
 		}
 		canvas.restore();
 	}
@@ -498,9 +496,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * @param parent RecyclerView into which is this decoration added.
 	 * @param state  Current state of the parent RecyclerView.
 	 */
-	@SuppressLint("NewApi")
 	protected void onDrawVertically(@NonNull final Canvas canvas, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
-		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		canvas.save();
 		int left;
 		int right;
@@ -517,6 +513,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			left = 0;
 			right = parent.getWidth();
 		}
+		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		left += hasRtlDirection ? mDividerOffsetEnd : mDividerOffsetStart;
 		right += hasRtlDirection ? mDividerOffsetStart : mDividerOffsetEnd;
 		final int childCount = parent.getChildCount();
@@ -525,11 +522,13 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 				continue;
 			}
 			final View child = parent.getChildAt(childIndex);
-			parent.getDecoratedBoundsWithMargins(child, mBounds);
-			final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
-			final int top = bottom - mDividerThickness;
-			mDivider.setBounds(left, top, right, bottom);
-			mDivider.draw(canvas);
+			if (mPrecondition.check(child, parent, state)) {
+				parent.getDecoratedBoundsWithMargins(child, mBounds);
+				final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
+				final int top = bottom - mDividerThickness;
+				mDivider.setBounds(left, top, right, bottom);
+				mDivider.draw(canvas);
+			}
 		}
 		canvas.restore();
 	}

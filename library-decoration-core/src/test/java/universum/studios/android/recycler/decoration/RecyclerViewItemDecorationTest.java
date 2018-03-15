@@ -34,6 +34,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.util.MockUtil.resetMock;
 
@@ -57,6 +58,14 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
+	}
+
+	@Test
+	public void testEmptyInstantiation() {
+		final Decoration decoration = new Decoration();
+		assertThat(decoration.skipsFirst(), is(false));
+		assertThat(decoration.skipsLast(), is(false));
+		assertThat(decoration.getPrecondition(), is(Decoration.Precondition.EMPTY));
 	}
 
 	@Test
@@ -90,11 +99,6 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	}
 
 	@Test
-	public void testSkipsFirstDefault() {
-		assertThat(new Decoration().skipsFirst(), is(false));
-	}
-
-	@Test
 	public void testSetSkipLast() {
 		final RecyclerViewItemDecoration decoration = new Decoration();
 		decoration.setSkipLast(true);
@@ -104,8 +108,12 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	}
 
 	@Test
-	public void testSkipsLastDefault() {
-		assertThat(new Decoration().skipsLast(), is(false));
+	public void testSetGetPrecondition() {
+		final Decoration decoration = new Decoration();
+		final RecyclerViewItemDecoration.Precondition mockPrecondition = mock(RecyclerViewItemDecoration.Precondition.class);
+		decoration.setPrecondition(mockPrecondition);
+		assertThat(decoration.getPrecondition(), is(mockPrecondition));
+		verifyZeroInteractions(mockPrecondition);
 	}
 
 	@Test

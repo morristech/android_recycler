@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import universum.studios.android.recycler.R;
 
@@ -58,6 +59,39 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Interface ===================================================================================
 	 */
 
+	/**
+	 * todo:
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface Precondition {
+
+		/**
+		 * todo:
+		 */
+		@NonNull
+		Precondition EMPTY = new Precondition() {
+
+			/**
+			 */
+			@Override
+			public boolean check(@NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+				// Always decorate by default.
+				return true;
+			}
+		};
+
+		/**
+		 * todo:
+		 *
+		 * @param view
+		 * @param parent
+		 * @param state
+		 * @return
+		 */
+		boolean check(@NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state);
+	}
+
 	/*
 	 * Static members ==============================================================================
 	 */
@@ -77,6 +111,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * data set or not.
 	 */
 	boolean mSkipLast;
+
+	/**
+	 * Precondition specified for this decoration. If not specified, this is an {@link Precondition#EMPTY}
+	 * precondition.
+	 */
+	@NonNull
+	Precondition mPrecondition = Precondition.EMPTY;
 
 	/*
 	 * Constructors ================================================================================
@@ -192,6 +233,25 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 */
 	public boolean skipsLast() {
 		return mSkipLast;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @param precondition
+	 */
+	public final void setPrecondition(@NonNull final Precondition precondition) {
+		this.mPrecondition = precondition;
+	}
+
+	/**
+	 * todo:
+	 *
+	 * @return
+	 */
+	@NonNull
+	public final Precondition getPrecondition() {
+		return mPrecondition;
 	}
 
 	/**
