@@ -5,6 +5,14 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 ## Version 1.x ##
 
+### 1.0.2 ###
+> 15.03.2018
+
+- `ItemDividerDecoration` now accepts **offsets** for its divider either via `setDividerOffset(int, int)`
+  or via _Xml_ attributes: `recyclerDividerOffsetStart`, `recyclerDividerOffsetEnd`.
+- Added ability to specify a `Precondition` for a desired `RecyclerViewItemDecoration` which may be
+  useful for more item specific decorating.
+
 ### [1.0.1](https://github.com/universum-studios/android_recycler/releases/tag/v1.0.1) ###
 > 21.05.2017
 

@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import org.junit.Test;
 
@@ -31,9 +32,11 @@ import universum.studios.android.test.local.RobolectricTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.util.MockUtil.resetMock;
 
@@ -57,6 +60,20 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
+	}
+
+	@Test
+	public void testEmptyPrecondition() {
+		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY, is(notNullValue()));
+		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY.check(new View(mApplication), mMockRecyclerView, mMockRecyclerViewState), is(true));
+	}
+
+	@Test
+	public void testEmptyInstantiation() {
+		final Decoration decoration = new Decoration();
+		assertThat(decoration.skipsFirst(), is(false));
+		assertThat(decoration.skipsLast(), is(false));
+		assertThat(decoration.getPrecondition(), is(Decoration.Precondition.EMPTY));
 	}
 
 	@Test
@@ -90,11 +107,6 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	}
 
 	@Test
-	public void testSkipsFirstDefault() {
-		assertThat(new Decoration().skipsFirst(), is(false));
-	}
-
-	@Test
 	public void testSetSkipLast() {
 		final RecyclerViewItemDecoration decoration = new Decoration();
 		decoration.setSkipLast(true);
@@ -104,8 +116,12 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	}
 
 	@Test
-	public void testSkipsLastDefault() {
-		assertThat(new Decoration().skipsLast(), is(false));
+	public void testSetGetPrecondition() {
+		final Decoration decoration = new Decoration();
+		final RecyclerViewItemDecoration.Precondition mockPrecondition = mock(RecyclerViewItemDecoration.Precondition.class);
+		decoration.setPrecondition(mockPrecondition);
+		assertThat(decoration.getPrecondition(), is(mockPrecondition));
+		verifyZeroInteractions(mockPrecondition);
 	}
 
 	@Test

@@ -75,6 +75,8 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 		assertThat(decoration.getDivider(), instanceOf(ColorDrawable.class));
 		assertThat(((ColorDrawable) decoration.getDivider()).getColor(), is(mContext.getResources().getColor(android.R.color.darker_gray)));
 		assertThat(decoration.getDividerThickness(), is(2));
+		assertThat(decoration.getDividerOffsetStart(), is(4));
+		assertThat(decoration.getDividerOffsetEnd(), is(8));
 		assertThat(decoration.skipsFirst(), is(true));
 		assertThat(decoration.skipsLast(), is(true));
 	}

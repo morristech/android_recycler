@@ -113,8 +113,8 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.addOnSwipeListener(firstMockListener);
 		interactor.addOnSwipeListener(secondMockListener);
 		interactor.notifySwipeStarted(mockViewHolder);
-		verify(firstMockListener, times(1)).onSwipeStarted(helper, mockViewHolder);
-		verify(secondMockListener, times(1)).onSwipeStarted(helper, mockViewHolder);
+		verify(firstMockListener).onSwipeStarted(helper, mockViewHolder);
+		verify(secondMockListener).onSwipeStarted(helper, mockViewHolder);
 	}
 
 	@Test
@@ -296,7 +296,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockAdapter.getItemSwipeFlags(0)).thenReturn(itemSwipeFlags);
 		final Holder mockViewHolder = createMockHolder(new View(mApplication), 0);
 		assertThat(interactor.getMovementFlags(mMockRecyclerView, mockViewHolder), is(itemSwipeFlags));
-		verify(mockAdapter, times(1)).getItemSwipeFlags(0);
+		verify(mockAdapter).getItemSwipeFlags(0);
 	}
 
 	@Test
@@ -339,9 +339,9 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(view);
 		interactor.onSelectedChanged(mockHolder, ItemSwipeHelper.INTERACTION);
 		assertThat(interactor.isActive(), is(true));
-		verify(mockHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockHolder, times(1)).onSwipeStarted();
-		verify(mockListener, times(1)).onSwipeStarted(helper, mockHolder);
+		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockHolder).onSwipeStarted();
+		verify(mockListener).onSwipeStarted(helper, mockHolder);
 	}
 
 	@Test
@@ -358,9 +358,9 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		interactor.onSelectedChanged(mockHolder, ItemSwipeHelper.INTERACTION);
 		assertThat(interactor.isActive(), is(true));
-		verify(mockHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockHolder, times(1)).onSwipeStarted();
-		verify(mockListener, times(1)).onSwipeStarted(helper, mockHolder);
+		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockHolder).onSwipeStarted();
+		verify(mockListener).onSwipeStarted(helper, mockHolder);
 	}
 
 	@Test
@@ -445,8 +445,8 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.swiping = true;
 		interactor.onSwiped(mockHolder, ItemSwipeHelper.START);
 		assertThat(interactor.isActive(), is(false));
-		verify(mockHolder, times(1)).onSwipeFinished(ItemSwipeHelper.START);
-		verify(mockListener, times(1)).onSwipeFinished(helper, mockHolder, ItemSwipeHelper.START);
+		verify(mockHolder).onSwipeFinished(ItemSwipeHelper.START);
+		verify(mockListener).onSwipeFinished(helper, mockHolder, ItemSwipeHelper.START);
 	}
 
 	@Test
@@ -501,9 +501,9 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(view);
 		interactor.clearView(mMockRecyclerView, mockHolder);
 		assertThat(interactor.isActive(), is(false));
-		verify(mockHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockHolder, times(1)).onSwipeCanceled();
-		verify(mockListener, times(1)).onSwipeCanceled(helper, mockHolder);
+		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockHolder).onSwipeCanceled();
+		verify(mockListener).onSwipeCanceled(helper, mockHolder);
 	}
 
 	@Test
@@ -521,9 +521,9 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		interactor.clearView(mMockRecyclerView, mockHolder);
 		assertThat(interactor.isActive(), is(false));
-		verify(mockHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
-		verify(mockHolder, times(1)).onSwipeCanceled();
-		verify(mockListener, times(1)).onSwipeCanceled(helper, mockHolder);
+		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockHolder).onSwipeCanceled();
+		verify(mockListener).onSwipeCanceled(helper, mockHolder);
 	}
 
 	@Test
@@ -541,7 +541,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		when(mockHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		interactor.clearView(mMockRecyclerView, mockHolder);
 		assertThat(interactor.isActive(), is(false));
-		verify(mockHolder, times(1)).getInteractiveView(ItemSwipeHelper.INTERACTION);
+		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockHolder, times(0)).onSwipeCanceled();
 		verify(mockListener, times(0)).onSwipeCanceled(any(ItemSwipeHelper.class), any(RecyclerView.ViewHolder.class));
 	}

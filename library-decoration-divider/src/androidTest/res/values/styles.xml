@@ -25,6 +25,8 @@
 		<item name="recyclerDividerOrientation">horizontal</item>
 		<item name="recyclerDivider">@android:color/darker_gray</item>
 		<item name="recyclerDividerThickness">2px</item>
+		<item name="recyclerDividerOffsetStart">4px</item>
+		<item name="recyclerDividerOffsetEnd">8px</item>
 		<item name="recyclerDividerSkipFirst">true</item>
 		<item name="recyclerDividerSkipLast">true</item>
 	</style>

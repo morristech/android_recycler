@@ -25,6 +25,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -68,22 +69,30 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 
 	/**
-	 * Amount of space to apply at the start of an item in horizontal direction.
+	 * Amount of space by which to offset an item at the start in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
 	 */
 	private int mHorizontalStart;
 
 	/**
-	 * Amount of space to apply at the end of an item in horizontal direction.
+	 * Amount of space by which to offset an item at the end in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
+	 *
+	 * @see #updateItemOffsets(Rect, boolean)
 	 */
 	private int mHorizontalEnd;
 
 	/**
-	 * Amount of space to apply at the start of an item in vertical direction.
+	 * Amount of space by which to offset an item at the start in vertical direction.
 	 */
 	private int mVerticalStart;
 
 	/**
-	 * Amount of space to apply at the end of an item in vertical direction.
+	 * Amount of space by which to offset an item at the end in vertical direction.
 	 */
 	private int mVerticalEnd;
 
@@ -158,20 +167,21 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		if (context != null) {
 			final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Recycler_ItemDecoration_Space, defStyleAttr, defStyleRes);
-			for (int i = 0; i < attributes.getIndexCount(); i++) {
-				final int index = attributes.getIndex(i);
-				if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
-					this.mHorizontalStart = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
-					this.mHorizontalEnd = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
-					this.mVerticalStart = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
-					this.mVerticalEnd = attributes.getDimensionPixelSize(index, 0);
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
-					setSkipFirst(attributes.getBoolean(index, skipsFirst()));
-				} else if (index == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
-					setSkipLast(attributes.getBoolean(index, skipsLast()));
+			final int attributeCount = attributes.getIndexCount();
+			for (int i = 0; i < attributeCount; i++) {
+				final int attrIndex = attributes.getIndex(i);
+				if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
+					this.mHorizontalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
+					this.mHorizontalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
+					this.mVerticalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
+					this.mVerticalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
+					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
+				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
+					setSkipLast(attributes.getBoolean(attrIndex, skipsLast()));
 				}
 			}
 			attributes.recycle();
@@ -183,7 +193,9 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 
 	/**
-	 * Returns the amount of space that will be applied at the start of each item in horizontal direction.
+	 * Returns the amount of space by which to offset each item at the start in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getHorizontalEnd()
@@ -193,7 +205,9 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the end of each item in horizontal direction.
+	 * Returns the amount of space by which to offset each item at the end in horizontal direction.
+	 * <p>
+	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getHorizontalStart()
@@ -203,7 +217,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the start of each item in vertical direction.
+	 * Returns the amount of space by which to offset each item at the start in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getVerticalEnd()
@@ -213,7 +227,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Returns the amount of space that will be applied at the end of each item in vertical direction.
+	 * Returns the amount of space by which to offset each item at the end in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
 	 * @see #getVerticalStart()
@@ -229,25 +243,31 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 		if (mSkipFirst || mSkipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {
+				rect.setEmpty();
 				return;
 			}
 			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
-				rect.set(0, 0, 0, 0);
-			} else {
-				this.updateRectWithOffsets(rect);
+				rect.setEmpty();
+				return;
 			}
+		}
+		if (mPrecondition.check(view, parent, state)) {
+			this.updateItemOffsets(rect, ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL);
 		} else {
-			this.updateRectWithOffsets(rect);
+			rect.setEmpty();
 		}
 	}
 
 	/**
-	 * Updates the given <var>rect</var> with the current spacing amounts specified for this decoration.
+	 * Called to update the given <var>rect</var> with the current spacing offsets specified for this
+	 * decoration.
 	 *
-	 * @param rect The rect to be updated.
+	 * @param rect         The desired item offsets rect to be updated.
+	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
+	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
-	private void updateRectWithOffsets(final Rect rect) {
-		rect.set(mHorizontalStart, mVerticalStart, mHorizontalEnd, mVerticalEnd);
+	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
+		rect.set(rtlDirection ? mHorizontalEnd : mHorizontalStart, mVerticalStart, rtlDirection ? mHorizontalStart : mHorizontalEnd, mVerticalEnd);
 	}
 
 	/*
