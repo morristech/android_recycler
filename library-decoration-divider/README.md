@@ -14,8 +14,8 @@ This module contains **decoration** which draws **divider** for each of items di
 _depends on:_
 [recycler-decoration-core](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-core)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [ItemDividerDecoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-divider/src/main/java/universum/studios/android/recycler/decoration/ItemDividerDecoration.java)

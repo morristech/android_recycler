@@ -36,12 +36,12 @@ android {
 
     final String keystoreDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
     final File keystoreFile = new File("${keystoreDirPath}/keystore.jks")
-    final File accessPropertiesFile = new File("${keystoreDirPath}/access.properties")
-    if (keystoreFile.exists() && accessPropertiesFile.exists()) {
-        final Properties accessProperties = new Properties()
-        accessProperties.load(new FileInputStream(accessPropertiesFile))
+    final File keyPropertiesFile = new File("${keystoreDirPath}/key.properties")
+    if (keystoreFile.exists() && keyPropertiesFile.exists()) {
+        final Properties keyProperties = new Properties()
+        keyProperties.load(new FileInputStream(keyPropertiesFile))
         //
-        // The access.properties file should contain following data (each property at a single line):
+        // The key.properties file should contain following data (each property at a single line):
         // <pre>
         // store.password=STORE_PASSWORD
         // key.alias=ALIAS_OF_THE_KEY
@@ -51,9 +51,9 @@ android {
         signingConfigs {
             production {
                 storeFile keystoreFile
-                storePassword accessProperties['store.password']
-                keyAlias accessProperties['key.alias']
-                keyPassword accessProperties['key.password']
+                storePassword keyProperties['store.password']
+                keyAlias keyProperties['key.alias']
+                keyPassword keyProperties['key.password']
             }
         }
 
@@ -81,21 +81,21 @@ android {
  */
 repositories {
     mavenLocal()
-    maven { url repos.bintray.universumStudiosAndroid }
+    maven { url repos.bintray.universum.studios.android }
 }
 
 dependencies {
     implementation project(':library')
-    implementation deps.androidSupport.design
-    implementation deps.androidSupport.vectorDrawable
-    implementation deps.androidSupport.recyclerView
-    implementation deps.androidSupport.cardView
+    implementation deps.android.support.design
+    implementation deps.android.support.vectorDrawable
+    implementation deps.android.support.recyclerView
+    implementation deps.android.support.cardView
     implementation deps.other.butterknife
     annotationProcessor deps.other.butterknifeProcessor
-    implementation deps.universumStudios.samples
-    implementation deps.universumStudios.fragments
-    implementation deps.universumStudios.logger
-    implementation deps.universumStudios.widgetAdapters
-    implementation deps.universumStudios.fontCore
-    implementation deps.universumStudios.ui
+    implementation deps.universum.studios.samples
+    implementation deps.universum.studios.fragments
+    implementation deps.universum.studios.logger
+    implementation deps.universum.studios.widgetAdapters
+    implementation deps.universum.studios.fontCore
+    implementation deps.universum.studios.ui
 }

@@ -21,7 +21,7 @@ as usually.
     }
 
 ## Available modules ##
-> Following modules are available in the [latest](https://github.com/universum-studios/android_recycler/releases "Latest Releases page") stable release.
+> Following modules are available in the [latest](https://github.com/universum-studios/android_recycler/releases "Releases page") stable release.
 
 - **[Core](https://github.com/universum-studios/android_recycler/tree/master/library-core)**
 - **[@Decoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration)**

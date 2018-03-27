@@ -1,11 +1,12 @@
 Change-Log
 ===============
+> Regular configuration update: _27.03.2018_
 
 More **detailed changelog** for each respective version may be viewed by pressing on a desired _version's name_.
 
 ## Version 1.x ##
 
-### 1.0.2 ###
+### [1.0.2](https://github.com/universum-studios/android_recycler/releases/tag/v1.0.2) ###
 > 15.03.2018
 
 - `ItemDividerDecoration` now accepts **offsets** for its divider either via `setDividerOffset(int, int)`

@@ -11,8 +11,8 @@ item decorations provided by this library.
 
     implementation "universum.studios.android:recycler-decoration-core:${DESIRED_VERSION}@aar"
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [RecyclerViewItemDecoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-core/src/main/java/universum/studios/android/recycler/decoration/RecyclerViewItemDecoration.java)
