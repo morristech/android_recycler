@@ -14,8 +14,8 @@ a `RecyclerView` widget.
 _depends on:_
 [recycler-helper-core](https://github.com/universum-studios/android_recycler/tree/master/library-helper-core)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [ItemSwipeHelper](https://github.com/universum-studios/android_recycler/tree/master/library-helper-swipe/src/main/java/universum/studios/android/recycler/helper/ItemSwipeHelper.java)

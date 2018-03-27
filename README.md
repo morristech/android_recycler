@@ -1,7 +1,7 @@
 Android Recycler
 ===============
 
-[![CircleCI](https://circleci.com/gh/universum-studios/android_recycler.svg?style=svg)](https://circleci.com/gh/universum-studios/android_recycler)
+[![CircleCI](https://circleci.com/gh/universum-studios/android_recycler.svg?style=shield)](https://circleci.com/gh/universum-studios/android_recycler)
 [![Codecov](https://codecov.io/gh/universum-studios/android_recycler/branch/master/graph/badge.svg)](https://codecov.io/gh/universum-studios/android_recycler)
 [![Codacy](https://api.codacy.com/project/badge/Grade/e53e4e18654b45baa4f219071b3d91db)](https://www.codacy.com/app/universum-studios/android_recycler?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_recycler&amp;utm_campaign=Badge_Grade)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Recycler-green.svg?style=flat)](https://android-arsenal.com/details/1/5664)
@@ -13,7 +13,7 @@ For more information please visit the **[Wiki](https://github.com/universum-stud
 ## Download ##
 [![Bintray](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Arecycler/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Arecycler/_latestVersion)
 
-Download the latest **[release](https://github.com/universum-studios/android_recycler/releases "Latest Releases page")** or **add as dependency** in your project via:
+Download the latest **[release](https://github.com/universum-studios/android_recycler/releases "Releases page")** or **add as dependency** in your project via:
 
 ### Gradle ###
 

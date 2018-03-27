@@ -14,8 +14,8 @@ This module contains **decoration** which adds **space** for each of items displ
 _depends on:_
 [recycler-decoration-core](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-core)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [ItemSpaceDecoration](https://github.com/universum-studios/android_recycler/tree/master/library-decoration-space/src/main/java/universum/studios/android/recycler/decoration/ItemSpaceDecoration.java)

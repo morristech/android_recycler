@@ -72,8 +72,8 @@ repositories {
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.androidSupport.annotations
-    implementation deps.androidSupport.recyclerView
+    implementation deps.android.support.annotations
+    implementation deps.android.support.recyclerView
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     // None.
