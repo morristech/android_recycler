@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.decoration;
 
@@ -57,7 +57,7 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 		super.beforeTest();
 		resetMock(mMockCanvas);
 		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mContext));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(context));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
 	}
@@ -65,15 +65,15 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 	@Test
 	@SuppressWarnings({"deprecation", "ConstantConditions"})
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Divider"
 		));
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.HORIZONTAL));
 		assertThat(decoration.getDivider(), instanceOf(ColorDrawable.class));
-		assertThat(((ColorDrawable) decoration.getDivider()).getColor(), is(mContext.getResources().getColor(android.R.color.darker_gray)));
+		assertThat(((ColorDrawable) decoration.getDivider()).getColor(), is(context.getResources().getColor(android.R.color.darker_gray)));
 		assertThat(decoration.getDividerThickness(), is(2));
 		assertThat(decoration.getDividerOffsetStart(), is(4));
 		assertThat(decoration.getDividerOffsetEnd(), is(8));
@@ -83,9 +83,9 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipNone() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Divider.SkipNone"
 		));
@@ -95,9 +95,9 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipFirst() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Divider.SkipFirst"
 		));
@@ -107,9 +107,9 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipLast() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Divider.SkipLast"
 		));
@@ -119,9 +119,9 @@ public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipBoth() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Divider.SkipBoth"
 		));
