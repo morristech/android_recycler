@@ -62,10 +62,10 @@ public final class ItemSpaceDecorationTest extends RobolectricTestCase {
 	@Override
 	public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mItemView = new TextView(mApplication);
+		this.mItemView = new TextView(application);
 		resetMock(mMockCanvas);
 		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		when(mMockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
 		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(mItemView);
 		resetMock(mMockRecyclerViewState);
@@ -99,21 +99,21 @@ public final class ItemSpaceDecorationTest extends RobolectricTestCase {
 
 	@Test
 	public void testInstantiationWithContext() {
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mApplication);
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSet() {
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mApplication, null);
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application, null);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mApplication, null, 0);
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application, null, 0);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}

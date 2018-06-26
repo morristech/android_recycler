@@ -139,11 +139,11 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 
 	@Test
 	public void testOnChildDraw() throws Exception {
-		final Holder mockHolder = createMockHolder(new View(mApplication));
+		final Holder mockHolder = createMockHolder(new View(application));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
-		final View view = new View(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
+		final View view = new View(application);
 		when(mockHolder.getInteractiveView(Helper.ACTION_STATE_SWIPE)).thenReturn(view);
 		interactor.onChildDraw(
 				canvas,
@@ -161,11 +161,11 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 	public void testOnChildDrawWithNotInteractiveViewHolder() {
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
 		interactor.onChildDraw(
 				canvas,
 				recyclerView,
-				new RecyclerView.ViewHolder(new View(mApplication)) {},
+				new RecyclerView.ViewHolder(new View(application)) {},
 				0, 0,
 				Helper.ACTION_STATE_SWIPE,
 				true
@@ -174,10 +174,10 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 
 	@Test
 	public void testOnChildDrawWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
-		final Holder mockHolder = createMockHolder(new View(mApplication));
+		final Holder mockHolder = createMockHolder(new View(application));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
 		when(mockHolder.getInteractiveView(Helper.ACTION_STATE_SWIPE)).thenReturn(null);
 		interactor.onChildDraw(
 				canvas,
@@ -193,11 +193,11 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 
 	@Test
 	public void testOnChildDrawOver() throws Exception {
-		final Holder mockHolder = createMockHolder(new View(mApplication));
+		final Holder mockHolder = createMockHolder(new View(application));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
-		final View view = new View(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
+		final View view = new View(application);
 		when(mockHolder.getInteractiveView(Helper.ACTION_STATE_DRAG)).thenReturn(view);
 		interactor.onChildDrawOver(
 				canvas,
@@ -215,11 +215,11 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 	public void testOnChildDrawOverWithNotInteractiveViewHolder() {
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
 		interactor.onChildDrawOver(
 				canvas,
 				recyclerView,
-				new RecyclerView.ViewHolder(new View(mApplication)) {},
+				new RecyclerView.ViewHolder(new View(application)) {},
 				0, 0,
 				Helper.ACTION_STATE_DRAG,
 				true
@@ -228,10 +228,10 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 
 	@Test
 	public void testOnChildDrawOverWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
-		final Holder mockHolder = createMockHolder(new View(mApplication));
+		final Holder mockHolder = createMockHolder(new View(application));
 		final Interactor interactor = new Interactor();
 		final Canvas canvas = new Canvas();
-		final RecyclerView recyclerView = new RecyclerView(mApplication);
+		final RecyclerView recyclerView = new RecyclerView(application);
 		when(mockHolder.getInteractiveView(Helper.ACTION_STATE_DRAG)).thenReturn(null);
 		interactor.onChildDrawOver(
 				canvas,

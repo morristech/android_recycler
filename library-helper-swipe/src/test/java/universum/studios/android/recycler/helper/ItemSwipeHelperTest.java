@@ -121,7 +121,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderForHorizontalSwipe() throws Throwable {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		itemView.setTranslationX(1f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
@@ -133,7 +133,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderForHorizontalSwipeWithoutTranslation() throws Throwable {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final RecyclerView.Adapter adapter = new Adapter();
 		final RecyclerView.AdapterDataObserver mockAdapterObserver = mock(RecyclerView.AdapterDataObserver.class);
 		adapter.registerAdapterDataObserver(mockAdapterObserver);
@@ -149,7 +149,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderForVerticalSwipe() throws Throwable {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		itemView.setTranslationY(1f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
@@ -161,7 +161,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderForVerticalSwipeWithoutTranslation() throws Throwable {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final RecyclerView.Adapter adapter = new Adapter();
 		final RecyclerView.AdapterDataObserver mockAdapterObserver = mock(RecyclerView.AdapterDataObserver.class);
 		adapter.registerAdapterDataObserver(mockAdapterObserver);
@@ -178,7 +178,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 	@Test
 	public void testRestoreHolderWithAnimationCallback() throws Throwable {
 		final Runnable mockAnimationCallback = mock(Runnable.class);
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		itemView.setTranslationX(0f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
@@ -190,7 +190,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderWithUnknownDirection() throws Throwable {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, 100), is(false));
@@ -199,7 +199,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 	@Test
 	@SuppressWarnings("ResourceType")
 	public void testRestoreHolderWithUnknownPosition() throws Exception {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(null, itemView, RecyclerView.NO_POSITION);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
@@ -208,7 +208,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderWithoutInteractiveView() throws Exception {
-		final View itemView = new View(mApplication);
+		final View itemView = new View(application);
 		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
 		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
@@ -217,7 +217,7 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
 	@Test
 	public void testRestoreHolderNotTypeOfSwipeHolder() throws Exception {
-		assertThat(new ItemSwipeHelper().restoreHolder(new RecyclerView.ViewHolder(new View(mApplication)) {}, ItemSwipeHelper.START), is(false));
+		assertThat(new ItemSwipeHelper().restoreHolder(new RecyclerView.ViewHolder(new View(application)) {}, ItemSwipeHelper.START), is(false));
 	}
 
 	private static Holder createMockHolder(RecyclerView ownerRecyclerView, View itemView, int position) throws Exception {

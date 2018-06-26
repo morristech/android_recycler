@@ -12,7 +12,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath 'universum.studios.gradle:github-plugin:1.1.2'
@@ -43,7 +43,9 @@ task clean(type: Delete) {
  * Task that updates library artifacts directory.
  */
 task updateArtifacts() {
-    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:updateArtifacts" }
+    subprojects.findAll {
+        if (it.name.startsWith("library")) dependsOn ":${it.name}:updateArtifacts"
+    }
     doLast {
         if (file(repos.project.artifacts).exists()) {
             exec {
@@ -59,7 +61,9 @@ task updateArtifacts() {
 task deployModulesToMavenLocal() {
     group 'deploy'
     description 'Deploys artifacts for all library modules (except groups) into Maven local repository.'
-    subprojects.findAll { if (it.name.startsWith("library-") && !it.name.endsWith('_group')) dependsOn ":${it.name}:uploadArchives" }
+    subprojects.findAll {
+        if (it.name.startsWith("library-") && !it.name.endsWith('_group')) dependsOn ":${it.name}:uploadArchives"
+    }
 }
 
 /**
@@ -68,7 +72,9 @@ task deployModulesToMavenLocal() {
 task deployGroupsToMavenLocal() {
     group 'deploy'
     description 'Deploys artifacts for all library module groups into Maven local repository.'
-    subprojects.findAll { if (it.name.startsWith("library-") && it.name.endsWith('_group')) dependsOn ":${it.name}:uploadArchives" }
+    subprojects.findAll {
+        if (it.name.startsWith("library-") && it.name.endsWith('_group')) dependsOn ":${it.name}:uploadArchives"
+    }
 }
 
 /**
@@ -77,7 +83,9 @@ task deployGroupsToMavenLocal() {
 task deployModulesToBintray() {
     group 'deploy'
     description 'Deploys artifacts for all library modules (except groups) up to the Bintray repository.'
-    subprojects.findAll { if (it.name.startsWith("library-") && !it.name.endsWith('_group')) dependsOn ":${it.name}:bintrayUpload" }
+    subprojects.findAll {
+        if (it.name.startsWith("library-") && !it.name.endsWith('_group')) dependsOn ":${it.name}:bintrayUpload"
+    }
 }
 
 /**
@@ -86,7 +94,9 @@ task deployModulesToBintray() {
 task deployGroupsToBintray() {
     group 'deploy'
     description 'Deploys artifacts for all library module groups up to the Bintray repository.'
-    subprojects.findAll { if (it.name.startsWith("library-") && it.name.endsWith('_group')) dependsOn ":${it.name}:bintrayUpload" }
+    subprojects.findAll {
+        if (it.name.startsWith("library-") && it.name.endsWith('_group')) dependsOn ":${it.name}:bintrayUpload"
+    }
 }
 
 /**

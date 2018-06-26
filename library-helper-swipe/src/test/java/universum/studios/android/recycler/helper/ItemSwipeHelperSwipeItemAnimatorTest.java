@@ -47,8 +47,8 @@ public final class ItemSwipeHelperSwipeItemAnimatorTest extends RobolectricTestC
 
 	@Test
 	public void testAnimateChangeForVerticalTranslation() throws Exception {
-		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(mApplication));
-		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(mApplication));
+		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
+		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 1),
@@ -58,8 +58,8 @@ public final class ItemSwipeHelperSwipeItemAnimatorTest extends RobolectricTestC
 
 	@Test
 	public void testAnimateChangeForHorizontalTranslation() throws Exception {
-		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(mApplication));
-		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(mApplication));
+		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
+		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 1, 0),
@@ -69,7 +69,7 @@ public final class ItemSwipeHelperSwipeItemAnimatorTest extends RobolectricTestC
 
 	@Test
 	public void testAnimateChangeForSameHolders() throws Exception {
-		final RecyclerView.ViewHolder mockViewHolder = createMockViewHolder(new View(mApplication));
+		final RecyclerView.ViewHolder mockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
 		assertThat(animator.animateChange(mockViewHolder, mockViewHolder, 0, 0, 0, 0), is(false));
 	}

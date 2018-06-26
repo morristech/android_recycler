@@ -57,7 +57,7 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	public void beforeTest() throws Exception {
 		super.beforeTest();
 		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		resetMock(mMockRecyclerViewState);
 		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
 	}
@@ -65,7 +65,7 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 	@Test
 	public void testEmptyPrecondition() {
 		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY, is(notNullValue()));
-		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY.check(new View(mApplication), mMockRecyclerView, mMockRecyclerViewState), is(true));
+		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY.check(new View(application), mMockRecyclerView, mMockRecyclerViewState), is(true));
 	}
 
 	@Test
@@ -78,21 +78,21 @@ public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 
 	@Test
 	public void testInstantiationWithContext() {
-		final Decoration decoration = new Decoration(mApplication);
+		final Decoration decoration = new Decoration(application);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSet() {
-		final Decoration decoration = new Decoration(mApplication, null);
+		final Decoration decoration = new Decoration(application, null);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
-		final Decoration decoration = new Decoration(mApplication, null, 0);
+		final Decoration decoration = new Decoration(application, null, 0);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}

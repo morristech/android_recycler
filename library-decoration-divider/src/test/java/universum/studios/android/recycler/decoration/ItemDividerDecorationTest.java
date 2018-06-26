@@ -65,10 +65,10 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 	@Override
 	public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mItemView = new TextView(mApplication);
+		this.mItemView = new TextView(application);
 		resetMock(mMockCanvas);
 		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		when(mMockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
 		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(mItemView);
 		resetMock(mMockRecyclerViewState);
@@ -118,21 +118,21 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 
 	@Test
 	public void testInstantiationWithContext() {
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mApplication);
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(application);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSet() {
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mApplication, null);
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(application, null);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
-		final ItemDividerDecoration decoration = new ItemDividerDecoration(mApplication, null, 0);
+		final ItemDividerDecoration decoration = new ItemDividerDecoration(application, null, 0);
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
@@ -406,7 +406,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 
 	@Test
 	public void testShouldDecorateWithoutDivider() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(null);
 		decoration.setDividerThickness(2);
@@ -415,7 +415,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 
 	@Test
 	public void testShouldDecorateWithZeroDividerThickness() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mApplication));
+		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mock(Drawable.class));
 		decoration.setDividerThickness(0);

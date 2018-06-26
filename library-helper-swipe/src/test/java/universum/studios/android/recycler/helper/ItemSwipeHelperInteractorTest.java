@@ -294,7 +294,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.attachAdapter(mockAdapter);
 		final int itemSwipeFlags = ItemSwipeHelper.makeSwipeFlags(ItemSwipeHelper.START | ItemSwipeHelper.END);
 		when(mockAdapter.getItemSwipeFlags(0)).thenReturn(itemSwipeFlags);
-		final Holder mockViewHolder = createMockHolder(new View(mApplication), 0);
+		final Holder mockViewHolder = createMockHolder(new View(application), 0);
 		assertThat(interactor.getMovementFlags(mMockRecyclerView, mockViewHolder), is(itemSwipeFlags));
 		verify(mockAdapter).getItemSwipeFlags(0);
 	}
@@ -327,7 +327,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testOnSelectedChanged() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(view, 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -346,7 +346,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testOnSelectedChangedWithoutInteractiveView() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(view, 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -365,7 +365,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testOnSelectedChangedForNotSwipeInteraction() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(view, 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -381,7 +381,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 	@Test
 	public void testOnSelectedChangedForNotSwipeHolder() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(mApplication), 0);
+		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -394,7 +394,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 	@Test
 	public void testOnSelectedChangedWhenDisabled() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final Holder mockHolder = createMockHolder(new View(mApplication), 0);
+		final Holder mockHolder = createMockHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -408,7 +408,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testOnSelectedChangedWithoutAttachedAdapter() throws Exception {
-		final Holder mockHolder = createMockHolder(new View(mApplication), 0);
+		final Holder mockHolder = createMockHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.addOnSwipeListener(mockListener);
@@ -488,7 +488,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testClearView() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(mMockRecyclerView, view, 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -508,7 +508,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testClearViewNotInteractive() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(mMockRecyclerView, view, 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -528,7 +528,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testClearViewForHolderWithUnknownPosition() throws Exception {
-		final View view = new View(mApplication);
+		final View view = new View(application);
 		final Adapter mockAdapter = mock(Adapter.class);
 		final Holder mockHolder = createMockHolder(view, RecyclerView.NO_POSITION);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
@@ -549,7 +549,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 	@Test
 	public void testClearViewForNotSwipeHolder() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(mApplication), 0);
+		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -563,7 +563,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 	@Test
 	public void testClearViewWhenDisabled() throws Exception {
 		final Adapter mockAdapter = mock(Adapter.class);
-		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(mApplication), 0);
+		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
@@ -577,7 +577,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 
 	@Test
 	public void testClearViewWithoutAttachedAdapter() throws Exception {
-		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(mApplication), 0);
+		final RecyclerView.ViewHolder mockHolder = createMockViewHolder(new View(application), 0);
 		final ItemSwipeHelper.OnSwipeListener mockListener = mock(ItemSwipeHelper.OnSwipeListener.class);
 		final ItemSwipeHelper.Interactor interactor = new ItemSwipeHelper.Interactor();
 		interactor.addOnSwipeListener(mockListener);
