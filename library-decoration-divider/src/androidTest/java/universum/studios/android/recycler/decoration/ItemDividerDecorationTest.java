@@ -42,6 +42,10 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  */
 public final class ItemDividerDecorationTest extends InstrumentedTestCase {
 
+	// Arrange:
+	// Act:
+	// Assert:
+
 	private Canvas mMockCanvas = mock(Canvas.class);
 	private RecyclerView mMockRecyclerView;
 	private RecyclerView.State mMockRecyclerViewState;

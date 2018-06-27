@@ -49,6 +49,10 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  */
 public final class ItemDividerDecorationTest extends RobolectricTestCase {
 
+	// Arrange:
+	// Act:
+	// Assert:
+
 	private static final int MOCK_ITEMS_COUNT = 10;
 
 	private Canvas mMockCanvas = mock(Canvas.class);

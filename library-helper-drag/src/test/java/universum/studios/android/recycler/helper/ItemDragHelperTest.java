@@ -33,18 +33,14 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  */
 public final class ItemDragHelperTest extends RobolectricTestCase {
 
-	@Test
-	public void testInteractionConstant() {
+	@Test public void testConstants() {
+		// Assert:
 		assertThat(ItemDragHelper.INTERACTION, is(ItemTouchHelper.ACTION_STATE_DRAG));
-	}
-
-	@Test
-	public void testMoveTresholdConstant() {
 		assertThat(ItemDragHelper.MOVE_THRESHOLD, is(0.5f));
 	}
 
-	@Test
-	public void testMakeDragFlags() {
+	@Test public void testMakeDragFlags() {
+		// Act + Assert:
 		assertThat(
 				ItemDragHelper.makeDragFlags(ItemDragHelper.UP),
 				is(ItemTouchHelper.Callback.makeMovementFlags(ItemTouchHelper.UP, 0))
@@ -55,8 +51,10 @@ public final class ItemDragHelperTest extends RobolectricTestCase {
 		);
 	}
 
-	@Test
-	public void testGetInteractor() {
-		assertThat(new ItemDragHelper().getInteractor(), instanceOf(ItemDragHelper.Interactor.class));
+	@Test public void testInstantiation() {
+		// Act:
+		final ItemDragHelper helper = new ItemDragHelper();
+		// Act + Assert:
+		assertThat(helper.getInteractor(), instanceOf(ItemDragHelper.Interactor.class));
 	}
 }

@@ -43,6 +43,10 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  * @author Martin Albedinsky
  */
 public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
+
+	// Arrange:
+	// Act:
+	// Assert:
     
 	private RecyclerView mMockRecyclerView;
 	private RecyclerView.State mMockRecyclerViewState;
@@ -64,7 +68,7 @@ public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
-		final Decoration decoration = new Decoration(context, null, 0, TestResources.resourceIdentifier(
+		final TestDecoration decoration = new TestDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.SkipNone"
@@ -76,7 +80,7 @@ public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipFirst() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
-		final Decoration decoration = new Decoration(context, null, 0, TestResources.resourceIdentifier(
+		final TestDecoration decoration = new TestDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.SkipFirst"
@@ -88,7 +92,7 @@ public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipLast() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
-		final Decoration decoration = new Decoration(context, null, 0, TestResources.resourceIdentifier(
+		final TestDecoration decoration = new TestDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.SkipLast"
@@ -100,7 +104,7 @@ public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
 	@Test
 	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResWithSkipBoth() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
-		final Decoration decoration = new Decoration(context, null, 0, TestResources.resourceIdentifier(
+		final TestDecoration decoration = new TestDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.SkipBoth"
@@ -109,13 +113,18 @@ public final class RecyclerViewItemDecorationTest extends InstrumentedTestCase {
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	private static final class Decoration extends RecyclerViewItemDecoration {
+	private static final class TestDecoration extends RecyclerViewItemDecoration {
 
-		Decoration() {
+		TestDecoration() {
 			super();
 		}
 
-		Decoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+		TestDecoration(
+				@Nullable final Context context,
+				@Nullable final AttributeSet attrs,
+				@AttrRes final int defStyleAttr,
+				@StyleRes final int defStyleRes
+		) {
 			super(context, attrs, defStyleAttr, defStyleRes);
 		}
 	}

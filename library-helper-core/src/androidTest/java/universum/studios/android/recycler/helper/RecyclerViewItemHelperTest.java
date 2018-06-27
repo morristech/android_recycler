@@ -37,72 +37,79 @@ import static org.mockito.Mockito.when;
  */
 public final class RecyclerViewItemHelperTest extends InstrumentedTestCase {
 
-	@Test
 	@UiThreadTest
-	public void testAttachToRecyclerView() {
-		final Interactor mockInteractor = mock(Interactor.class);
+	@Test public void testAttachToRecyclerView() {
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView recyclerView = new RecyclerView(context);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
 		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(true);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
-		verify(mockInteractor, times(1)).canAttachAdapter(mockAdapter);
-		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapter);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
+		// Assert:
+		verify(mockInteractor).canAttachAdapter(mockAdapter);
+		verify(mockInteractor).onAdapterAttached(mockAdapter);
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
 
 	@UiThreadTest
 	@Test(expected = IllegalArgumentException.class)
 	public void testAttachToRecyclerViewWithUnsupportedAdapter() {
-		final Interactor mockInteractor = mock(Interactor.class);
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView recyclerView = new RecyclerView(context);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
 		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(false);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
 	}
 
-	@Test
 	@UiThreadTest
-	public void testAttachToRecyclerViewWithoutAdapter() {
-		final Interactor mockInteractor = mock(Interactor.class);
+	@Test public void testAttachToRecyclerViewWithoutAdapter() {
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView recyclerView = new RecyclerView(context);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
+		// Assert:
 		verify(mockInteractor, times(0)).canAttachAdapter(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterAttached(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
 
-	private static class Helper extends RecyclerViewItemHelper<Interactor> {
+	private static class TestHelper extends RecyclerViewItemHelper<TestInteractor> {
 
-		Helper(@NonNull Interactor interactor) {
+		TestHelper(@NonNull final TestInteractor interactor) {
 			super(interactor);
 		}
 	}
 
-	private static class Interactor extends RecyclerViewItemHelper.ItemInteractor {
+	private static class TestInteractor extends RecyclerViewItemHelper.ItemInteractor {
 
-		@Override
-		protected boolean canAttachAdapter(@NonNull RecyclerView.Adapter adapter) {
+		@Override protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
 			return false;
 		}
 
-		@Override
-		public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+		@Override public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
 			return 0;
 		}
 
-		@Override
-		public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+		@Override public boolean onMove(
+				@NonNull final RecyclerView recyclerView,
+				@NonNull final RecyclerView.ViewHolder viewHolder,
+				@NonNull final RecyclerView.ViewHolder target
+		) {
 			return false;
 		}
 
-		@Override
-		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-		}
+		@Override public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {}
 
-		@Override
-		public boolean isActive() {
+		@Override public boolean isActive() {
 			return false;
 		}
 	}

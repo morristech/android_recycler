@@ -39,6 +39,10 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  * @author Martin Albedinsky
  */
 public final class ItemSpaceDecorationTest extends InstrumentedTestCase {
+
+	// Arrange:
+	// Act:
+	// Assert:
     
 	private Canvas mMockCanvas = mock(Canvas.class);
 	private RecyclerView mMockRecyclerView;

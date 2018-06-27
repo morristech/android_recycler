@@ -38,143 +38,153 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.MockUtil.resetMock;
 
 /**
  * @author Martin Albedinsky
  */
 public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
 
-	// Arrange:
-	// Act:
-	// Assert:
-    
-	private RecyclerView mMockRecyclerView;
-	private RecyclerView.State mMockRecyclerViewState;
-
-	public RecyclerViewItemDecorationTest() {
-		this.mMockRecyclerView = mock(RecyclerView.class);
-		this.mMockRecyclerViewState = mock(RecyclerView.State.class);
-	}
-
-	@Override
-	public void beforeTest() throws Exception {
-		super.beforeTest();
-		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
-		resetMock(mMockRecyclerViewState);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
-	}
-
-	@Test
-	public void testEmptyPrecondition() {
+	@Test public void testEmptyPrecondition() {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+		final RecyclerView.State mockRecyclerViewState = mock(RecyclerView.State.class);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(10);
+		// Act + Assert:
 		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY, is(notNullValue()));
-		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY.check(new View(application), mMockRecyclerView, mMockRecyclerViewState), is(true));
+		assertThat(RecyclerViewItemDecoration.Precondition.EMPTY.check(new View(application), mockRecyclerView, mockRecyclerViewState), is(true));
 	}
 
-	@Test
-	public void testEmptyInstantiation() {
-		final Decoration decoration = new Decoration();
+	@Test public void testEmptyInstantiation() {
+		// Act:
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
-		assertThat(decoration.getPrecondition(), is(Decoration.Precondition.EMPTY));
+		assertThat(decoration.getPrecondition(), is(TestDecoration.Precondition.EMPTY));
 	}
 
-	@Test
-	public void testInstantiationWithContext() {
-		final Decoration decoration = new Decoration(application);
-		assertThat(decoration.skipsFirst(), is(false));
-		assertThat(decoration.skipsLast(), is(false));
-	}
-
-	@Test
-	public void testInstantiationWithContextAttrsSet() {
-		final Decoration decoration = new Decoration(application, null);
+	@Test public void testInstantiationWithContext() {
+		// Act:
+		final RecyclerViewItemDecoration decoration = new TestDecoration(application);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
-		final Decoration decoration = new Decoration(application, null, 0);
+	@Test public void testInstantiationWithContextAttrsSet() {
+		// Act:
+		final RecyclerViewItemDecoration decoration = new TestDecoration(application, null);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testSetSkipFirst() {
-		final RecyclerViewItemDecoration decoration = new Decoration();
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttr() {
+		// Act:
+		final RecyclerViewItemDecoration decoration = new TestDecoration(application, null, 0);
+		// Assert:
+		assertThat(decoration.skipsFirst(), is(false));
+		assertThat(decoration.skipsLast(), is(false));
+	}
+
+	@Test public void testSkipFirst() {
+		// Arrange:
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
 		decoration.setSkipFirst(true);
 		assertThat(decoration.skipsFirst(), is(true));
 		decoration.setSkipFirst(false);
 		assertThat(decoration.skipsFirst(), is(false));
 	}
 
-	@Test
-	public void testSetSkipLast() {
-		final RecyclerViewItemDecoration decoration = new Decoration();
+	@Test public void testSkipLast() {
+		// Arrange:
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
 		decoration.setSkipLast(true);
 		assertThat(decoration.skipsLast(), is(true));
 		decoration.setSkipLast(false);
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testSetGetPrecondition() {
-		final Decoration decoration = new Decoration();
+	@Test public void testPrecondition() {
+		// Arrange:
 		final RecyclerViewItemDecoration.Precondition mockPrecondition = mock(RecyclerViewItemDecoration.Precondition.class);
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
 		decoration.setPrecondition(mockPrecondition);
 		assertThat(decoration.getPrecondition(), is(mockPrecondition));
 		verifyZeroInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testShouldDecorate() {
-		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(true));
-		verify(mMockRecyclerView, times(1)).getLayoutManager();
-		verify(mMockRecyclerViewState, times(1)).getItemCount();
+	@Test public void testShouldDecorate() {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+		final RecyclerView.State mockRecyclerViewState = mock(RecyclerView.State.class);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(10);
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(true));
+		verify(mockRecyclerView).getLayoutManager();
+		verify(mockRecyclerViewState).getItemCount();
 	}
 
-	@Test
-	public void testShouldDecorateForRecyclerViewWithoutLayoutManager() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
-		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
-		verify(mMockRecyclerView, times(1)).getLayoutManager();
-		verify(mMockRecyclerViewState, times(0)).getItemCount();
+	@Test public void testShouldDecorateForRecyclerViewWithoutLayoutManager() {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(null);
+		final RecyclerView.State mockRecyclerViewState = mock(RecyclerView.State.class);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(10);
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
+		verify(mockRecyclerView, times(1)).getLayoutManager();
+		verify(mockRecyclerViewState, times(0)).getItemCount();
 	}
 
-	@Test
-	public void testShouldDecorateForRecyclerViewStateWithoutItems() {
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(0);
-		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
-		verify(mMockRecyclerView, times(1)).getLayoutManager();
-		verify(mMockRecyclerViewState, times(1)).getItemCount();
+	@Test public void testShouldDecorateForRecyclerViewStateWithoutItems() {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+		final RecyclerView.State mockRecyclerViewState = mock(RecyclerView.State.class);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(0);
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
+		verify(mockRecyclerView, times(1)).getLayoutManager();
+		verify(mockRecyclerViewState, times(1)).getItemCount();
 	}
 
-	@Test
-	public void testShouldDecorateForRecyclerViewWithoutLayoutManagerAndStateWithoutItems() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(0);
-		assertThat(new Decoration().shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
-		verify(mMockRecyclerView, times(1)).getLayoutManager();
-		verify(mMockRecyclerViewState, times(0)).getItemCount();
+	@Test public void testShouldDecorateForRecyclerViewWithoutLayoutManagerAndStateWithoutItems() {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(null);
+		final RecyclerView.State mockRecyclerViewState = mock(RecyclerView.State.class);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(0);
+		final RecyclerViewItemDecoration decoration = new TestDecoration();
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
+		verify(mockRecyclerView).getLayoutManager();
+		verify(mockRecyclerViewState, times(0)).getItemCount();
 	}
 
-	private static final class Decoration extends RecyclerViewItemDecoration {
+	private static final class TestDecoration extends RecyclerViewItemDecoration {
 
-		Decoration() {
+		TestDecoration() {
 			super();
 		}
 
-		Decoration(@Nullable Context context) {
+		TestDecoration(@Nullable final Context context) {
 			super(context);
 		}
 
-		Decoration(@Nullable Context context, @Nullable AttributeSet attrs) {
+		TestDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs) {
 			super(context, attrs);
 		}
 
-		Decoration(@Nullable Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+		TestDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr) {
 			super(context, attrs, defStyleAttr);
 		}
 	}

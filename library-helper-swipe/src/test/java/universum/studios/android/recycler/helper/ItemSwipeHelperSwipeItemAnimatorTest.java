@@ -36,41 +36,45 @@ import static org.mockito.Mockito.mock;
  * @author Martin Albedinsky
  */
 public final class ItemSwipeHelperSwipeItemAnimatorTest extends RobolectricTestCase {
-    
-	@Test
-	public void testAnimateChange() {
+
+	@Test public void testAnimateChange() {
+		// Arrange:
 		final RecyclerView.ViewHolder oldMockViewHolder = mock(RecyclerView.ViewHolder.class);
 		final RecyclerView.ViewHolder newMockViewHolder = mock(RecyclerView.ViewHolder.class);
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 0), is(false));
 	}
 
-	@Test
-	public void testAnimateChangeForVerticalTranslation() throws Exception {
+	@Test public void testAnimateChangeForVerticalTranslation() throws Exception {
+		// Arrange:
 		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
 		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 1),
 				is(new DefaultItemAnimator().animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 1))
 		);
 	}
 
-	@Test
-	public void testAnimateChangeForHorizontalTranslation() throws Exception {
+	@Test public void testAnimateChangeForHorizontalTranslation() throws Exception {
+		// Arrange:
 		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
 		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 1, 0),
 				is(new DefaultItemAnimator().animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 1, 0))
 		);
 	}
 
-	@Test
-	public void testAnimateChangeForSameHolders() throws Exception {
+	@Test public void testAnimateChangeForSameHolders() throws Exception {
+		// Arrange:
 		final RecyclerView.ViewHolder mockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(animator.animateChange(mockViewHolder, mockViewHolder, 0, 0, 0, 0), is(false));
 	}
 
