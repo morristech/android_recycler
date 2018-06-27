@@ -42,6 +42,8 @@ import universum.studios.android.recycler.R;
  * {@code none}
  *
  * @author Martin Albedinsky
+ * @since 1.0
+ *
  * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
  */
 public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
@@ -66,6 +68,7 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * In general, preconditions may be used in order to perform more item specific decoration logic.
 	 *
 	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public interface Precondition {
 
@@ -73,13 +76,11 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 		 * Empty implementation (NULL object) which is always satisfied, that is, every item view will
 		 * be decorated when using this precondition.
 		 */
-		@NonNull
-		Precondition EMPTY = new Precondition() {
+		@NonNull Precondition EMPTY = new Precondition() {
 
 			/**
 			 */
-			@Override
-			public boolean check(@NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+			@Override public boolean check(@NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
 				// Always decorate by default.
 				return true;
 			}
@@ -109,20 +110,19 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 * Boolean flag indicating whether this decoration should be skipped for the first item from the
 	 * data set or not.
 	 */
-	boolean mSkipFirst;
+	boolean skipFirst;
 
 	/**
 	 * Boolean flag indicating whether this decoration should be skipped for the last item from the
 	 * data set or not.
 	 */
-	boolean mSkipLast;
+	boolean skipLast;
 
 	/**
 	 * Precondition specified for this decoration. If not specified, this is an {@link Precondition#EMPTY}
 	 * precondition.
 	 */
-	@NonNull
-	Precondition mPrecondition = Precondition.EMPTY;
+	@NonNull Precondition precondition = Precondition.EMPTY;
 
 	/*
 	 * Constructors ================================================================================
@@ -175,9 +175,9 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 			for (int i = 0; i < attributeCount; i++) {
 				final int attrIndex = attributes.getIndex(i);
 				if (attrIndex == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipFirst) {
-					this.mSkipFirst = attributes.getBoolean(attrIndex, false);
+					this.skipFirst = attributes.getBoolean(attrIndex, false);
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_recyclerItemDecorationSkipLast) {
-					this.mSkipLast = attributes.getBoolean(attrIndex, false);
+					this.skipLast = attributes.getBoolean(attrIndex, false);
 				}
 			}
 			attributes.recycle();
@@ -196,12 +196,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @param skip {@code True} to not apply this decoration for the first item, {@code false} to
 	 *             apply it.
+	 *
 	 * @see #skipsFirst()
 	 * @see #setSkipLast(boolean)
 	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipFirst(final boolean skip) {
-		this.mSkipFirst = skip;
+		this.skipFirst = skip;
 	}
 
 	/**
@@ -209,10 +210,11 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @return {@code True} if this decoration is not applied for the first item, {@code false} if
 	 * it is.
+	 *
 	 * @see #setSkipFirst(boolean)
 	 */
 	public boolean skipsFirst() {
-		return mSkipFirst;
+		return skipFirst;
 	}
 
 	/**
@@ -223,12 +225,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @param skip {@code True} to not apply this decoration for the last item, {@code false} to
 	 *             apply it.
+	 *
 	 * @see #skipsFirst()
 	 * @see #setSkipFirst(boolean)
 	 * @see #setPrecondition(Precondition)
 	 */
 	public void setSkipLast(final boolean skip) {
-		this.mSkipLast = skip;
+		this.skipLast = skip;
 	}
 
 	/**
@@ -236,10 +239,11 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @return {@code True} if this decoration is not applied for the last item, {@code false} if
 	 * it is.
+	 *
 	 * @see #setSkipLast(boolean)
 	 */
 	public boolean skipsLast() {
-		return mSkipLast;
+		return skipLast;
 	}
 
 	/**
@@ -250,12 +254,13 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @param precondition The desired precondition which should be checked for each item view
 	 *                     of the parent recycler view before it is decorated.
+	 *
 	 * @see #getPrecondition()
 	 * @see #setSkipFirst(boolean)
 	 * @see #setSkipLast(boolean)
 	 */
 	public final void setPrecondition(@NonNull final Precondition precondition) {
-		this.mPrecondition = precondition;
+		this.precondition = precondition;
 	}
 
 	/**
@@ -263,11 +268,11 @@ public abstract class RecyclerViewItemDecoration extends RecyclerView.ItemDecora
 	 *
 	 * @return This decoration's precondition. If not specified, this is an {@link Precondition#EMPTY}
 	 * instance.
+	 *
 	 * @see #setPrecondition(Precondition)
 	 */
-	@NonNull
-	public final Precondition getPrecondition() {
-		return mPrecondition;
+	@NonNull public final Precondition getPrecondition() {
+		return precondition;
 	}
 
 	/**

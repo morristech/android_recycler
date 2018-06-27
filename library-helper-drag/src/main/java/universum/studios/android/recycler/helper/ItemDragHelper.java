@@ -49,6 +49,7 @@ import java.util.List;
  * unregistered via {@link ItemDragHelper.Interactor#removeOnDragListener(OnDragListener)}.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.Interactor> {
 
@@ -82,6 +83,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * {@link RecyclerView.ViewHolder ViewHolders}.
 	 *
 	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public interface DragAdapter {
 
@@ -91,6 +93,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param position Position of the item for which to obtain its drag flags.
 		 * @return Movement flags determining in which direction can be the item dragged.
+		 *
 		 * @see ItemDragHelper#makeDragFlags(int)
 		 */
 		int getItemDragFlags(int position);
@@ -100,6 +103,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * <var>position</var> has started.
 		 *
 		 * @param position Position of the view holder of which view started to be dragged by the user.
+		 *
 		 * @see #onItemDragFinished(int, int)
 		 * @see #onMoveItem(int, int)
 		 */
@@ -129,6 +133,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @param targetPosition  Target position at which could be the associated view holder dropped.
 		 * @return {@code True} if the holder can be dropped at the target position, {@code false}
 		 * otherwise.
+		 *
 		 * @see #onItemDragFinished(int, int)
 		 */
 		boolean canDropItemOver(int currentPosition, int targetPosition);
@@ -140,6 +145,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @param fromPosition The position from which has been the associated view holder started
 		 *                     to be dragged.
 		 * @param toPosition   The position at which has been the associated view holder dropped.
+		 *
 		 * @see #canDropItemOver(int, int)
 		 * @see #onItemDragStarted(int)
 		 */
@@ -151,6 +157,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * drag feature for theirs corresponding item views.
 	 *
 	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public interface DragViewHolder extends InteractiveViewHolder {
 
@@ -168,6 +175,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param fromPosition The position from which has been the view holder dragged.
 		 * @param toPosition   The position at which has been the view holder dropped.
+		 *
 		 * @see #onDragStarted()
 		 * @see ItemDragHelper.Callback#clearView(RecyclerView, RecyclerView.ViewHolder)
 		 */
@@ -184,6 +192,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * <b>canceled</b> drag gesture for a specific {@link RecyclerView.ViewHolder} instance.
 	 *
 	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public interface OnDragListener {
 
@@ -192,6 +201,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param dragHelper The item helper controlling the drag gesture for the view holder.
 		 * @param viewHolder The view holder for which has been the drag gesture started.
+		 *
 		 * @see #onDragFinished(ItemDragHelper, RecyclerView.ViewHolder, int, int)
 		 */
 		void onDragStarted(@NonNull ItemDragHelper dragHelper, @NonNull RecyclerView.ViewHolder viewHolder);
@@ -203,6 +213,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @param viewHolder   The view holder for which has been the drag gesture finished.
 		 * @param fromPosition The position from which has been the view holder dragged.
 		 * @param toPosition   The position at which has been the view holder dropped.
+		 *
 		 * @see #onDragStarted(ItemDragHelper, RecyclerView.ViewHolder)
 		 */
 		void onDragFinished(@NonNull ItemDragHelper dragHelper, @NonNull RecyclerView.ViewHolder viewHolder, int fromPosition, int toPosition);
@@ -240,7 +251,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 *
 	 * @param interactor The interactor that will receive and handle drag gesture related events.
 	 */
-	private ItemDragHelper(@NonNull Interactor interactor) {
+	private ItemDragHelper(@NonNull final Interactor interactor) {
 		super(interactor);
 	}
 	 
@@ -254,6 +265,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * @param movementFlags The desired movement flags. One of flags defined by
 	 *                      {@link Movement @Movement} annotation.
 	 * @return Drag flags according to the given movement flags.
+	 *
 	 * @see ItemDragHelper.Callback#makeMovementFlags(int, int)
 	 */
 	public static int makeDragFlags(@Movement final int movementFlags) {
@@ -268,6 +280,9 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 	 * A {@link ItemInteractor} implementation used by {@link ItemDragHelper} to handle drag gesture
 	 * related callbacks and to delegate drag events to the view holder that is being dragged and
 	 * also to it parent adapter in order to properly move dragged items in the adapter's data set.
+	 *
+	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public static final class Interactor extends RecyclerViewItemHelper.ItemInteractor {
 
@@ -291,8 +306,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @see #onAdapterAttached(RecyclerView.Adapter)
 		 */
-		@VisibleForTesting
-		DragAdapter dragAdapter;
+		@VisibleForTesting DragAdapter dragAdapter;
 
 		/**
 		 * List containing all registered {@link OnDragListener}.
@@ -309,16 +323,14 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @see #onSelectedChanged(RecyclerView.ViewHolder, int)
 		 * @see #clearView(RecyclerView, RecyclerView.ViewHolder)
 		 */
-		@VisibleForTesting
-		boolean dragging;
+		@VisibleForTesting boolean dragging;
 
 		/**
 		 * Position for which has been the drag gesture started.
 		 *
 		 * @see #onSelectedChanged(RecyclerView.ViewHolder, int)
 		 */
-		@VisibleForTesting
-		int draggingFromPosition = RecyclerView.NO_POSITION;
+		@VisibleForTesting int draggingFromPosition = RecyclerView.NO_POSITION;
 
 		/**
 		 * Position from which is the view holder moving during the current "move session".
@@ -326,8 +338,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @see #onMove(RecyclerView, RecyclerView.ViewHolder, RecyclerView.ViewHolder)
 		 */
-		@VisibleForTesting
-		int movingFromPosition = RecyclerView.NO_POSITION;
+		@VisibleForTesting int movingFromPosition = RecyclerView.NO_POSITION;
 
 		/**
 		 * Position to which is the view holder moving during the current "move session".
@@ -335,8 +346,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @see #onMove(RecyclerView, RecyclerView.ViewHolder, RecyclerView.ViewHolder)
 		 */
-		@VisibleForTesting
-		int movingToPosition = RecyclerView.NO_POSITION;
+		@VisibleForTesting int movingToPosition = RecyclerView.NO_POSITION;
 
 		/**
 		 * Creates a new instance of drag gesture Interactor.
@@ -356,16 +366,16 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param enabled {@code True} to enable automatic drag on long press, {@code false} to
 		 *                disable it.
+		 *
 		 * @see #isLongPressDragEnabled()
 		 */
-		public void setLongPressDragEnabled(boolean enabled) {
+		public void setLongPressDragEnabled(final boolean enabled) {
 			this.longPressDragEnabled = enabled;
 		}
 
 		/**
 		 */
-		@Override
-		public boolean isLongPressDragEnabled() {
+		@Override public boolean isLongPressDragEnabled() {
 			return longPressDragEnabled;
 		}
 
@@ -376,6 +386,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * Default value: {@link #MOVE_THRESHOLD}
 		 *
 		 * @param threshold The desired threshold from the range {@code [0.0, 1.0]}.
+		 *
 		 * @see #getDragThreshold()
 		 * @see #getMoveThreshold(RecyclerView.ViewHolder)
 		 * @see Interactor#getMoveThreshold(RecyclerView.ViewHolder)
@@ -389,17 +400,16 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * to be considered as it is dragged.
 		 *
 		 * @return The drag threshold from the range {@code [0.0, 1.0]}.
+		 *
 		 * @see #setDragThreshold(float)
 		 */
-		@FloatRange(from = 0.0f, to = 1.0f)
-		public float getDragThreshold() {
+		@FloatRange(from = 0.0f, to = 1.0f) public float getDragThreshold() {
 			return dragThreshold;
 		}
 
 		/**
 		 */
-		@Override
-		public float getMoveThreshold(@NonNull final RecyclerView.ViewHolder viewHolder) {
+		@Override public float getMoveThreshold(@NonNull final RecyclerView.ViewHolder viewHolder) {
 			return dragThreshold;
 		}
 
@@ -408,6 +418,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * or <b>canceled</b> for a specific {@link RecyclerView.ViewHolder} instance.
 		 *
 		 * @param listener The desired listener callback to add.
+		 *
 		 * @see #removeOnDragListener(OnDragListener)
 		 */
 		public void addOnDragListener(@NonNull final OnDragListener listener) {
@@ -421,8 +432,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param viewHolder The view holder for which the drag has started.
 		 */
-		@VisibleForTesting
-		void notifyDragStarted(final RecyclerView.ViewHolder viewHolder) {
+		@VisibleForTesting void notifyDragStarted(final RecyclerView.ViewHolder viewHolder) {
 			if (listeners != null && !listeners.isEmpty()) {
 				for (final OnDragListener listener : listeners) {
 					listener.onDragStarted((ItemDragHelper) helper, viewHolder);
@@ -438,8 +448,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * @param fromPosition The position from which has been the view holder dragged.
 		 * @param toPosition   The position at which has been the view holder dropped.
 		 */
-		@VisibleForTesting
-		void notifyDragFinished(final RecyclerView.ViewHolder viewHolder, final int fromPosition, final int toPosition) {
+		@VisibleForTesting void notifyDragFinished(final RecyclerView.ViewHolder viewHolder, final int fromPosition, final int toPosition) {
 			if (listeners != null && !listeners.isEmpty()) {
 				for (final OnDragListener listener : listeners) {
 					listener.onDragFinished((ItemDragHelper) helper, viewHolder, fromPosition, toPosition);
@@ -453,8 +462,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 *
 		 * @param viewHolder The view holder for which the drag has canceled.
 		 */
-		@VisibleForTesting
-		void notifyDragCanceled(final RecyclerView.ViewHolder viewHolder) {
+		@VisibleForTesting void notifyDragCanceled(final RecyclerView.ViewHolder viewHolder) {
 			if (listeners != null && !listeners.isEmpty()) {
 				for (final OnDragListener listener : listeners) {
 					listener.onDragCanceled((ItemDragHelper) helper, viewHolder);
@@ -466,6 +474,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		 * Removes the given drag <var>listener</var> from the registered listeners.
 		 *
 		 * @param listener The desired listener to remove.
+		 *
 		 * @see #addOnDragListener(OnDragListener)
 		 */
 		public void removeOnDragListener(@NonNull final OnDragListener listener) {
@@ -474,23 +483,20 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 
 		/**
 		 */
-		@Override
-		protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
+		@Override protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
 			return adapter instanceof DragAdapter;
 		}
 
 		/**
 		 */
-		@Override
-		protected void onAdapterAttached(@NonNull final RecyclerView.Adapter adapter) {
+		@Override protected void onAdapterAttached(@NonNull final RecyclerView.Adapter adapter) {
 			super.onAdapterAttached(adapter);
 			this.dragAdapter = (DragAdapter) adapter;
 		}
 
 		/**
 		 */
-		@Override
-		protected void onAdapterDetached(@NonNull final RecyclerView.Adapter adapter) {
+		@Override protected void onAdapterDetached(@NonNull final RecyclerView.Adapter adapter) {
 			super.onAdapterDetached(adapter);
 			this.dragAdapter = null;
 			this.resetState();
@@ -498,8 +504,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 
 		/**
 		 */
-		@Override
-		public void setEnabled(final boolean enabled) {
+		@Override public void setEnabled(final boolean enabled) {
 			super.setEnabled(enabled);
 			this.resetState();
 		}
@@ -507,30 +512,26 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		/**
 		 * Resets current state of this interactor to the idle one.
 		 */
-		@VisibleForTesting
-		void resetState() {
+		@VisibleForTesting void resetState() {
 			this.dragging = false;
 			this.draggingFromPosition = movingFromPosition = movingToPosition = RecyclerView.NO_POSITION;
 		}
 
 		/**
 		 */
-		@Override
-		public boolean isActive() {
+		@Override public boolean isActive() {
 			return dragging;
 		}
 
 		/**
 		 */
-		@Override
-		public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
+		@Override public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
 			return shouldHandleInteraction() && viewHolder instanceof DragViewHolder ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
 		 */
-		@Override
-		public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
+		@Override public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
 			super.onSelectedChanged(viewHolder, actionState);
 			if (shouldHandleInteraction() && viewHolder instanceof DragViewHolder) {
 				switch (actionState) {
@@ -549,8 +550,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 
 		/**
 		 */
-		@Override
-		public boolean onMove(
+		@Override public boolean onMove(
 				@NonNull final RecyclerView recyclerView,
 				@NonNull final RecyclerView.ViewHolder current,
 				@NonNull final RecyclerView.ViewHolder target
@@ -567,15 +567,13 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 
 		/**
 		 */
-		@Override
-		public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
+		@Override public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
 			// Ignored for this interactor implementation.
 		}
 
 		/**
 		 */
-		@Override
-		public boolean canDropOver(
+		@Override public boolean canDropOver(
 				@NonNull final RecyclerView recyclerView,
 				@NonNull final RecyclerView.ViewHolder current,
 				@NonNull final RecyclerView.ViewHolder target
@@ -588,8 +586,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 
 		/**
 		 */
-		@Override
-		public void clearView(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
+		@Override public void clearView(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
 			super.clearView(recyclerView, viewHolder);
 			if (shouldHandleInteraction() && viewHolder instanceof DragViewHolder) {
 				final int draggingToPosition = viewHolder.getAdapterPosition();

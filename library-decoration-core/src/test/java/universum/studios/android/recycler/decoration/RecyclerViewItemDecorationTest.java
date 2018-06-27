@@ -44,6 +44,10 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  * @author Martin Albedinsky
  */
 public final class RecyclerViewItemDecorationTest extends RobolectricTestCase {
+
+	// Arrange:
+	// Act:
+	// Assert:
     
 	private RecyclerView mMockRecyclerView;
 	private RecyclerView.State mMockRecyclerViewState;
