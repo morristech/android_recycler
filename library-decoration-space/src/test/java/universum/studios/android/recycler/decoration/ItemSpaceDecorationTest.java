@@ -52,201 +52,217 @@ public final class ItemSpaceDecorationTest extends RobolectricTestCase {
 
 	private static final int MOCK_ITEMS_COUNT = 10;
     
-	private Canvas mMockCanvas = mock(Canvas.class);
-	private RecyclerView mMockRecyclerView;
-	private RecyclerView.State mMockRecyclerViewState;
-	private View mItemView;
+	private final Canvas mockCanvas;
+	private final RecyclerView mockRecyclerView;
+	private final RecyclerView.State mockRecyclerViewState;
+	private View itemView;
 
 	public ItemSpaceDecorationTest() {
-		this.mMockCanvas = mock(Canvas.class);
-		this.mMockRecyclerView = mock(RecyclerView.class);
-		this.mMockRecyclerViewState = mock(RecyclerView.State.class);
+		this.mockCanvas = mock(Canvas.class);
+		this.mockRecyclerView = mock(RecyclerView.class);
+		this.mockRecyclerViewState = mock(RecyclerView.State.class);
 	}
 
-	@Override
-	public void beforeTest() throws Exception {
+	@Override public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mItemView = new TextView(application);
-		resetMock(mMockCanvas);
-		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
-		when(mMockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
-		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(mItemView);
-		resetMock(mMockRecyclerViewState);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(MOCK_ITEMS_COUNT);
+		this.itemView = new TextView(application);
+		resetMock(mockCanvas);
+		resetMock(mockRecyclerView);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+		when(mockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
+		when(mockRecyclerView.getChildAt(anyInt())).thenReturn(itemView);
+		resetMock(mockRecyclerViewState);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(MOCK_ITEMS_COUNT);
 	}
 
-	@Test
-	public void testEmptyInstantiation() {
+	@Test public void testInstantiation() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration();
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithGlobalSpacings() {
+	@Test public void testInstantiationWithGlobalSpacings() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(16, 8);
+		// Assert:
 		assertThat(decoration.getHorizontalStart(), is(16));
 		assertThat(decoration.getHorizontalEnd(), is(16));
 		assertThat(decoration.getVerticalStart(), is(8));
 		assertThat(decoration.getVerticalEnd(), is(8));
 	}
 
-	@Test
-	public void testInstantiationWithSeparateSpacings() {
+	@Test public void testInstantiationWithSeparateSpacings() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(4, 16, 8, 24);
+		// Assert:
 		assertThat(decoration.getHorizontalStart(), is(4));
 		assertThat(decoration.getHorizontalEnd(), is(16));
 		assertThat(decoration.getVerticalStart(), is(8));
 		assertThat(decoration.getVerticalEnd(), is(24));
 	}
 
-	@Test
-	public void testInstantiationWithContext() {
+	@Test public void testInstantiationWithContext() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSet() {
+	@Test public void testInstantiationWithContextAttrsSet() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application, null);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttr() {
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(application, null, 0);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testGetItemOffsets() {
+	@Test public void testGetItemOffsets() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
+		// Act:
 		final Rect rect = new Rect();
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.left, is(decoration.getHorizontalStart()));
 		assertThat(rect.right, is(decoration.getHorizontalEnd()));
 		assertThat(rect.top, is(decoration.getVerticalStart()));
 		assertThat(rect.bottom, is(decoration.getVerticalEnd()));
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForRTLLayoutDirection() {
+	@Test public void testGetItemOffsetsForRTLLayoutDirection() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
+		when(mockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		// Act:
 		final Rect rect = new Rect();
-		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.left, is(decoration.getHorizontalEnd()));
 		assertThat(rect.right, is(decoration.getHorizontalStart()));
 		assertThat(rect.top, is(decoration.getVerticalStart()));
 		assertThat(rect.bottom, is(decoration.getVerticalEnd()));
-		verify(mMockRecyclerView).getLayoutDirection();
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockRecyclerView).getLayoutDirection();
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipFirst() {
+	@Test public void testGetItemOffsetsSkipFirst() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(false);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(i == 0 ? 0 : decoration.getHorizontalStart()));
 			assertThat(rect.right, is(i == 0 ? 0 : decoration.getHorizontalEnd()));
 			assertThat(rect.top, is(i == 0 ? 0 : decoration.getVerticalStart()));
 			assertThat(rect.bottom, is(i == 0 ? 0 : decoration.getVerticalEnd()));
 		}
-		verify(mockPrecondition, times(itemCount - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipLast() {
+	@Test public void testGetItemOffsetsSkipLast() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(false);
 		decoration.setSkipLast(true);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(i == itemCount - 1 ? 0 : decoration.getHorizontalStart()));
 			assertThat(rect.right, is(i == itemCount - 1 ? 0 : decoration.getHorizontalEnd()));
 			assertThat(rect.top, is(i == itemCount - 1 ? 0 : decoration.getVerticalStart()));
 			assertThat(rect.bottom, is(i == itemCount - 1 ? 0 : decoration.getVerticalEnd()));
 		}
-		verify(mockPrecondition, times(itemCount - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipBoth() {
+	@Test public void testGetItemOffsetsSkipBoth() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(true);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(i == 0 || i == itemCount - 1 ? 0 : 1));
 			assertThat(rect.right, is(i == 0 || i  == itemCount - 1 ? 0 : 2));
 			assertThat(rect.top, is(i == 0 || i  == itemCount - 1 ? 0 : 3));
 			assertThat(rect.bottom, is(i == 0 || i  == itemCount - 1 ? 0 : 4));
 		}
-		verify(mockPrecondition, times(itemCount - 2)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 2)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForUnknownAdapterPosition() {
+	@Test public void testGetItemOffsetsForUnknownAdapterPosition() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(true);
 		final Rect rect = new Rect();
-		when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(RecyclerView.NO_POSITION);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(RecyclerView.NO_POSITION);
+		// Act:
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.isEmpty(), is(true));
-		verifyZeroInteractions(mMockRecyclerViewState, mockPrecondition);
+		verifyZeroInteractions(mockRecyclerViewState, mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsWithUnsatisfiedPrecondition() {
+	@Test public void testGetItemOffsetsWithUnsatisfiedPrecondition() {
+		// Arrange:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(1, 2, 3, 4);
 		final ItemSpaceDecoration.Precondition mockPrecondition = mock(ItemSpaceDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(false);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(false);
 		decoration.setPrecondition(mockPrecondition);
 		final Rect rect = new Rect();
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act:
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.isEmpty(), is(true));
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 }

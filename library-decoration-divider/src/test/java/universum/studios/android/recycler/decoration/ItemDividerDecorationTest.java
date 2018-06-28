@@ -49,45 +49,40 @@ import static org.mockito.internal.util.MockUtil.resetMock;
  */
 public final class ItemDividerDecorationTest extends RobolectricTestCase {
 
-	// Arrange:
-	// Act:
-	// Assert:
-
 	private static final int MOCK_ITEMS_COUNT = 10;
 
-	private Canvas mMockCanvas = mock(Canvas.class);
-	private RecyclerView mMockRecyclerView;
-	private RecyclerView.State mMockRecyclerViewState;
-	private View mItemView;
+	private final Canvas mockCanvas;
+	private final RecyclerView mockRecyclerView;
+	private final RecyclerView.State mockRecyclerViewState;
+	private View itemView;
 
 	public ItemDividerDecorationTest() {
-		this.mMockCanvas = mock(Canvas.class);
-		this.mMockRecyclerView = mock(RecyclerView.class);
-		this.mMockRecyclerViewState = mock(RecyclerView.State.class);
+		this.mockCanvas = mock(Canvas.class);
+		this.mockRecyclerView = mock(RecyclerView.class);
+		this.mockRecyclerViewState = mock(RecyclerView.State.class);
 	}
 
-	@Override
-	public void beforeTest() throws Exception {
+	@Override public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mItemView = new TextView(application);
-		resetMock(mMockCanvas);
-		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
-		when(mMockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
-		when(mMockRecyclerView.getChildAt(anyInt())).thenReturn(mItemView);
-		resetMock(mMockRecyclerViewState);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(MOCK_ITEMS_COUNT);
+		this.itemView = new TextView(application);
+		resetMock(mockCanvas);
+		resetMock(mockRecyclerView);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+		when(mockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
+		when(mockRecyclerView.getChildAt(anyInt())).thenReturn(itemView);
+		resetMock(mockRecyclerViewState);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(MOCK_ITEMS_COUNT);
 	}
 
-	@Override
-	public void afterTest() throws Exception {
+	@Override public void afterTest() throws Exception {
 		super.afterTest();
-		this.mItemView = null;
+		this.itemView = null;
 	}
 
-	@Test
-	public void testEmptyInstantiation() {
+	@Test public void testInstantiation() {
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.VERTICAL));
@@ -98,123 +93,142 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		assertThat(decoration.getPrecondition(), is(RecyclerViewItemDecoration.Precondition.EMPTY));
 	}
 
-	@Test
-	public void testInstantiationWithDividerAndVerticalOrientation() {
+	@Test public void testInstantiationWithDividerAndVerticalOrientation() {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicWidth()).thenReturn(4);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration(ItemDividerDecoration.VERTICAL, mockDivider);
+		// Assert:
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.VERTICAL));
 		assertThat(decoration.getDivider(), is(mockDivider));
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicHeight()));
 	}
 
-	@Test
-	public void testInstantiationWithDividerAndHorizontalOrientation() {
+	@Test public void testInstantiationWithDividerAndHorizontalOrientation() {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicWidth()).thenReturn(4);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration(ItemDividerDecoration.HORIZONTAL, mockDivider);
+		// Assert:
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.HORIZONTAL));
 		assertThat(decoration.getDivider(), is(mockDivider));
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicWidth()));
 	}
 
-	@Test
-	public void testInstantiationWithContext() {
+	@Test public void testInstantiationWithContext() {
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration(application);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSet() {
+	@Test public void testInstantiationWithContextAttrsSet() {
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration(application, null);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttr() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttr() {
+		// Act:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration(application, null, 0);
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testSetGetOrientation() {
+	@Test public void testOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		// Act + Assert:
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.HORIZONTAL));
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		assertThat(decoration.getOrientation(), is(ItemDividerDecoration.VERTICAL));
 	}
 
-	@Test
-	public void testSetOrientationAfterDivider() {
+	@Test public void testSetOrientationAfterDivider() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicWidth()).thenReturn(4);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
 		decoration.setDivider(mockDivider);
+		// Act + Assert:
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicWidth()));
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicHeight()));
 	}
 
-	@Test
-	public void testSetDividerForVerticalOrientation() {
+	@Test public void testSetDividerForVerticalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicWidth()).thenReturn(4);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
+		// Act:
 		decoration.setDivider(mockDivider);
+		// Assert:
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicHeight()));
 	}
 
-	@Test
-	public void testSetDividerForHorizontalOrientation() {
+	@Test public void testSetDividerForHorizontalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicWidth()).thenReturn(4);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
+		// Act:
 		decoration.setDivider(mockDivider);
+		// Assert:
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicWidth()));
 	}
 
-	@Test
-	public void testSetDividerAfterThickness() {
+	@Test public void testSetDividerAfterThickness() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDividerThickness(4);
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
+		// Act:
 		decoration.setDivider(mockDivider);
+		// Assert:
 		assertThat(decoration.getDividerThickness(), is(mockDivider.getIntrinsicHeight()));
 	}
 
-	@Test
-	public void testSetGetDividerThickness() {
+	@Test public void testDividerThickness() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		// Act + Assert:
 		decoration.setDividerThickness(10);
 		assertThat(decoration.getDividerThickness(), is(10));
 	}
 
-	@Test
-	public void testSetDividerThicknessAfterDivider() {
+	@Test public void testSetDividerThicknessAfterDivider() {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		when(mockDivider.getIntrinsicHeight()).thenReturn(2);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mockDivider);
+		// Act:
 		decoration.setDividerThickness(4);
+		// Assert:
 		assertThat(decoration.getDividerThickness(), is(4));
 	}
 
-	@Test
-	public void testSetGetDividerOffsets() {
+	@Test public void testDividerOffsets() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
+		// Act + Assert:
 		decoration.setDividerOffset(10, 5);
 		assertThat(decoration.getDividerOffsetStart(), is(10));
 		assertThat(decoration.getDividerOffsetEnd(), is(5));
@@ -223,335 +237,362 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		assertThat(decoration.getDividerOffsetEnd(), is(2));
 	}
 
-	@Test
-	public void testGetItemOffsetsForVerticalOrientation() {
+	@Test public void testGetItemOffsetsForVerticalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		decoration.setDividerThickness(4);
 		decoration.setDividerOffset(10, 5);
+		// Act:
 		final Rect rect = new Rect();
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.left, is(10));
 		assertThat(rect.right, is(5));
 		assertThat(rect.top, is(0));
 		assertThat(rect.bottom, is(decoration.getDividerThickness()));
-		verify(mMockRecyclerView).getLayoutDirection();
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockRecyclerView).getLayoutDirection();
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForVerticalOrientationAndRTLLayoutDirection() {
+	@Test public void testGetItemOffsetsForVerticalOrientationAndRTLLayoutDirection() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		decoration.setDividerThickness(4);
 		decoration.setDividerOffset(10, 5);
+		when(mockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		// Act:
 		final Rect rect = new Rect();
-		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.left, is(5));
 		assertThat(rect.right, is(10));
 		assertThat(rect.top, is(0));
 		assertThat(rect.bottom, is(decoration.getDividerThickness()));
-		verify(mMockRecyclerView).getLayoutDirection();
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockRecyclerView).getLayoutDirection();
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForHorizontalOrientation() {
+	@Test public void testGetItemOffsetsForHorizontalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		decoration.setDividerThickness(4);
 		decoration.setDividerOffset(10, 5);
+		// Act:
 		final Rect rect = new Rect();
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.left, is(0));
 		assertThat(rect.right, is(decoration.getDividerThickness()));
 		assertThat(rect.top, is(10));
 		assertThat(rect.bottom, is(5));
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipFirst() {
+	@Test public void testGetItemOffsetsSkipFirst() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(false);
 		decoration.setDividerThickness(4);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(0));
 			assertThat(rect.right, is(0));
 			assertThat(rect.top, is(0));
 			assertThat(rect.bottom, is(i == 0 ? 0 : decoration.getDividerThickness()));
 		}
-		verify(mockPrecondition, times(itemCount - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipLast() {
+	@Test public void testGetItemOffsetsSkipLast() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(false);
 		decoration.setSkipLast(true);
 		decoration.setDividerThickness(4);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(0));
 			assertThat(rect.right, is(0));
 			assertThat(rect.top, is(0));
 			assertThat(rect.bottom, is(i == itemCount - 1 ? 0 : decoration.getDividerThickness()));
 		}
-		verify(mockPrecondition, times(itemCount - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsSkipBoth() {
+	@Test public void testGetItemOffsetsSkipBoth() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(true);
 		decoration.setDividerThickness(4);
+		// Act + Assert:
 		final Rect rect = new Rect();
-		final int itemCount = mMockRecyclerViewState.getItemCount();
+		final int itemCount = mockRecyclerViewState.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(i);
-			decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+			when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(i);
+			decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 			assertThat(rect.left, is(0));
 			assertThat(rect.right, is(0));
 			assertThat(rect.top, is(0));
 			assertThat(rect.bottom, is(i == 0 || i == itemCount - 1 ? 0 : decoration.getDividerThickness()));
 		}
-		verify(mockPrecondition, times(itemCount - 2)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition, times(itemCount - 2)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsWithUnsatisfiedPrecondition() {
+	@Test public void testGetItemOffsetsWithUnsatisfiedPrecondition() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(false);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(false);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		decoration.setDividerThickness(4);
+		// Act:
 		final Rect rect = new Rect();
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.isEmpty(), is(true));
-		verify(mockPrecondition).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForZeroDividerThickness() {
+	@Test public void testGetItemOffsetsForZeroDividerThickness() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setDividerThickness(0);
 		final Rect rect = new Rect();
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act + Assert:
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 		assertThat(rect.isEmpty(), is(true));
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 		assertThat(rect.isEmpty(), is(true));
-		verifyZeroInteractions(mMockRecyclerView, mMockRecyclerViewState, mockPrecondition);
+		verifyZeroInteractions(mockRecyclerView, mockRecyclerViewState, mockPrecondition);
 	}
 
-	@Test
-	public void testGetItemOffsetsForUnknownAdapterPosition() {
+	@Test public void testGetItemOffsetsForUnknownAdapterPosition() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipFirst(true);
 		decoration.setSkipLast(true);
 		decoration.setDividerThickness(4);
 		final Rect rect = new Rect();
-		when(mMockRecyclerView.getChildAdapterPosition(mItemView)).thenReturn(RecyclerView.NO_POSITION);
-		decoration.getItemOffsets(rect, mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		when(mockRecyclerView.getChildAdapterPosition(itemView)).thenReturn(RecyclerView.NO_POSITION);
+		// Act:
+		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
 		assertThat(rect.isEmpty(), is(true));
-		verifyZeroInteractions(mMockRecyclerViewState, mockPrecondition);
+		verifyZeroInteractions(mockRecyclerViewState, mockPrecondition);
 	}
 
-	@Test
-	public void testShouldDecorate() {
+	@Test public void testShouldDecorate() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mock(Drawable.class));
 		decoration.setDividerThickness(2);
-		assertThat(decoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(true));
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(true));
 	}
 
-	@Test
-	public void testShouldDecorateWithoutDivider() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+	@Test public void testShouldDecorateWithoutDivider() {
+		// Arrange:
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(null);
 		decoration.setDividerThickness(2);
-		assertThat(decoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
 	}
 
-	@Test
-	public void testShouldDecorateWithZeroDividerThickness() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
+	@Test public void testShouldDecorateWithZeroDividerThickness() {
+		// Arrange:
+		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mock(Drawable.class));
 		decoration.setDividerThickness(0);
-		assertThat(decoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
 	}
 
-	@Test
-	public void testShouldDecorateWithoutDividerAndThicknessAndValidRecyclerViewAndState() {
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(0);
+	@Test public void testShouldDecorateWithoutDividerAndThicknessAndValidRecyclerViewAndState() {
+		// Arrange:
+		when(mockRecyclerView.getLayoutManager()).thenReturn(null);
+		when(mockRecyclerViewState.getItemCount()).thenReturn(0);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(null);
 		decoration.setDividerThickness(0);
-		assertThat(decoration.shouldDecorate(mMockRecyclerView, mMockRecyclerViewState), is(false));
+		// Act + Assert:
+		assertThat(decoration.shouldDecorate(mockRecyclerView, mockRecyclerViewState), is(false));
 	}
 
-	@Test
-	public void testOnDrawForVerticalOrientation() {
+	@Test public void testOnDrawForVerticalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.VERTICAL);
 		decoration.setDivider(mock(Drawable.class));
 		decoration.setDividerThickness(4);
-		decoration.onDraw(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mockPrecondition, times(MOCK_ITEMS_COUNT - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act:
+		decoration.onDraw(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockPrecondition, times(MOCK_ITEMS_COUNT - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testOnDrawForHorizontalOrientation() {
+	@Test public void testOnDrawForHorizontalOrientation() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
 		decoration.setDivider(mock(Drawable.class));
 		decoration.setDividerThickness(4);
-		decoration.onDraw(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mockPrecondition, times(MOCK_ITEMS_COUNT - 1)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act:
+		decoration.onDraw(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockPrecondition, times(MOCK_ITEMS_COUNT - 1)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}
 
-	@Test
-	public void testOnDrawForRecyclerViewWithoutLayoutManager() {
+	@Test public void testOnDrawForRecyclerViewWithoutLayoutManager() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setOrientation(ItemDividerDecoration.HORIZONTAL);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(null);
-		decoration.onDraw(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verifyZeroInteractions(mMockCanvas);
+		when(mockRecyclerView.getLayoutManager()).thenReturn(null);
+		// Act:
+		decoration.onDraw(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verifyZeroInteractions(mockCanvas);
 	}
 
-	@Test
-	public void testOnDrawHorizontally() {
+	@Test public void testOnDrawHorizontally() {
 		this.testOnDrawHorizontallyInner(false, false);
 	}
 
-	@Test
-	public void testOnDrawHorizontallyForRTLLayoutDirection() {
+	@Test public void testOnDrawHorizontallyForRTLLayoutDirection() {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(true);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(true);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setDivider(mockDivider);
 		decoration.setDividerThickness(4);
 		decoration.setDividerOffset(10, 5);
-		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
-		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
-		verify(mMockRecyclerView).getChildCount();
-		final int verifyTimes = mMockRecyclerView.getChildCount() - 1;
+		when(mockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		// Act:
+		decoration.onDrawHorizontally(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
+		verify(mockRecyclerView).getChildCount();
+		final int verifyTimes = mockRecyclerView.getChildCount() - 1;
 		verify(mockDivider, times(verifyTimes)).setBounds(
 				-decoration.getDividerThickness(),
 				10,
 				0,
 				5
 		);
-		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mockPrecondition, times(verifyTimes)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
+		verify(mockPrecondition, times(verifyTimes)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
-		verify(mMockCanvas).restore();
+		verify(mockCanvas).restore();
 	}
 
-	@Test
-	public void testOnDrawHorizontallySkipFirst() {
+	@Test public void testOnDrawHorizontallySkipFirst() {
 		this.testOnDrawHorizontallyInner(true, false);
 	}
 
-	@Test
-	public void testOnDrawHorizontallySkipLast() {
+	@Test public void testOnDrawHorizontallySkipLast() {
 		this.testOnDrawHorizontallyInner(false, true);
 	}
 
-	@Test
-	public void testOnDrawHorizontallySkipBoth() {
+	@Test public void testOnDrawHorizontallySkipBoth() {
 		this.testOnDrawHorizontallyInner(true, true);
 	}
 
-	@Test
-	public void testOnDrawHorizontallyWithUnsatisfiedPrecondition() {
+	@Test public void testOnDrawHorizontallyWithUnsatisfiedPrecondition() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(false);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(false);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipLast(false);
 		final Drawable mockDivider = mock(Drawable.class);
 		decoration.setDivider(mockDivider);
-		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mockPrecondition, times(MOCK_ITEMS_COUNT)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act:
+		decoration.onDrawHorizontally(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockPrecondition, times(MOCK_ITEMS_COUNT)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
-		verify(mockDivider, times(0)).draw(mMockCanvas);
-		verify(mMockCanvas).restore();
+		verify(mockDivider, times(0)).draw(mockCanvas);
+		verify(mockCanvas).restore();
 	}
 
 	private void testOnDrawHorizontallyInner(boolean skipFirst, boolean skipLast) {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setSkipFirst(skipFirst);
 		decoration.setSkipLast(skipLast);
 		decoration.setDivider(mockDivider);
 		decoration.setDividerThickness(4);
-		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
-		verify(mMockRecyclerView, times(1)).getChildCount();
-		int verifyTimes = mMockRecyclerView.getChildCount();
+		// Act:
+		decoration.onDrawHorizontally(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
+		verify(mockRecyclerView).getChildCount();
+		int verifyTimes = mockRecyclerView.getChildCount();
 		verifyTimes -= skipFirst ? 1 : 0;
 		verifyTimes -= skipLast ? 1 : 0;
 		verify(mockDivider, times(verifyTimes)).setBounds(
@@ -560,103 +601,108 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				0,
 				0
 		);
-		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mMockCanvas).restore();
+		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
+		verify(mockCanvas).restore();
 	}
 
-	@Test
 	@SuppressLint("NewApi")
-	public void testOnDrawClippedHorizontally() {
+	@Test public void testOnDrawClippedHorizontally() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mock(Drawable.class));
-		when(mMockRecyclerView.getClipToPadding()).thenReturn(true);
-		when(mMockRecyclerView.getPaddingLeft()).thenReturn(16);
-		when(mMockRecyclerView.getPaddingRight()).thenReturn(16);
-		when(mMockRecyclerView.getPaddingTop()).thenReturn(8);
-		when(mMockRecyclerView.getPaddingBottom()).thenReturn(8);
-		decoration.onDrawHorizontally(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mMockCanvas).clipRect(
-				mMockRecyclerView.getPaddingLeft(),
-				mMockRecyclerView.getPaddingTop(),
-				mMockRecyclerView.getWidth() - mMockRecyclerView.getPaddingRight(),
-				mMockRecyclerView.getHeight() - mMockRecyclerView.getPaddingBottom()
+		when(mockRecyclerView.getClipToPadding()).thenReturn(true);
+		when(mockRecyclerView.getPaddingLeft()).thenReturn(16);
+		when(mockRecyclerView.getPaddingRight()).thenReturn(16);
+		when(mockRecyclerView.getPaddingTop()).thenReturn(8);
+		when(mockRecyclerView.getPaddingBottom()).thenReturn(8);
+		// Act:
+		decoration.onDrawHorizontally(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockCanvas).clipRect(
+				mockRecyclerView.getPaddingLeft(),
+				mockRecyclerView.getPaddingTop(),
+				mockRecyclerView.getWidth() - mockRecyclerView.getPaddingRight(),
+				mockRecyclerView.getHeight() - mockRecyclerView.getPaddingBottom()
 		);
-		verify(mMockCanvas).restore();
+		verify(mockCanvas).restore();
 	}
 
-	@Test
-	public void testOnDrawVertically() {
+	@Test public void testOnDrawVertically() {
 		this.testOnDrawVerticallyInner(false, false);
 	}
 
-	@Test
-	public void testOnDrawVerticallyForRTLLayoutDirection() {
+	@Test public void testOnDrawVerticallyForRTLLayoutDirection() {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mockDivider);
 		decoration.setDividerThickness(4);
 		decoration.setDividerOffset(10, 5);
-		when(mMockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
-		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockRecyclerView).getLayoutDirection();
-		verify(mMockCanvas).save();
-		verify(mMockRecyclerView).getChildCount();
-		int verifyTimes = mMockRecyclerView.getChildCount() - 1;
+		when(mockRecyclerView.getLayoutDirection()).thenReturn(ViewCompat.LAYOUT_DIRECTION_RTL);
+		// Act:
+		decoration.onDrawVertically(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockRecyclerView).getLayoutDirection();
+		verify(mockCanvas).save();
+		verify(mockRecyclerView).getChildCount();
+		int verifyTimes = mockRecyclerView.getChildCount() - 1;
 		verify(mockDivider, times(verifyTimes)).setBounds(
 				5,
 				-decoration.getDividerThickness(),
 				10,
 				0
 		);
-		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mMockCanvas).restore();
+		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
+		verify(mockCanvas).restore();
 	}
 
-	@Test
-	public void testOnDrawVerticallySkipFirst() {
+	@Test public void testOnDrawVerticallySkipFirst() {
 		this.testOnDrawVerticallyInner(true, false);
 	}
 
-	@Test
-	public void testOnDrawVerticallySkipLast() {
+	@Test public void testOnDrawVerticallySkipLast() {
 		this.testOnDrawVerticallyInner(false, true);
 	}
 
-	@Test
-	public void testOnDrawVerticallySkipBoth() {
+	@Test public void testOnDrawVerticallySkipBoth() {
 		this.testOnDrawVerticallyInner(true, true);
 	}
 
-	@Test
-	public void testOnDrawVerticallyWithUnsatisfiedPrecondition() {
+	@Test public void testOnDrawVerticallyWithUnsatisfiedPrecondition() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		final ItemDividerDecoration.Precondition mockPrecondition = mock(ItemDividerDecoration.Precondition.class);
-		when(mockPrecondition.check(mItemView, mMockRecyclerView, mMockRecyclerViewState)).thenReturn(false);
+		when(mockPrecondition.check(itemView, mockRecyclerView, mockRecyclerViewState)).thenReturn(false);
 		decoration.setPrecondition(mockPrecondition);
 		decoration.setSkipLast(false);
 		final Drawable mockDivider = mock(Drawable.class);
 		decoration.setDivider(mockDivider);
-		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mockPrecondition, times(MOCK_ITEMS_COUNT)).check(mItemView, mMockRecyclerView, mMockRecyclerViewState);
+		// Act:
+		decoration.onDrawVertically(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockPrecondition, times(MOCK_ITEMS_COUNT)).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
-		verify(mockDivider, times(0)).draw(mMockCanvas);
-		verify(mMockCanvas).restore();
+		verify(mockDivider, times(0)).draw(mockCanvas);
+		verify(mockCanvas).restore();
 	}
 
 	private void testOnDrawVerticallyInner(boolean skipFirst, boolean skipLast) {
+		// Arrange:
 		final Drawable mockDivider = mock(Drawable.class);
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setSkipFirst(skipFirst);
 		decoration.setSkipLast(skipLast);
 		decoration.setDivider(mockDivider);
 		decoration.setDividerThickness(4);
-		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mMockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
-		verify(mMockRecyclerView).getChildCount();
-		int verifyTimes = mMockRecyclerView.getChildCount();
+		// Act:
+		decoration.onDrawVertically(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockCanvas, times(0)).clipRect(anyInt(), anyInt(), anyInt(), anyInt());
+		verify(mockRecyclerView).getChildCount();
+		int verifyTimes = mockRecyclerView.getChildCount();
 		verifyTimes -= skipFirst ? 1 : 0;
 		verifyTimes -= skipLast ? 1 : 0;
 		verify(mockDivider, times(verifyTimes)).setBounds(
@@ -665,28 +711,30 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				0,
 				0
 		);
-		verify(mockDivider, times(verifyTimes)).draw(mMockCanvas);
-		verify(mMockCanvas).restore();
+		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
+		verify(mockCanvas).restore();
 	}
 
-	@Test
 	@SuppressLint("NewApi")
-	public void testOnDrawClippedVertically() {
+	@Test public void testOnDrawClippedVertically() {
+		// Arrange:
 		final ItemDividerDecoration decoration = new ItemDividerDecoration();
 		decoration.setDivider(mock(Drawable.class));
-		when(mMockRecyclerView.getClipToPadding()).thenReturn(true);
-		when(mMockRecyclerView.getPaddingLeft()).thenReturn(16);
-		when(mMockRecyclerView.getPaddingRight()).thenReturn(16);
-		when(mMockRecyclerView.getPaddingTop()).thenReturn(8);
-		when(mMockRecyclerView.getPaddingBottom()).thenReturn(8);
-		decoration.onDrawVertically(mMockCanvas, mMockRecyclerView, mMockRecyclerViewState);
-		verify(mMockCanvas).save();
-		verify(mMockCanvas).clipRect(
-				mMockRecyclerView.getPaddingLeft(),
-				mMockRecyclerView.getPaddingTop(),
-				mMockRecyclerView.getWidth() - mMockRecyclerView.getPaddingRight(),
-				mMockRecyclerView.getHeight() - mMockRecyclerView.getPaddingBottom()
+		when(mockRecyclerView.getClipToPadding()).thenReturn(true);
+		when(mockRecyclerView.getPaddingLeft()).thenReturn(16);
+		when(mockRecyclerView.getPaddingRight()).thenReturn(16);
+		when(mockRecyclerView.getPaddingTop()).thenReturn(8);
+		when(mockRecyclerView.getPaddingBottom()).thenReturn(8);
+		// Act:
+		decoration.onDrawVertically(mockCanvas, mockRecyclerView, mockRecyclerViewState);
+		// Assert:
+		verify(mockCanvas).save();
+		verify(mockCanvas).clipRect(
+				mockRecyclerView.getPaddingLeft(),
+				mockRecyclerView.getPaddingTop(),
+				mockRecyclerView.getWidth() - mockRecyclerView.getPaddingRight(),
+				mockRecyclerView.getHeight() - mockRecyclerView.getPaddingBottom()
 		);
-		verify(mMockCanvas).restore();
+		verify(mockCanvas).restore();
 	}
 }

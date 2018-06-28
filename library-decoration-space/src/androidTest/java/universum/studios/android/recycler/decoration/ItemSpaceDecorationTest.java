@@ -18,10 +18,6 @@
  */
 package universum.studios.android.recycler.decoration;
 
-import android.graphics.Canvas;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import org.junit.Test;
 
 import universum.studios.android.test.instrumented.InstrumentedTestCase;
@@ -31,47 +27,21 @@ import universum.studios.android.test.instrumented.TestUtils;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.MockUtil.resetMock;
 
 /**
  * @author Martin Albedinsky
  */
 public final class ItemSpaceDecorationTest extends InstrumentedTestCase {
 
-	// Arrange:
-	// Act:
-	// Assert:
-    
-	private Canvas mMockCanvas = mock(Canvas.class);
-	private RecyclerView mMockRecyclerView;
-	private RecyclerView.State mMockRecyclerViewState;
-
-	public ItemSpaceDecorationTest() {
-		this.mMockCanvas = mock(Canvas.class);
-		this.mMockRecyclerView = mock(RecyclerView.class);
-		this.mMockRecyclerViewState = mock(RecyclerView.State.class);
-	}
-
-	@Override
-	public void beforeTest() throws Exception {
-		super.beforeTest();
-		resetMock(mMockCanvas);
-		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(context));
-		resetMock(mMockRecyclerViewState);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
-	}
-
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space"
 		));
+		// Assert:
 		assertThat(decoration.getHorizontalStart(), is(8));
 		assertThat(decoration.getHorizontalEnd(), is(16));
 		assertThat(decoration.getVerticalStart(), is(4));
@@ -80,62 +50,67 @@ public final class ItemSpaceDecorationTest extends InstrumentedTestCase {
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipNone() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipNone() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipNone"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipFirst() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipFirst() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipFirst"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(true));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipLast() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipLast() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipLast"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipBoth() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipBoth() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipBoth"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(true));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResEmpty() {
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResEmpty() {
 		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
 		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
 				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.Empty"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
