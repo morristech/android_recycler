@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.helper;
 
@@ -33,8 +33,10 @@ import java.lang.annotation.RetentionPolicy;
  * An {@link ItemTouchHelper} implementation that is used as base class by all item helpers from the
  * Recycler library and is also encouraged to be used as base class by custom helper implementations.
  *
- * @param <I> Type of the item interactor that will be used by this helper.
  * @author Martin Albedinsky
+ * @since 1.0
+ *
+ * @param <I> Type of the item interactor that will be used by this helper.
  */
 public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.ItemInteractor> extends ItemTouchHelper {
 
@@ -65,8 +67,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 			UP, DOWN
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface Direction {
-	}
+	public @interface Direction {}
 
 	/**
 	 * Defines an annotation for determining supported movement flags by {@link ItemTouchHelper} API.
@@ -86,8 +87,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 			UP, DOWN
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface Movement {
-	}
+	public @interface Movement {}
 
 	/**
 	 * Defines an annotation for determining available interaction states for {@link ItemTouchHelper} API.
@@ -104,8 +104,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 			ACTION_STATE_DRAG
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface Interaction {
-	}
+	public @interface Interaction {}
 
 	/*
 	 * Interface ===================================================================================
@@ -114,6 +113,9 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	/**
 	 * Required interface for {@link RecyclerView.ViewHolder ViewHolders} with which may user interact
 	 * via a concrete {@link RecyclerViewItemHelper} implementation.
+	 *
+	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public interface InteractiveViewHolder {
 
@@ -129,8 +131,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * special view for the specified interaction so its item view should be considered as
 		 * interactive view.
 		 */
-		@Nullable
-		View getInteractiveView(@Interaction int interaction);
+		@Nullable View getInteractiveView(@Interaction int interaction);
 
 		/**
 		 * Called by the item helper to allow this holder to draw its current state in order to
@@ -144,6 +145,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * @param isCurrentlyActive {@code True} if view of this holder is currently being controlled
 		 *                          by the user, {@code false} if it is simply animating back to its
 		 *                          original state.
+		 *
 		 * @see ItemTouchHelper.Callback#onChildDraw(Canvas, RecyclerView, RecyclerView.ViewHolder, float, float, int, boolean)
 		 */
 		void onDraw(@NonNull Canvas canvas, float dX, float dY, @Interaction int interaction, boolean isCurrentlyActive);
@@ -160,6 +162,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * @param isCurrentlyActive {@code True} if view of this holder is currently being controlled
 		 *                          by the user, {@code false} if it is simply animating back to its
 		 *                          original state.
+		 *
 		 * @see ItemTouchHelper.Callback#onChildDrawOver(Canvas, RecyclerView, RecyclerView.ViewHolder, float, float, int, boolean)
 		 */
 		void onDrawOver(@NonNull Canvas canvas, float dX, float dY, @Interaction int interaction, boolean isCurrentlyActive);
@@ -176,7 +179,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	/**
 	 * Interactor used by this item helper to support/handle its specific provided feature.
 	 */
-	final I mInteractor;
+	final I interactor;
 
 	/*
 	 * Constructors ================================================================================
@@ -190,8 +193,8 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 */
 	protected RecyclerViewItemHelper(@NonNull final I interactor) {
 		super(interactor);
-		this.mInteractor = interactor;
-		this.mInteractor.attachToHelper(this);
+		this.interactor = interactor;
+		this.interactor.attachToHelper(this);
 	}
 
 	/*
@@ -206,22 +209,20 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 *
 	 * @return This helper's interactor.
 	 */
-	@NonNull
-	public final I getInteractor() {
-		return mInteractor;
+	@NonNull public final I getInteractor() {
+		return interactor;
 	}
 
 	/**
 	 */
-	@Override
-	public void attachToRecyclerView(@Nullable final RecyclerView recyclerView) {
+	@Override public void attachToRecyclerView(@Nullable final RecyclerView recyclerView) {
 		super.attachToRecyclerView(recyclerView);
 		if (recyclerView == null) {
-			this.mInteractor.attachAdapter(null);
+			this.interactor.attachAdapter(null);
 		} else {
 			final RecyclerView.Adapter adapter = recyclerView.getAdapter();
-			if (adapter == null || mInteractor.canAttachAdapter(adapter)) {
-				this.mInteractor.attachAdapter(adapter);
+			if (adapter == null || interactor.canAttachAdapter(adapter)) {
+				this.interactor.attachAdapter(adapter);
 			} else {
 				throw new IllegalArgumentException("Cannot attach adapter(" + adapter + ") to this(" + this + ") item helper.");
 			}
@@ -237,6 +238,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 	 * all interactors used by {@link RecyclerViewItemHelper} implementations.
 	 *
 	 * @author Martin Albedinsky
+	 * @since 1.0
 	 */
 	public static abstract class ItemInteractor extends ItemTouchHelper.Callback {
 
@@ -267,7 +269,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		}
 
 		/**
-		 * Invoked whenver {@link #attachToHelper(RecyclerViewItemHelper)} is called for this interactor
+		 * Invoked whenever {@link #attachToHelper(RecyclerViewItemHelper)} is called for this interactor
 		 * instance.
 		 *
 		 * @param helper The helper that will use this interactor to support its specific feature.
@@ -318,6 +320,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 *
 		 * @param adapter The adapter of the associated {@link RecyclerView} to which is the parent
 		 *                helper attached.
+		 *
 		 * @see #onAdapterDetached(RecyclerView.Adapter)
 		 */
 		protected void onAdapterAttached(@NonNull RecyclerView.Adapter adapter) {
@@ -330,6 +333,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * is already previous adapter attached.
 		 *
 		 * @param adapter The previous adapter that has been detached from this interactor.
+		 *
 		 * @see #onAdapterAttached(RecyclerView.Adapter)
 		 */
 		protected void onAdapterDetached(@NonNull RecyclerView.Adapter adapter) {
@@ -341,6 +345,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * Sets a boolean flag indicating whether this interactor should be enabled or not.
 		 *
 		 * @param enabled {@code True} to enable this interactor, {@code false} otherwise.
+		 *
 		 * @see #isEnabled()
 		 */
 		public void setEnabled(final boolean enabled) {
@@ -351,6 +356,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 * Returns boolean flag indicating whether this interactor is enabled or not.
 		 *
 		 * @return {@code True} if this interactor is enabled, {@code false} otherwise.
+		 *
 		 * @see #setEnabled(boolean)
 		 */
 		public boolean isEnabled() {
@@ -381,8 +387,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 
 		/**
 		 */
-		@Override
-		public void onChildDraw(
+		@Override public void onChildDraw(
 				@NonNull final Canvas canvas,
 				@NonNull final RecyclerView recyclerView,
 				@NonNull final RecyclerView.ViewHolder viewHolder,
@@ -407,8 +412,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 
 		/**
 		 */
-		@Override
-		public void onChildDrawOver(
+		@Override public void onChildDrawOver(
 				@NonNull final Canvas canvas,
 				@NonNull final RecyclerView recyclerView,
 				@NonNull final RecyclerView.ViewHolder viewHolder,

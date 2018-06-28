@@ -1,23 +1,24 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.helper;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -33,44 +34,26 @@ import universum.studios.android.test.local.RobolectricTestCase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.MockUtil.resetMock;
 
 /**
  * @author Martin Albedinsky
  */
 public final class ItemSwipeHelperTest extends RobolectricTestCase {
 
-	private RecyclerView mMockRecyclerView;
-
-	public ItemSwipeHelperTest() {
-		this.mMockRecyclerView = mock(RecyclerView.class);
-	}
-
-	@Override
-	public void beforeTest() throws Exception {
-		super.beforeTest();
-		resetMock(mMockRecyclerView);
-	}
-
-	@Test
-	public void testInteractionConstant() {
+	@Test public void testConstants() {
+		// Assert:
 		assertThat(ItemSwipeHelper.INTERACTION, is(ItemTouchHelper.ACTION_STATE_SWIPE));
-	}
-
-	@Test
-	public void testSwipeTresholdConstant() {
 		assertThat(ItemSwipeHelper.SWIPE_THRESHOLD, is(0.5f));
 	}
 
-	@Test
-	public void testMakeSwipeFlags() {
+	@Test public void testMakeSwipeFlags() {
+		// Act + Assert:
 		assertThat(
 				ItemSwipeHelper.makeSwipeFlags(ItemSwipeHelper.START),
 				is(ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.START))
@@ -81,148 +64,164 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		);
 	}
 
-	@Test
-	public void testGetInteractor() {
-		assertThat(new ItemSwipeHelper().getInteractor(), instanceOf(ItemSwipeHelper.Interactor.class));
+	@Test public void testInstantiation() {
+		// Act:
+		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Assert:
+		assertThat(helper.getInteractor(), instanceOf(ItemSwipeHelper.Interactor.class));
+		assertThat(helper.getRestoreHolderAnimationDuration(), is(ItemSwipeHelper.RESTORE_HOLDER_ANIMATION_DURATION));
+		assertThat(helper.getRestoreHolderAnimationInterpolator(), is(notNullValue()));
 	}
 
-	@Test
-	public void testSetGetRestoreHolderAnimationDuration() {
+	@Test public void testRestoreHolderAnimationDuration() {
+		// Arrange:
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
 		helper.setRestoreHolderAnimationDuration(500L);
 		assertThat(helper.getRestoreHolderAnimationDuration(), is(500L));
 	}
 
-	@Test
-	@SuppressWarnings("ResourceType")
-	public void testSetRestoreHolderAnimationDurationOutOfRange() {
+	@Test public void testSetRestoreHolderAnimationDurationOutOfRange() {
+		// Arrange:
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act:
 		helper.setRestoreHolderAnimationDuration(-100L);
+		// Assert:
 		assertThat(helper.getRestoreHolderAnimationDuration(), is(0L));
 	}
 
-	@Test
-	public void testGetRestoreHolderAnimationDurationDefault() {
-		assertThat(new ItemSwipeHelper().getRestoreHolderAnimationDuration(), is(ItemSwipeHelper.RESTORE_HOLDER_ANIMATION_DURATION));
-	}
-
-	@Test
-	public void testSetGetRestoreHolderAnimationInterpolator() {
+	@Test public void testRestoreHolderAnimationInterpolator() {
+		// Arrange:
 		final Interpolator mockInterpolator = mock(Interpolator.class);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
 		helper.setRestoreHolderAnimationInterpolator(mockInterpolator);
 		assertThat(helper.getRestoreHolderAnimationInterpolator(), is(mockInterpolator));
 	}
 
-	@Test
-	public void testGetRestoreHolderAnimationInterpolatorDefault() {
-		assertThat(new ItemSwipeHelper().getRestoreHolderAnimationInterpolator(), is(not(nullValue())));
-	}
-
-	@Test
-	public void testRestoreHolderForHorizontalSwipe() throws Throwable {
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+	@Test public void testRestoreHolderForHorizontalSwipe() throws Throwable {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		itemView.setTranslationX(1f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.setRestoreHolderAnimationDuration(0L);
+		// Act + Assert:
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(true));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
-	@Test
-	public void testRestoreHolderForHorizontalSwipeWithoutTranslation() throws Throwable {
-		final View itemView = new View(mApplication);
-		final RecyclerView.Adapter adapter = new Adapter();
+	@Test public void testRestoreHolderForHorizontalSwipeWithoutTranslation() throws Throwable {
+		// Arrange:
+		final RecyclerView.Adapter adapter = new TestAdapter();
 		final RecyclerView.AdapterDataObserver mockAdapterObserver = mock(RecyclerView.AdapterDataObserver.class);
 		adapter.registerAdapterDataObserver(mockAdapterObserver);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		itemView.setTranslationX(0f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.getInteractor().attachAdapter(adapter);
+		// Act + Assert:
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(true));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockAdapterObserver).onItemRangeChanged(0, 1, null);
 	}
 
-	@Test
-	public void testRestoreHolderForVerticalSwipe() throws Throwable {
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+	@Test public void testRestoreHolderForVerticalSwipe() throws Throwable {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		itemView.setTranslationY(1f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.setRestoreHolderAnimationDuration(0L);
+		// Act + Assert:
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.DOWN), is(true));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
-	@Test
-	public void testRestoreHolderForVerticalSwipeWithoutTranslation() throws Throwable {
-		final View itemView = new View(mApplication);
-		final RecyclerView.Adapter adapter = new Adapter();
+	@Test public void testRestoreHolderForVerticalSwipeWithoutTranslation() throws Throwable {
+		// Arrange:
+		final RecyclerView.Adapter adapter = new TestAdapter();
 		final RecyclerView.AdapterDataObserver mockAdapterObserver = mock(RecyclerView.AdapterDataObserver.class);
 		adapter.registerAdapterDataObserver(mockAdapterObserver);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		itemView.setTranslationY(0f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
 		helper.getInteractor().attachAdapter(adapter);
+		// Act + Assert:
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.DOWN), is(true));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockAdapterObserver).onItemRangeChanged(0, 1, null);
 	}
 
-	@Test
-	public void testRestoreHolderWithAnimationCallback() throws Throwable {
+	@Test public void testRestoreHolderWithAnimationCallback() throws Throwable {
+		// Arrange:
 		final Runnable mockAnimationCallback = mock(Runnable.class);
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		itemView.setTranslationX(0f);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
 		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
 		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START, mockAnimationCallback), is(true));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockAnimationCallback).run();
 	}
 
-	@Test
-	public void testRestoreHolderWithUnknownDirection() throws Throwable {
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+	@Test public void testRestoreHolderWithUnknownDirection() throws Throwable {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(itemView);
-		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, 100), is(false));
+		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
+		assertThat(helper.restoreHolder(mockViewHolder, 100), is(false));
 	}
 
-	@Test
-	@SuppressWarnings("ResourceType")
-	public void testRestoreHolderWithUnknownPosition() throws Exception {
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(null, itemView, RecyclerView.NO_POSITION);
+	@Test public void testRestoreHolderWithUnknownPosition() throws Exception {
+		// Arrange:
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(null, itemView, RecyclerView.NO_POSITION);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
-		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
+		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
+		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
 		verify(mockViewHolder, times(0)).getInteractiveView(anyInt());
 	}
 
-	@Test
-	public void testRestoreHolderWithoutInteractiveView() throws Exception {
-		final View itemView = new View(mApplication);
-		final Holder mockViewHolder = createMockHolder(mMockRecyclerView, itemView, 0);
+	@Test public void testRestoreHolderWithoutInteractiveView() throws Exception {
+		// Arrange:
+		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
+		final View itemView = new View(application);
+		final TestHolder mockViewHolder = createMockHolder(mockRecyclerView, itemView, 0);
 		when(mockViewHolder.getInteractiveView(ItemSwipeHelper.INTERACTION)).thenReturn(null);
-		assertThat(new ItemSwipeHelper().restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
+		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
+		assertThat(helper.restoreHolder(mockViewHolder, ItemSwipeHelper.START), is(false));
 		verify(mockViewHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 	}
 
-	@Test
-	public void testRestoreHolderNotTypeOfSwipeHolder() throws Exception {
-		assertThat(new ItemSwipeHelper().restoreHolder(new RecyclerView.ViewHolder(new View(mApplication)) {}, ItemSwipeHelper.START), is(false));
+	@Test public void testRestoreHolderNotTypeOfSwipeHolder() {
+		// Arrange:
+		final ItemSwipeHelper helper = new ItemSwipeHelper();
+		// Act + Assert:
+		assertThat(helper.restoreHolder(new RecyclerView.ViewHolder(new View(application)) {}, ItemSwipeHelper.START), is(false));
 	}
 
-	private static Holder createMockHolder(RecyclerView ownerRecyclerView, View itemView, int position) throws Exception {
-		final Holder mockHolder = mock(Holder.class);
-		final Field itemViewField = Holder.class.getField("itemView");
+	private static TestHolder createMockHolder(RecyclerView ownerRecyclerView, View itemView, int position) throws Exception {
+		final TestHolder mockHolder = mock(TestHolder.class);
+		final Field itemViewField = TestHolder.class.getField("itemView");
 		itemViewField.setAccessible(true);
 		itemViewField.set(mockHolder, itemView);
 		final Field ownerRecyclerViewField = RecyclerView.ViewHolder.class.getDeclaredField("mOwnerRecyclerView");
@@ -232,31 +231,26 @@ public final class ItemSwipeHelperTest extends RobolectricTestCase {
 		return mockHolder;
 	}
 
-	private static class Adapter extends RecyclerView.Adapter implements ItemSwipeHelper.SwipeAdapter {
+	private static class TestAdapter extends RecyclerView.Adapter implements ItemSwipeHelper.SwipeAdapter {
 
-		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-			return null;
+		@Override @NonNull public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+			throw new UnsupportedOperationException();
 		}
 
-		@Override
-		public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		}
+		@Override public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {}
 
-		@Override
-		public int getItemCount() {
+		@Override public int getItemCount() {
 			return 0;
 		}
 
-		@Override
-		public int getItemSwipeFlags(int position) {
+		@Override public int getItemSwipeFlags(final int position) {
 			return 0;
 		}
 	}
 
-	private static abstract class Holder extends RecyclerView.ViewHolder implements ItemSwipeHelper.SwipeViewHolder {
+	private static abstract class TestHolder extends RecyclerView.ViewHolder implements ItemSwipeHelper.SwipeViewHolder {
 
-		Holder(View itemView) {
+		TestHolder(@NonNull final View itemView) {
 			super(itemView);
 		}
 	}

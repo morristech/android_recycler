@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.helper;
 
@@ -37,72 +37,79 @@ import static org.mockito.Mockito.when;
  */
 public final class RecyclerViewItemHelperTest extends InstrumentedTestCase {
 
-	@Test
 	@UiThreadTest
-	public void testAttachToRecyclerView() {
-		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
+	@Test public void testAttachToRecyclerView() {
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
+		final RecyclerView recyclerView = new RecyclerView(context);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
 		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(true);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
-		verify(mockInteractor, times(1)).canAttachAdapter(mockAdapter);
-		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapter);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
+		// Assert:
+		verify(mockInteractor).canAttachAdapter(mockAdapter);
+		verify(mockInteractor).onAdapterAttached(mockAdapter);
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
 
 	@UiThreadTest
 	@Test(expected = IllegalArgumentException.class)
 	public void testAttachToRecyclerViewWithUnsupportedAdapter() {
-		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
+		final RecyclerView recyclerView = new RecyclerView(context);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		recyclerView.setAdapter(mockAdapter);
 		when(mockInteractor.canAttachAdapter(mockAdapter)).thenReturn(false);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
 	}
 
-	@Test
 	@UiThreadTest
-	public void testAttachToRecyclerViewWithoutAdapter() {
-		final Interactor mockInteractor = mock(Interactor.class);
-		final RecyclerView recyclerView = new RecyclerView(mContext);
-		new Helper(mockInteractor).attachToRecyclerView(recyclerView);
+	@Test public void testAttachToRecyclerViewWithoutAdapter() {
+		// Arrange:
+		final TestInteractor mockInteractor = mock(TestInteractor.class);
+		final RecyclerView recyclerView = new RecyclerView(context);
+		final TestHelper helper = new TestHelper(mockInteractor);
+		// Act:
+		helper.attachToRecyclerView(recyclerView);
+		// Assert:
 		verify(mockInteractor, times(0)).canAttachAdapter(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterAttached(any(RecyclerView.Adapter.class));
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
 	}
 
-	private static class Helper extends RecyclerViewItemHelper<Interactor> {
+	private static class TestHelper extends RecyclerViewItemHelper<TestInteractor> {
 
-		Helper(@NonNull Interactor interactor) {
+		TestHelper(@NonNull final TestInteractor interactor) {
 			super(interactor);
 		}
 	}
 
-	private static class Interactor extends RecyclerViewItemHelper.ItemInteractor {
+	private static class TestInteractor extends RecyclerViewItemHelper.ItemInteractor {
 
-		@Override
-		protected boolean canAttachAdapter(@NonNull RecyclerView.Adapter adapter) {
+		@Override protected boolean canAttachAdapter(@NonNull final RecyclerView.Adapter adapter) {
 			return false;
 		}
 
-		@Override
-		public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+		@Override public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
 			return 0;
 		}
 
-		@Override
-		public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+		@Override public boolean onMove(
+				@NonNull final RecyclerView recyclerView,
+				@NonNull final RecyclerView.ViewHolder viewHolder,
+				@NonNull final RecyclerView.ViewHolder target
+		) {
 			return false;
 		}
 
-		@Override
-		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-		}
+		@Override public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {}
 
-		@Override
-		public boolean isActive() {
+		@Override public boolean isActive() {
 			return false;
 		}
 	}

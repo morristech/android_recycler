@@ -1,26 +1,22 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.decoration;
-
-import android.graphics.Canvas;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import org.junit.Test;
 
@@ -31,43 +27,21 @@ import universum.studios.android.test.instrumented.TestUtils;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.MockUtil.resetMock;
 
 /**
  * @author Martin Albedinsky
  */
 public final class ItemSpaceDecorationTest extends InstrumentedTestCase {
-    
-	private Canvas mMockCanvas = mock(Canvas.class);
-	private RecyclerView mMockRecyclerView;
-	private RecyclerView.State mMockRecyclerViewState;
 
-	public ItemSpaceDecorationTest() {
-		this.mMockCanvas = mock(Canvas.class);
-		this.mMockRecyclerView = mock(RecyclerView.class);
-		this.mMockRecyclerViewState = mock(RecyclerView.State.class);
-	}
-
-	@Override
-	public void beforeTest() throws Exception {
-		super.beforeTest();
-		resetMock(mMockCanvas);
-		resetMock(mMockRecyclerView);
-		when(mMockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(mContext));
-		resetMock(mMockRecyclerViewState);
-		when(mMockRecyclerViewState.getItemCount()).thenReturn(10);
-	}
-
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleRes() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space"
 		));
+		// Assert:
 		assertThat(decoration.getHorizontalStart(), is(8));
 		assertThat(decoration.getHorizontalEnd(), is(16));
 		assertThat(decoration.getVerticalStart(), is(4));
@@ -76,62 +50,67 @@ public final class ItemSpaceDecorationTest extends InstrumentedTestCase {
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipNone() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipNone() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipNone"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipFirst() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipFirst() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipFirst"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(true));
 		assertThat(decoration.skipsLast(), is(false));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipLast() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipLast() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipLast"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipBoth() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResSkipBoth() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.SkipBoth"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(true));
 		assertThat(decoration.skipsLast(), is(true));
 	}
 
-	@Test
-	public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResEmpty() {
-		assumeTrue(TestUtils.hasLibraryRootPackageName(mContext));
-		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(mContext, null, 0, TestResources.resourceIdentifier(
-				mContext,
+	@Test public void testInstantiationWithContextAttrsSetDefStyleAttrDefStyleResEmpty() {
+		assumeTrue(TestUtils.hasLibraryRootPackageName(context));
+		// Act:
+		final ItemSpaceDecoration decoration = new ItemSpaceDecoration(context, null, 0, TestResources.resourceIdentifier(
+				context,
 				TestResources.STYLE,
 				"Test.ItemDecoration.Space.Empty"
 		));
+		// Assert:
 		assertThat(decoration.skipsFirst(), is(false));
 		assertThat(decoration.skipsLast(), is(false));
 	}

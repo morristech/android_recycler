@@ -1,3 +1,21 @@
+/*
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
+ * -------------------------------------------------------------------------------------------------
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * *************************************************************************************************
+ */
 package universum.studios.android.samples.recycler.ui.helper.swipe;
 
 import android.content.Context;
@@ -31,9 +49,6 @@ import universum.studios.android.ui.util.ResourceUtils;
  */
 final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.SwipeAdapter {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "SampleSwipeAdapter";
-
 	static final int INTERACTION_HANDLING_VIA_DRAW = 0x00;
 	static final int INTERACTION_HANDLING_VIA_SWIPE_VIEW = 0x01;
 
@@ -44,35 +59,31 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 	@Retention(RetentionPolicy.SOURCE)
 	@interface InteractionHandling {}
 
-	private int mInteractionHandling = INTERACTION_HANDLING_VIA_DRAW;
+	private int interactionHandling = INTERACTION_HANDLING_VIA_DRAW;
 
-	SampleSwipeAdapter(@NonNull Context context, @NonNull List<AdapterItem> items) {
+	SampleSwipeAdapter(@NonNull final Context context, @NonNull final List<AdapterItem> items) {
 		super(context, items);
 		setHasStableIds(true);
 	}
 
-	void setInteractionHandling(@InteractionHandling int handling) {
-		this.mInteractionHandling = handling;
+	void setInteractionHandling(@InteractionHandling final int handling) {
+		this.interactionHandling = handling;
 	}
 
-	@Override
-	public long getItemId(int position) {
+	@Override public long getItemId(final int position) {
 		return getItem(position).getId();
 	}
 
-	@Override
-	public SampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	@Override public SampleViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
 		return new ItemHolder(inflateView(R.layout.item_list_swipeable, parent));
 	}
 
-	@Override
-	public void onBindViewHolder(@NonNull SampleViewHolder viewHolder, int position, @NonNull List<Object> payloads) {
+	@Override public void onBindViewHolder(@NonNull final SampleViewHolder viewHolder, final int position, @NonNull final List<Object> payloads) {
 		super.onBindViewHolder(viewHolder, position, payloads);
-		((ItemHolder) viewHolder).setInteractionHandling(mInteractionHandling);
+		((ItemHolder) viewHolder).setInteractionHandling(interactionHandling);
 	}
 
-	@Override
-	public int getItemSwipeFlags(int position) {
+	@Override public int getItemSwipeFlags(final int position) {
 		return ItemSwipeHelper.makeSwipeFlags(ItemSwipeHelper.START | ItemSwipeHelper.END);
 	}
 
@@ -93,7 +104,7 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 		private int interactionHandling = INTERACTION_HANDLING_VIA_DRAW;
 
 		@SuppressWarnings({"deprecation", "ConstantConditions"})
-		ItemHolder(@NonNull View itemView) {
+		ItemHolder(@NonNull final View itemView) {
 			super(ItemListSwipeableBinding.bind(itemView));
 			final Resources resources = itemView.getResources();
 			this.actionColorDone = resources.getColor(R.color.action_tint_done);
@@ -108,19 +119,16 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			this.actionDrawableDelete.setBounds(0, 0, actionDrawableSize, actionDrawableSize);
 		}
 
-		@Override
-		public void bind(@NonNull SampleAdapter adapter, int position, @Nullable List<Object> payloads) {
+		@Override public void bind(@NonNull final SampleAdapter adapter, final int position, @Nullable final List<Object> payloads) {
 			super.bind(adapter, position, payloads);
 			setVisibleAction(activeAction);
 		}
 
-		void setInteractionHandling(@InteractionHandling int handling) {
+		void setInteractionHandling(@InteractionHandling final int handling) {
 			this.interactionHandling = handling;
 		}
 
-		@Nullable
-		@Override
-		public View getInteractiveView(@RecyclerViewItemHelper.Interaction int interaction) {
+		@Override @Nullable public View getInteractiveView(@RecyclerViewItemHelper.Interaction final int interaction) {
 			if (interaction == ItemSwipeHelper.INTERACTION) {
 				switch (interactionHandling) {
 					case INTERACTION_HANDLING_VIA_SWIPE_VIEW: return binding.itemContentContainer;
@@ -131,24 +139,26 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			return null;
 		}
 
-		@Override
-		public void onSwipeStarted() {
+		@Override public void onSwipeStarted() {
 			// Ignored.
 		}
 
-		@Override
-		public void onSwipeFinished(@RecyclerViewItemHelper.Direction int direction) {
+		@Override public void onSwipeFinished(@RecyclerViewItemHelper.Direction final int direction) {
 			this.activeAction = ACTION_NONE;
 		}
 
-		@Override
-		public void onSwipeCanceled() {
+		@Override public void onSwipeCanceled() {
 			this.activeAction = ACTION_NONE;
 		}
 
-		@Override
 		@SuppressWarnings("ConstantConditions")
-		public void onDraw(@NonNull Canvas canvas, float dX, float dY, @RecyclerViewItemHelper.Interaction int interaction, boolean isCurrentlyActive) {
+		@Override public void onDraw(
+				@NonNull final Canvas canvas,
+				final float dX,
+				final float dY,
+				@RecyclerViewItemHelper.Interaction final int interaction,
+				final boolean isCurrentlyActive
+		) {
 			final View swipeView = getInteractiveView(interaction);
 			switch (interactionHandling) {
 				case INTERACTION_HANDLING_VIA_SWIPE_VIEW:
@@ -194,7 +204,7 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			}
 		}
 
-		private void setVisibleAction(int action) {
+		private void setVisibleAction(final int action) {
 			switch (action) {
 				case ACTION_DONE:
 					binding.itemActionsContainer.setBackgroundColor(actionColorDone);
@@ -215,8 +225,7 @@ final class SampleSwipeAdapter extends SampleAdapter implements ItemSwipeHelper.
 			}
 		}
 
-		@Override
-		public void onDrawOver(@NonNull Canvas canvas, float dX, float dY, @RecyclerViewItemHelper.Interaction int interaction, boolean isCurrentlyActive) {
+		@Override public void onDrawOver(@NonNull Canvas canvas, float dX, float dY, @RecyclerViewItemHelper.Interaction int interaction, boolean isCurrentlyActive) {
 			// Nothing to draw over.
 		}
 	}

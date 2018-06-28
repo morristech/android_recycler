@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.decoration;
 
@@ -43,6 +43,8 @@ import universum.studios.android.recycler.R;
  * {@code none}
  *
  * @author Martin Albedinsky
+ * @since 1.0
+ *
  * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
  */
 public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
@@ -75,7 +77,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 *
 	 * @see #updateItemOffsets(Rect, boolean)
 	 */
-	private int mHorizontalStart;
+	private int horizontalStart;
 
 	/**
 	 * Amount of space by which to offset an item at the end in horizontal direction.
@@ -84,17 +86,17 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 *
 	 * @see #updateItemOffsets(Rect, boolean)
 	 */
-	private int mHorizontalEnd;
+	private int horizontalEnd;
 
 	/**
 	 * Amount of space by which to offset an item at the start in vertical direction.
 	 */
-	private int mVerticalStart;
+	private int verticalStart;
 
 	/**
 	 * Amount of space by which to offset an item at the end in vertical direction.
 	 */
-	private int mVerticalEnd;
+	private int verticalEnd;
 
 	/*
 	 * Constructors ================================================================================
@@ -126,10 +128,10 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 */
 	public ItemSpaceDecoration(final int horizontalStart, final int horizontalEnd, final int verticalStart, final int verticalEnd) {
 		super();
-		this.mHorizontalStart = horizontalStart;
-		this.mHorizontalEnd = horizontalEnd;
-		this.mVerticalStart = verticalStart;
-		this.mVerticalEnd = verticalEnd;
+		this.horizontalStart = horizontalStart;
+		this.horizontalEnd = horizontalEnd;
+		this.verticalStart = verticalStart;
+		this.verticalEnd = verticalEnd;
 	}
 
 	/**
@@ -161,6 +163,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * @param defStyleAttr An attribute which contains a reference to a default style resource for
 	 *                     this decoration within a theme of the given context.
 	 * @param defStyleRes  Resource id of the default style for the new decoration.
+	 *
 	 * @see #ItemSpaceDecoration(int, int, int, int)
 	 */
 	public ItemSpaceDecoration(@Nullable final Context context, @Nullable final AttributeSet attrs, @AttrRes final int defStyleAttr, @StyleRes final int defStyleRes) {
@@ -171,13 +174,13 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 			for (int i = 0; i < attributeCount; i++) {
 				final int attrIndex = attributes.getIndex(i);
 				if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalStart) {
-					this.mHorizontalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+					this.horizontalStart = attributes.getDimensionPixelSize(attrIndex, 0);
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingHorizontalEnd) {
-					this.mHorizontalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+					this.horizontalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalStart) {
-					this.mVerticalStart = attributes.getDimensionPixelSize(attrIndex, 0);
+					this.verticalStart = attributes.getDimensionPixelSize(attrIndex, 0);
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingVerticalEnd) {
-					this.mVerticalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
+					this.verticalEnd = attributes.getDimensionPixelSize(attrIndex, 0);
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipFirst) {
 					setSkipFirst(attributes.getBoolean(attrIndex, skipsFirst()));
 				} else if (attrIndex == R.styleable.Recycler_ItemDecoration_Space_recyclerItemSpacingSkipLast) {
@@ -198,10 +201,11 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
+	 *
 	 * @see #getHorizontalEnd()
 	 */
 	public int getHorizontalStart() {
-		return mHorizontalStart;
+		return horizontalStart;
 	}
 
 	/**
@@ -210,48 +214,50 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 * This value is used with respect to layout direction of the parent {@link RecyclerView}.
 	 *
 	 * @return Amount of space in pixels.
+	 *
 	 * @see #getHorizontalStart()
 	 */
 	public int getHorizontalEnd() {
-		return mHorizontalEnd;
+		return horizontalEnd;
 	}
 
 	/**
 	 * Returns the amount of space by which to offset each item at the start in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
+	 *
 	 * @see #getVerticalEnd()
 	 */
 	public int getVerticalStart() {
-		return mVerticalStart;
+		return verticalStart;
 	}
 
 	/**
 	 * Returns the amount of space by which to offset each item at the end in vertical direction.
 	 *
 	 * @return Amount of space in pixels.
+	 *
 	 * @see #getVerticalStart()
 	 */
 	public int getVerticalEnd() {
-		return mVerticalEnd;
+		return verticalEnd;
 	}
 
 	/**
 	 */
-	@Override
-	public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
-		if (mSkipFirst || mSkipLast) {
+	@Override public void getItemOffsets(@NonNull final Rect rect, @NonNull final View view, @NonNull final RecyclerView parent, @NonNull final RecyclerView.State state) {
+		if (skipFirst || skipLast) {
 			final int position = parent.getChildAdapterPosition(view);
 			if (position == RecyclerView.NO_POSITION) {
 				rect.setEmpty();
 				return;
 			}
-			if ((mSkipFirst && position == 0) || (mSkipLast && position == state.getItemCount() - 1)) {
+			if ((skipFirst && position == 0) || (skipLast && position == state.getItemCount() - 1)) {
 				rect.setEmpty();
 				return;
 			}
 		}
-		if (mPrecondition.check(view, parent, state)) {
+		if (precondition.check(view, parent, state)) {
 			this.updateItemOffsets(rect, ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL);
 		} else {
 			rect.setEmpty();
@@ -267,7 +273,7 @@ public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
 	 *                     {@code false} for <i>LTR</i> layout direction.
 	 */
 	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
-		rect.set(rtlDirection ? mHorizontalEnd : mHorizontalStart, mVerticalStart, rtlDirection ? mHorizontalStart : mHorizontalEnd, mVerticalEnd);
+		rect.set(rtlDirection ? horizontalEnd : horizontalStart, verticalStart, rtlDirection ? horizontalStart : horizontalEnd, verticalEnd);
 	}
 
 	/*
