@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.samples.recycler.ui.decoration;
 
@@ -42,40 +42,31 @@ import universum.studios.android.widget.adapter.holder.AdapterHolder;
  */
 public abstract class DecorationSampleFragment extends RecyclerSampleFragment<SampleAdapter> {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "DecorationSampleFragment";
+	private Menu menu;
+	private RecyclerView.ItemDecoration itemDecoration;
 
-	private Menu mMenu;
-	private RecyclerView.ItemDecoration mItemDecoration;
-
-	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
+	@Override public void onCreate(@Nullable final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 	}
 
-	@NonNull
-	@Override
-	protected SampleAdapter createAdapterWithHolderFactory(@NonNull AdapterHolder.Factory<SampleViewHolder> factory) {
+	@Override @NonNull protected SampleAdapter createAdapterWithHolderFactory(@NonNull final AdapterHolder.Factory<SampleViewHolder> factory) {
 		final SampleAdapter adapter = new SampleAdapter(getActivity(), AdapterItems.createSampleList(getResources()));
 		adapter.setHolderFactory(factory);
 		return adapter;
 	}
 
-	@Override
-	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+	@Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		onChangeLayoutManager(collectionView, createLayoutManagerForCurrentLayoutSetting());
 	}
 
-	@Override
-	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+	@Override public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.recycler_decoration, mMenu = menu);
+		inflater.inflate(R.menu.recycler_decoration, this.menu = menu);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+	@Override public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
 		if (item.isChecked()) {
 			return true;
 		}
@@ -93,34 +84,32 @@ public abstract class DecorationSampleFragment extends RecyclerSampleFragment<Sa
 
 	private RecyclerView.LayoutManager createLayoutManagerForCurrentLayoutSetting() {
 		final Context context = getActivity();
-		if (mMenu == null) {
+		if (menu == null) {
 			return createLinearLayoutManager(context, LinearLayoutManager.VERTICAL);
 		}
-		final boolean isLinear = mMenu.findItem(R.id.menu_recycler_layout_linear).isChecked();
-		final boolean isVertical = mMenu.findItem(R.id.menu_recycler_orientation_vertical).isChecked();
+		final boolean isLinear = menu.findItem(R.id.menu_recycler_layout_linear).isChecked();
+		final boolean isVertical = menu.findItem(R.id.menu_recycler_orientation_vertical).isChecked();
 		final int orientation = isVertical ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL;
 		return isLinear ? createLinearLayoutManager(context, orientation) : createGridLayoutManager(context, orientation);
 	}
 
-	@NonNull
-	protected RecyclerView.LayoutManager createLinearLayoutManager(@NonNull Context context, int orientation) {
+	@NonNull protected RecyclerView.LayoutManager createLinearLayoutManager(@NonNull final Context context, final int orientation) {
 		return new LinearLayoutManager(context, orientation, false);
 	}
 
-	@NonNull
-	protected RecyclerView.LayoutManager createGridLayoutManager(@NonNull Context context, int orientation) {
+	@NonNull protected RecyclerView.LayoutManager createGridLayoutManager(@NonNull final Context context, final int orientation) {
 		return new GridLayoutManager(context, 2, orientation, false);
 	}
 
-	protected void onChangeLayoutManager(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.LayoutManager layoutManager) {
+	protected void onChangeLayoutManager(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.LayoutManager layoutManager) {
 		recyclerView.setLayoutManager(layoutManager);
 	}
 
-	protected void setItemDecoration(@Nullable RecyclerView.ItemDecoration decoration) {
-		if (mItemDecoration != null) {
-			collectionView.removeItemDecoration(mItemDecoration);
+	protected void setItemDecoration(@Nullable final RecyclerView.ItemDecoration decoration) {
+		if (itemDecoration != null) {
+			collectionView.removeItemDecoration(itemDecoration);
 		}
-		this.mItemDecoration = decoration;
+		this.itemDecoration = decoration;
 		if (decoration != null) {
 			collectionView.addItemDecoration(decoration);
 		}

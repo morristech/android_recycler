@@ -1,22 +1,23 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.helper;
+
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import org.junit.Test;
@@ -31,19 +32,15 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  * @author Martin Albedinsky
  */
 public final class ItemDragHelperTest extends RobolectricTestCase {
-    
-	@Test
-	public void testInteractionConstant() {
-		assertThat(ItemDragHelper.INTERACTION, is(ItemTouchHelper.ACTION_STATE_DRAG));
-	}
 
-	@Test
-	public void testMoveTresholdConstant() {
+	@Test public void testConstants() {
+		// Assert:
+		assertThat(ItemDragHelper.INTERACTION, is(ItemTouchHelper.ACTION_STATE_DRAG));
 		assertThat(ItemDragHelper.MOVE_THRESHOLD, is(0.5f));
 	}
 
-	@Test
-	public void testMakeDragFlags() {
+	@Test public void testMakeDragFlags() {
+		// Act + Assert:
 		assertThat(
 				ItemDragHelper.makeDragFlags(ItemDragHelper.UP),
 				is(ItemTouchHelper.Callback.makeMovementFlags(ItemTouchHelper.UP, 0))
@@ -54,8 +51,10 @@ public final class ItemDragHelperTest extends RobolectricTestCase {
 		);
 	}
 
-	@Test
-	public void testGetInteractor() {
-		assertThat(new ItemDragHelper().getInteractor(), instanceOf(ItemDragHelper.Interactor.class));
+	@Test public void testInstantiation() {
+		// Act:
+		final ItemDragHelper helper = new ItemDragHelper();
+		// Act + Assert:
+		assertThat(helper.getInteractor(), instanceOf(ItemDragHelper.Interactor.class));
 	}
 }

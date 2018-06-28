@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.recycler.helper;
 
@@ -36,41 +36,45 @@ import static org.mockito.Mockito.mock;
  * @author Martin Albedinsky
  */
 public final class ItemSwipeHelperSwipeItemAnimatorTest extends RobolectricTestCase {
-    
-	@Test
-	public void testAnimateChange() {
+
+	@Test public void testAnimateChange() {
+		// Arrange:
 		final RecyclerView.ViewHolder oldMockViewHolder = mock(RecyclerView.ViewHolder.class);
 		final RecyclerView.ViewHolder newMockViewHolder = mock(RecyclerView.ViewHolder.class);
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 0), is(false));
 	}
 
-	@Test
-	public void testAnimateChangeForVerticalTranslation() throws Exception {
-		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(mApplication));
-		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(mApplication));
+	@Test public void testAnimateChangeForVerticalTranslation() throws Exception {
+		// Arrange:
+		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
+		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 1),
 				is(new DefaultItemAnimator().animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 0, 1))
 		);
 	}
 
-	@Test
-	public void testAnimateChangeForHorizontalTranslation() throws Exception {
-		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(mApplication));
-		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(mApplication));
+	@Test public void testAnimateChangeForHorizontalTranslation() throws Exception {
+		// Arrange:
+		final RecyclerView.ViewHolder oldMockViewHolder = createMockViewHolder(new View(application));
+		final RecyclerView.ViewHolder newMockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(
 				animator.animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 1, 0),
 				is(new DefaultItemAnimator().animateChange(oldMockViewHolder, newMockViewHolder, 0, 0, 1, 0))
 		);
 	}
 
-	@Test
-	public void testAnimateChangeForSameHolders() throws Exception {
-		final RecyclerView.ViewHolder mockViewHolder = createMockViewHolder(new View(mApplication));
+	@Test public void testAnimateChangeForSameHolders() throws Exception {
+		// Arrange:
+		final RecyclerView.ViewHolder mockViewHolder = createMockViewHolder(new View(application));
 		final ItemSwipeHelper.SwipeItemAnimator animator = new ItemSwipeHelper.SwipeItemAnimator();
+		// Act + Assert:
 		assertThat(animator.animateChange(mockViewHolder, mockViewHolder, 0, 0, 0, 0), is(false));
 	}
 
