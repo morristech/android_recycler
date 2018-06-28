@@ -164,8 +164,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.removeOnSwipeListener(firstMockListener);
 		interactor.removeOnSwipeListener(secondMockListener);
 		interactor.notifySwipeStarted(mockViewHolder);
-		verifyNoMoreInteractions(firstMockListener);
-		verifyNoMoreInteractions(secondMockListener);
+		verifyNoMoreInteractions(firstMockListener, secondMockListener);
 	}
 
 	@Test public void testNotifySwipeStartedWithoutRegisteredListeners() {
@@ -199,8 +198,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.removeOnSwipeListener(firstMockListener);
 		interactor.removeOnSwipeListener(secondMockListener);
 		interactor.notifySwipeFinished(mockViewHolder, ItemTouchHelper.END);
-		verifyNoMoreInteractions(firstMockListener);
-		verifyNoMoreInteractions(secondMockListener);
+		verifyNoMoreInteractions(firstMockListener, secondMockListener);
 	}
 
 	@Test public void testNotifySwipeFinishedWithoutRegisteredListeners() {
@@ -237,8 +235,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.removeOnSwipeListener(firstMockListener);
 		interactor.removeOnSwipeListener(secondMockListener);
 		interactor.notifySwipeCanceled(mockViewHolder);
-		verifyNoMoreInteractions(firstMockListener);
-		verifyNoMoreInteractions(secondMockListener);
+		verifyNoMoreInteractions(firstMockListener, secondMockListener);
 	}
 
 	@Test public void testNotifySwipeCanceledWithoutRegisteredListeners() {
@@ -363,6 +360,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockHolder).onSwipeStarted();
 		verify(mockListener).onSwipeStarted(helper, mockHolder);
+		verifyNoMoreInteractions(mockAdapter, mockListener);
 	}
 
 	@Test public void testOnSelectedChangedWithoutInteractiveView() throws Exception {
@@ -399,8 +397,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.onSelectedChanged(mockHolder, ItemTouchHelper.ACTION_STATE_DRAG);
 		// Assert:
 		assertThat(interactor.isActive(), is(false));
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockListener);
 	}
 
 	@Test public void testOnSelectedChangedForNotSwipeHolder() throws Exception {
@@ -431,8 +428,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.onSelectedChanged(mockHolder, ItemSwipeHelper.INTERACTION);
 		// Assert:
 		assertThat(interactor.isActive(), is(false));
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockListener);
 	}
 
 	@Test public void testOnSelectedChangedWithoutAttachedAdapter() throws Exception {
@@ -446,8 +442,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		interactor.onSelectedChanged(mockHolder, ItemSwipeHelper.INTERACTION);
 		// Assert:
 		assertThat(interactor.isActive(), is(false));
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockListener);
 	}
 
 	@Test public void testOnMove() {
@@ -548,6 +543,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		verify(mockHolder).getInteractiveView(ItemSwipeHelper.INTERACTION);
 		verify(mockHolder).onSwipeCanceled();
 		verify(mockListener).onSwipeCanceled(helper, mockHolder);
+		verifyNoMoreInteractions(mockListener);
 	}
 
 	@Test public void testClearViewNotInteractive() throws Exception {
@@ -608,9 +604,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		// Act:
 		interactor.clearView(mockRecyclerView, mockHolder);
 		// Assert:
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockAdapter);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockAdapter, mockListener);
 	}
 
 	@Test public void testClearViewWhenDisabled() throws Exception {
@@ -626,9 +620,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		// Act:
 		interactor.clearView(mockRecyclerView, mockHolder);
 		// Assert:
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockAdapter);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockAdapter, mockListener);
 	}
 
 	@Test public void testClearViewWithoutAttachedAdapter() throws Exception {
@@ -641,8 +633,7 @@ public final class ItemSwipeHelperInteractorTest extends RobolectricTestCase {
 		// Act:
 		interactor.clearView(mockRecyclerView, mockHolder);
 		// Assert:
-		verifyZeroInteractions(mockHolder);
-		verifyZeroInteractions(mockListener);
+		verifyZeroInteractions(mockHolder, mockListener);
 	}
 
 	private static TestHolder createMockHolder(final View itemView, final int position) throws Exception {
