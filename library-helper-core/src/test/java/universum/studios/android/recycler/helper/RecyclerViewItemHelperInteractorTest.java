@@ -35,6 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,32 +43,41 @@ import static org.mockito.Mockito.when;
  */
 public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestCase {
 
-	// Arrange:
-	// Act:
-	// Assert:
+	@Test public void testInstantiation() {
+		// Act:
+		final TestInteractor interactor = new TestInteractor();
+		// Assert:
+		assertThat(interactor.isEnabled(), is(true));
+		assertThat(interactor.shouldHandleInteraction(), is(false));
+	}
 
-	@Test
-	public void testAttachToHelper() {
+	@Test public void testAttachToHelper() {
+		// Arrange:
 		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final TestHelper mockHelper = mock(TestHelper.class);
+		// Act:
 		mockInteractor.attachToHelper(mockHelper);
-		verify(mockInteractor, times(1)).onAttachedToHelper(mockHelper);
+		// Assert:
+		verify(mockInteractor).onAttachedToHelper(mockHelper);
 	}
 
-	@Test
-	public void testAttachAdapter() {
+	@Test public void testAttachAdapter() {
+		// Arrange:
 		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
+		// Act:
 		mockInteractor.attachAdapter(mockAdapter);
-		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapter);
-		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
+		// Assert:
+		verify(mockInteractor).onAdapterAttached(mockAdapter);
+		verifyNoMoreInteractions(mockInteractor);
 	}
 
-	@Test
-	public void testAttachAdapterWithPreviousAttached() {
+	@Test public void testAttachAdapterWithPreviousAttached() {
+		// Arrange:
 		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView.Adapter mockAdapterFirst = mock(RecyclerView.Adapter.class);
 		final RecyclerView.Adapter mockAdapterSecond = mock(RecyclerView.Adapter.class);
+		// Act + Assert:
 		mockInteractor.attachAdapter(mockAdapterFirst);
 		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapterFirst);
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
@@ -80,54 +90,61 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapterSecond);
 		verify(mockInteractor, times(1)).onAdapterDetached(mockAdapterFirst);
 		verify(mockInteractor, times(1)).onAdapterDetached(mockAdapterSecond);
+		verifyNoMoreInteractions(mockInteractor);
 	}
 
-	@Test
-	public void testAttachSameAdapter() {
+	@Test public void testAttachSameAdapter() {
+		// Arrange:
 		final TestInteractor mockInteractor = mock(TestInteractor.class);
 		final RecyclerView.Adapter mockAdapter = mock(RecyclerView.Adapter.class);
 		mockInteractor.attachAdapter(mockAdapter);
+		// Act:
 		mockInteractor.attachAdapter(mockAdapter);
-		verify(mockInteractor, times(1)).onAdapterAttached(mockAdapter);
+		// Assert:
+		verify(mockInteractor).onAdapterAttached(mockAdapter);
 		verify(mockInteractor, times(0)).onAdapterDetached(any(RecyclerView.Adapter.class));
+		verifyNoMoreInteractions(mockInteractor);
 	}
 
-	@Test
-	public void testOnAttachedToHelper() {
-		// Only test that invocation of this method does not cause any troubles.
-		new TestInteractor().onAttachedToHelper(mock(TestHelper.class));
-	}
-
-	@Test
-	public void testOnAdapterAttached() {
-		// Only test that invocation of this method does not cause any troubles.
-		new TestInteractor().onAdapterAttached(mock(RecyclerView.Adapter.class));
-	}
-
-	@Test
-	public void testOnAdapterDetached() {
-		// Only test that invocation of this method does not cause any troubles.
-		new TestInteractor().onAdapterDetached(mock(RecyclerView.Adapter.class));
-	}
-
-	@Test
-	public void testSetIsEnabled() {
+	@Test public void testOnAttachedToHelper() {
+		// Arrange:
 		final TestInteractor interactor = new TestInteractor();
+		// Act:
+		// Only ensure that invocation of this method does not cause any troubles.
+		interactor.onAttachedToHelper(mock(TestHelper.class));
+	}
+
+	@Test public void testOnAdapterAttached() {
+		// Arrange:
+		final TestInteractor interactor = new TestInteractor();
+		// Act:
+		// Only ensure that invocation of this method does not cause any troubles.
+		interactor.onAdapterAttached(mock(RecyclerView.Adapter.class));
+	}
+
+	@Test public void testOnAdapterDetached() {
+		// Arrange:
+		final TestInteractor interactor = new TestInteractor();
+		// Act:
+		// Only ensure that invocation of this method does not cause any troubles.
+		interactor.onAdapterDetached(mock(RecyclerView.Adapter.class));
+	}
+
+	@Test public void testIsEnabled() {
+		// Arrange:
+		final TestInteractor interactor = new TestInteractor();
+		// Act + Assert:
 		interactor.setEnabled(false);
 		assertThat(interactor.isEnabled(), is(false));
 		interactor.setEnabled(true);
 		assertThat(interactor.isEnabled(), is(true));
 	}
 
-	@Test
-	public void testIsEnabledDefault() {
-		assertThat(new TestInteractor().isEnabled(), is(true));
-	}
-
-	@Test
-	public void testShouldHandleInteraction() {
+	@Test public void testShouldHandleInteraction() {
+		// Arrange:
 		final TestInteractor interactor = new TestInteractor();
 		interactor.attachAdapter(mock(RecyclerView.Adapter.class));
+		// Act + Assert:
 		assertThat(interactor.shouldHandleInteraction(), is(true));
 		interactor.setEnabled(false);
 		assertThat(interactor.shouldHandleInteraction(), is(false));
@@ -136,19 +153,15 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		assertThat(interactor.shouldHandleInteraction(), is(false));
 	}
 
-	@Test
-	public void testShouldHandleInteractionDefault() {
-		assertThat(new TestInteractor().shouldHandleInteraction(), is(false));
-	}
-
-	@Test
-	public void testOnChildDraw() throws Exception {
+	@Test public void testOnChildDraw() throws Exception {
+		// Arrange:
 		final TestHolder mockHolder = createMockHolder(new View(application));
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
 		final View view = new View(application);
 		when(mockHolder.getInteractiveView(TestHelper.ACTION_STATE_SWIPE)).thenReturn(view);
+		// Act:
 		interactor.onChildDraw(
 				canvas,
 				recyclerView,
@@ -157,15 +170,18 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 				TestHelper.ACTION_STATE_SWIPE,
 				true
 		);
-		verify(mockHolder, times(1)).getInteractiveView(TestHelper.ACTION_STATE_SWIPE);
-		verify(mockHolder, times(1)).onDraw(canvas, 0, 0, TestHelper.ACTION_STATE_SWIPE, true);
+		// Assert:
+		verify(mockHolder).getInteractiveView(TestHelper.ACTION_STATE_SWIPE);
+		verify(mockHolder).onDraw(canvas, 0, 0, TestHelper.ACTION_STATE_SWIPE, true);
+		verifyNoMoreInteractions(mockHolder);
 	}
 
-	@Test
-	public void testOnChildDrawWithNotInteractiveViewHolder() {
+	@Test public void testOnChildDrawWithNotInteractiveViewHolder() {
+		// Arrange:
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
+		// Act:
 		interactor.onChildDraw(
 				canvas,
 				recyclerView,
@@ -176,13 +192,14 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		);
 	}
 
-	@Test
-	public void testOnChildDrawWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
+	@Test public void testOnChildDrawWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
+		// Arrange:
 		final TestHolder mockHolder = createMockHolder(new View(application));
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
 		when(mockHolder.getInteractiveView(TestHelper.ACTION_STATE_SWIPE)).thenReturn(null);
+		// Act:
 		interactor.onChildDraw(
 				canvas,
 				recyclerView,
@@ -191,18 +208,21 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 				TestHelper.ACTION_STATE_SWIPE,
 				true
 		);
-		verify(mockHolder, times(1)).getInteractiveView(TestHelper.ACTION_STATE_SWIPE);
-		verify(mockHolder, times(1)).onDraw(canvas, 0, 0, TestHelper.ACTION_STATE_SWIPE, true);
+		// Assert:
+		verify(mockHolder).getInteractiveView(TestHelper.ACTION_STATE_SWIPE);
+		verify(mockHolder).onDraw(canvas, 0, 0, TestHelper.ACTION_STATE_SWIPE, true);
+		verifyNoMoreInteractions(mockHolder);
 	}
 
-	@Test
-	public void testOnChildDrawOver() throws Exception {
+	@Test public void testOnChildDrawOver() throws Exception {
+		// Arrange:
 		final TestHolder mockHolder = createMockHolder(new View(application));
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
 		final View view = new View(application);
 		when(mockHolder.getInteractiveView(TestHelper.ACTION_STATE_DRAG)).thenReturn(view);
+		// Act:
 		interactor.onChildDrawOver(
 				canvas,
 				recyclerView,
@@ -211,15 +231,17 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 				TestHelper.ACTION_STATE_DRAG,
 				true
 		);
-		verify(mockHolder, times(1)).getInteractiveView(TestHelper.ACTION_STATE_DRAG);
-		verify(mockHolder, times(1)).onDrawOver(canvas, 0, 0, TestHelper.ACTION_STATE_DRAG, true);
+		// Assert:
+		verify(mockHolder).getInteractiveView(TestHelper.ACTION_STATE_DRAG);
+		verify(mockHolder).onDrawOver(canvas, 0, 0, TestHelper.ACTION_STATE_DRAG, true);
 	}
 
-	@Test
-	public void testOnChildDrawOverWithNotInteractiveViewHolder() {
+	@Test public void testOnChildDrawOverWithNotInteractiveViewHolder() {
+		// Arrange:
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
+		// Act:
 		interactor.onChildDrawOver(
 				canvas,
 				recyclerView,
@@ -230,13 +252,14 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		);
 	}
 
-	@Test
-	public void testOnChildDrawOverWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
+	@Test public void testOnChildDrawOverWithInteractiveViewHolderWithoutInteractiveView() throws Exception {
+		// Arrange:
 		final TestHolder mockHolder = createMockHolder(new View(application));
 		final TestInteractor interactor = new TestInteractor();
 		final Canvas canvas = new Canvas();
 		final RecyclerView recyclerView = new RecyclerView(application);
 		when(mockHolder.getInteractiveView(TestHelper.ACTION_STATE_DRAG)).thenReturn(null);
+		// Act:
 		interactor.onChildDrawOver(
 				canvas,
 				recyclerView,
@@ -245,11 +268,13 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 				TestHelper.ACTION_STATE_DRAG,
 				true
 		);
-		verify(mockHolder, times(1)).getInteractiveView(TestHelper.ACTION_STATE_DRAG);
-		verify(mockHolder, times(1)).onDrawOver(canvas, 0, 0, TestHelper.ACTION_STATE_DRAG, true);
+		// Assert:
+		verify(mockHolder).getInteractiveView(TestHelper.ACTION_STATE_DRAG);
+		verify(mockHolder).onDrawOver(canvas, 0, 0, TestHelper.ACTION_STATE_DRAG, true);
+		verifyNoMoreInteractions(mockHolder);
 	}
 
-	private static TestHolder createMockHolder(View itemView) throws Exception {
+	private static TestHolder createMockHolder(final View itemView) throws Exception {
 		final TestHolder mockHolder = mock(TestHolder.class);
 		final Field itemViewField = TestHolder.class.getField("itemView");
 		itemViewField.setAccessible(true);
