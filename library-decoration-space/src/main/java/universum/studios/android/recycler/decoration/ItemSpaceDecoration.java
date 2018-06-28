@@ -43,6 +43,8 @@ import universum.studios.android.recycler.R;
  * {@code none}
  *
  * @author Martin Albedinsky
+ * @since 1.0
+ *
  * @see RecyclerView#addItemDecoration(RecyclerView.ItemDecoration)
  */
 public class ItemSpaceDecoration extends RecyclerViewItemDecoration {
