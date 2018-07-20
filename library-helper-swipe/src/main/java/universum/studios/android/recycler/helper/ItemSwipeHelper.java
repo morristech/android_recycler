@@ -610,13 +610,13 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		/**
 		 */
 		@Override public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			return shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder ? swipeAdapter.getItemSwipeFlags(viewHolder.getAdapterPosition()) : 0;
+			return shouldHandleInteraction(viewHolder) ? swipeAdapter.getItemSwipeFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
 		 */
 		@Override public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
-			if (shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder) {
+			if (shouldHandleInteraction(viewHolder)) {
 				switch (actionState) {
 					case INTERACTION:
 						this.swiping = true;
@@ -654,7 +654,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 		/**
 		 */
 		@Override public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
-			if (shouldHandleInteraction() && viewHolder instanceof SwipeViewHolder) {
+			if (shouldHandleInteraction(viewHolder)) {
 				final SwipeViewHolder swipeViewHolder = (SwipeViewHolder) viewHolder;
 				swipeViewHolder.onSwipeFinished(direction);
 				notifySwipeFinished(viewHolder, direction);
@@ -673,8 +673,7 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 				} else {
 					getDefaultUIUtil().clearView(interactiveView);
 				}
-				final int adapterPosition = viewHolder.getAdapterPosition();
-				if (adapterPosition != RecyclerView.NO_POSITION && !recyclerView.isComputingLayout()) {
+				if (viewHolder.getAdapterPosition() != RecyclerView.NO_POSITION && !recyclerView.isComputingLayout()) {
 					swipeViewHolder.onSwipeCanceled();
 					notifySwipeCanceled(viewHolder);
 				}
@@ -682,6 +681,12 @@ public final class ItemSwipeHelper extends RecyclerViewItemHelper<ItemSwipeHelpe
 			} else {
 				super.clearView(recyclerView, viewHolder);
 			}
+		}
+
+		/**
+		 */
+		@Override protected boolean shouldHandleInteraction(@Nullable final RecyclerView.ViewHolder viewHolder) {
+			return viewHolder instanceof SwipeViewHolder && super.shouldHandleInteraction(viewHolder);
 		}
 	}
 
