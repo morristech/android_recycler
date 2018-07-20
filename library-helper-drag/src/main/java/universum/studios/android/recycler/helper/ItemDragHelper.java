@@ -526,14 +526,14 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 		/**
 		 */
 		@Override public int getMovementFlags(@NonNull final RecyclerView recyclerView, @NonNull final RecyclerView.ViewHolder viewHolder) {
-			return shouldHandleInteraction() && viewHolder instanceof DragViewHolder ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
+			return shouldHandleInteraction(viewHolder) ? dragAdapter.getItemDragFlags(viewHolder.getAdapterPosition()) : 0;
 		}
 
 		/**
 		 */
 		@Override public void onSelectedChanged(@Nullable final RecyclerView.ViewHolder viewHolder, final int actionState) {
 			super.onSelectedChanged(viewHolder, actionState);
-			if (shouldHandleInteraction() && viewHolder instanceof DragViewHolder) {
+			if (shouldHandleInteraction(viewHolder)) {
 				switch (actionState) {
 					case INTERACTION:
 						this.dragging = true;
@@ -555,7 +555,7 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 				@NonNull final RecyclerView.ViewHolder current,
 				@NonNull final RecyclerView.ViewHolder target
 		) {
-			if (shouldHandleInteraction() && current instanceof DragViewHolder && target instanceof DragViewHolder) {
+			if (shouldHandleInteraction(current) && shouldHandleInteraction(target)) {
 				final int fromPosition = current.getAdapterPosition();
 				final int toPosition = target.getAdapterPosition();
 				if (fromPosition != toPosition && (fromPosition != movingFromPosition || toPosition != movingToPosition)) {
@@ -578,10 +578,8 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 				@NonNull final RecyclerView.ViewHolder current,
 				@NonNull final RecyclerView.ViewHolder target
 		) {
-			return shouldHandleInteraction() && current instanceof DragViewHolder && target instanceof DragViewHolder && dragAdapter.canDropItemOver(
-					current.getAdapterPosition(),
-					target.getAdapterPosition()
-			);
+			return shouldHandleInteraction(current) && shouldHandleInteraction(target)
+					&& dragAdapter.canDropItemOver(current.getAdapterPosition(), target.getAdapterPosition());
 		}
 
 		/**
@@ -590,11 +588,19 @@ public final class ItemDragHelper extends RecyclerViewItemHelper<ItemDragHelper.
 			super.clearView(recyclerView, viewHolder);
 			if (shouldHandleInteraction() && viewHolder instanceof DragViewHolder) {
 				final int draggingToPosition = viewHolder.getAdapterPosition();
-				((DragViewHolder) viewHolder).onDragFinished(draggingFromPosition, draggingToPosition);
-				this.dragAdapter.onItemDragFinished(draggingFromPosition, draggingToPosition);
-				notifyDragFinished(viewHolder, draggingFromPosition, draggingToPosition);
+				if (draggingFromPosition != RecyclerView.NO_POSITION) {
+					((DragViewHolder) viewHolder).onDragFinished(draggingFromPosition, draggingToPosition);
+					this.dragAdapter.onItemDragFinished(draggingFromPosition, draggingToPosition);
+					notifyDragFinished(viewHolder, draggingFromPosition, draggingToPosition);
+				}
 				this.resetState();
 			}
+		}
+
+		/**
+		 */
+		@Override protected boolean shouldHandleInteraction(@Nullable final RecyclerView.ViewHolder viewHolder) {
+			return viewHolder instanceof DragViewHolder && super.shouldHandleInteraction(viewHolder);
 		}
 	}
 }

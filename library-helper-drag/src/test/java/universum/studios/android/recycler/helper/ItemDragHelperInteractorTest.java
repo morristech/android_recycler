@@ -399,7 +399,9 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		// Assert:
 		assertThat(interactor.isActive(), is(false));
 		assertThat(interactor.draggingFromPosition, is(RecyclerView.NO_POSITION));
-		verifyZeroInteractions(mockHolder, mockAdapter, mockListener);
+		verify(mockHolder).getAdapterPosition();
+		verifyNoMoreInteractions(mockHolder);
+		verifyZeroInteractions(mockAdapter, mockListener);
 	}
 
 	@Test public void testOnSelectedChangedForNotDragHolder() throws Exception {
@@ -453,8 +455,8 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		// Arrange:
 		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
 		final TestAdapter mockAdapter = mock(TestAdapter.class);
-		final TestHolder mockHolderCurrent = createMockHolder(mockRecyclerView, new View(application), 0);
-		final TestHolder mockHolderTarget = createMockHolder(mockRecyclerView, new View(application), 1);
+		final TestHolder mockHolderCurrent = createMockHolder(new View(application), 0);
+		final TestHolder mockHolderTarget = createMockHolder(new View(application), 1);
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
 		when(mockAdapter.onMoveItem(mockHolderCurrent.getAdapterPosition(), mockHolderTarget.getAdapterPosition())).thenReturn(true);
@@ -470,8 +472,8 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		// Arrange:
 		final RecyclerView mockRecyclerView = mock(RecyclerView.class);
 		final TestAdapter mockAdapter = mock(TestAdapter.class);
-		final TestHolder mockHolderCurrent = createMockHolder(mockRecyclerView, new View(application), 0);
-		final TestHolder mockHolderTarget = createMockHolder(mockRecyclerView, new View(application), 1);
+		final TestHolder mockHolderCurrent = createMockHolder(new View(application), 0);
+		final TestHolder mockHolderTarget = createMockHolder(new View(application), 1);
 		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
 		interactor.attachAdapter(mockAdapter);
 		when(mockAdapter.onMoveItem(mockHolderCurrent.getAdapterPosition(), mockHolderTarget.getAdapterPosition())).thenReturn(false);
@@ -497,7 +499,9 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		assertThat(interactor.onMove(mockRecyclerView, mockViewHolderCurrent, mockHolderTarget), is(false));
 		assertThat(interactor.onMove(mockRecyclerView, mockHolderCurrent, mockViewHolderTarget), is(false));
 		assertThat(interactor.onMove(mockRecyclerView, mockViewHolderCurrent, mockViewHolderTarget), is(false));
-		verifyZeroInteractions(mockAdapter, mockHolderCurrent, mockHolderTarget);
+		verify(mockHolderCurrent).getAdapterPosition();
+		verifyNoMoreInteractions(mockHolderCurrent);
+		verifyZeroInteractions(mockAdapter, mockHolderTarget);
 	}
 
 	@Test public void testOnMoveWhenDisabled() {
@@ -576,7 +580,9 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		assertThat(interactor.canDropOver(mockRecyclerView, mockViewHolderCurrent, mockHolderTarget), is(false));
 		assertThat(interactor.canDropOver(mockRecyclerView, mockHolderCurrent, mockViewHolderTarget), is(false));
 		assertThat(interactor.canDropOver(mockRecyclerView, mockViewHolderCurrent, mockViewHolderTarget), is(false));
-		verifyZeroInteractions(mockAdapter, mockHolderCurrent, mockHolderTarget);
+		verify(mockHolderCurrent).getAdapterPosition();
+		verifyNoMoreInteractions(mockHolderCurrent);
+		verifyZeroInteractions(mockAdapter, mockHolderTarget);
 	}
 
 	@Test public void testCanDropOverWhenDisabled() {
@@ -677,6 +683,27 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		verifyZeroInteractions(mockHolder, mockListener);
 	}
 
+	@Test public void testShouldHandleInteractionForHolder() throws Exception {
+		// Arrange:
+		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
+		interactor.attachAdapter(mock(TestAdapter.class));
+		final RecyclerView.ViewHolder mockHolder = createMockHolder(mock(View.class), 1);
+		// Act + Assert:
+		assertThat(interactor.shouldHandleInteraction(mockHolder), is(true));
+		verify(mockHolder).getAdapterPosition();
+		verifyNoMoreInteractions(mockHolder);
+	}
+
+	@Test public void testShouldHandleInteractionForHolderThatIsNotDragHolder() {
+		// Arrange:
+		final ItemDragHelper.Interactor interactor = new ItemDragHelper.Interactor();
+		interactor.attachAdapter(mock(TestAdapter.class));
+		final RecyclerView.ViewHolder mockHolder = mock(RecyclerView.ViewHolder.class);
+		// Act + Assert:
+		assertThat(interactor.shouldHandleInteraction(mockHolder), is(false));
+		verifyZeroInteractions(mockHolder);
+	}
+
 	private static TestHolder createMockHolder(final View itemView) throws Exception {
 		final TestHolder mockHolder = mock(TestHolder.class);
 		final Field itemViewField = TestHolder.class.getField("itemView");
@@ -686,14 +713,11 @@ public final class ItemDragHelperInteractorTest extends RobolectricTestCase {
 		return mockHolder;
 	}
 
-	private static TestHolder createMockHolder(final RecyclerView recyclerView, final View itemView, final int position) throws Exception {
+	private static TestHolder createMockHolder(final View itemView, final int position) throws Exception {
 		final TestHolder mockHolder = mock(TestHolder.class);
 		final Field itemViewField = TestHolder.class.getField("itemView");
 		itemViewField.setAccessible(true);
 		itemViewField.set(mockHolder, itemView);
-		final Field recyclerViewField = RecyclerView.ViewHolder.class.getDeclaredField("mOwnerRecyclerView");
-		recyclerViewField.setAccessible(true);
-		recyclerViewField.set(mockHolder, recyclerView);
 		when(mockHolder.getAdapterPosition()).thenReturn(position);
 		return mockHolder;
 	}
