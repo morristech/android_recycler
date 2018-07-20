@@ -140,6 +140,21 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		assertThat(interactor.isEnabled(), is(true));
 	}
 
+	@Test public void testShouldHandleInteractionForHolder() throws Exception {
+		// Arrange:
+		final TestInteractor interactor = new TestInteractor();
+		interactor.attachAdapter(mock(RecyclerView.Adapter.class));
+		final TestHolder mockHolderWithInvalidPosition = createMockHolder(mock(RecyclerView.class), mock(View.class), RecyclerView.NO_POSITION);
+		final TestHolder mockHolderWithValidPosition = createMockHolder(mock(RecyclerView.class), mock(View.class), 1);
+		// Act + Assert:
+		assertThat(interactor.shouldHandleInteraction(null), is(false));
+		assertThat(interactor.shouldHandleInteraction(mockHolderWithInvalidPosition), is(false));
+		assertThat(interactor.shouldHandleInteraction(mockHolderWithValidPosition), is(true));
+		verify(mockHolderWithInvalidPosition).getAdapterPosition();
+		verify(mockHolderWithValidPosition).getAdapterPosition();
+		verifyNoMoreInteractions(mockHolderWithInvalidPosition, mockHolderWithValidPosition);
+	}
+
 	@Test public void testShouldHandleInteraction() {
 		// Arrange:
 		final TestInteractor interactor = new TestInteractor();
@@ -279,6 +294,18 @@ public final class RecyclerViewItemHelperInteractorTest extends RobolectricTestC
 		final Field itemViewField = TestHolder.class.getField("itemView");
 		itemViewField.setAccessible(true);
 		itemViewField.set(mockHolder, itemView);
+		return mockHolder;
+	}
+
+	private static TestHolder createMockHolder(final RecyclerView recyclerView, final View itemView, final int position) throws Exception {
+		final TestHolder mockHolder = mock(TestHolder.class);
+		final Field itemViewField = TestHolder.class.getField("itemView");
+		itemViewField.setAccessible(true);
+		itemViewField.set(mockHolder, itemView);
+		final Field recyclerViewField = RecyclerView.ViewHolder.class.getDeclaredField("mOwnerRecyclerView");
+		recyclerViewField.setAccessible(true);
+		recyclerViewField.set(mockHolder, recyclerView);
+		when(mockHolder.getAdapterPosition()).thenReturn(position);
 		return mockHolder;
 	}
 

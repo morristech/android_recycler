@@ -264,7 +264,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 *
 		 * @param helper The helper that will use this interactor to support its specific feature.
 		 */
-		final void attachToHelper(RecyclerViewItemHelper helper) {
+		final void attachToHelper(final RecyclerViewItemHelper helper) {
 			onAttachedToHelper(this.helper = helper);
 		}
 
@@ -299,7 +299,7 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		 *
 		 * @param adapter The adapter to attach. May be {@code null} to detach previous adapter.
 		 */
-		final void attachAdapter(RecyclerView.Adapter adapter) {
+		final void attachAdapter(final RecyclerView.Adapter adapter) {
 			if (this.adapter == adapter) {
 				return;
 			}
@@ -372,12 +372,29 @@ public abstract class RecyclerViewItemHelper<I extends RecyclerViewItemHelper.It
 		public abstract boolean isActive();
 
 		/**
+		 * Checks whether this interactor should handle interaction for the specified <var>viewHolder</var>
+		 * due to received callback from the parent helper.
+		 * <p>
+		 * This implementation only extends {@link #shouldHandleInteraction()} in a way that the
+		 * view holder is checked if it is not null and has valid adapter position. Inheritance
+		 * hierarchies are allowed to override this behaviour as desired.
+		 *
+		 * @param viewHolder The desired view holder to be checked.
+		 * @return {@code True} if {@link #shouldHandleInteraction()} returns {@code true}, view holder
+		 * is not null and has valid (not {@link RecyclerView#NO_POSITION}) adapter position,
+		 * {@code false} otherwise.
+		 */
+		protected boolean shouldHandleInteraction(@Nullable final RecyclerView.ViewHolder viewHolder) {
+			return shouldHandleInteraction() && viewHolder != null && viewHolder.getAdapterPosition() != RecyclerView.NO_POSITION;
+		}
+
+		/**
 		 * Checks whether this interactor should handle interaction due to received callback from
 		 * the parent helper.
 		 * <p>
 		 * This implementation checks whether this interactor instance is enabled at this time and
-		 * also has valid adapter attached. However inheritance hierarchies may override this behaviour
-		 * as they desire.
+		 * also has valid adapter attached. However inheritance hierarchies are allowed to override
+		 * this behaviour as desired.
 		 *
 		 * @return {@code True} if interaction should be handled, {@code false} otherwise.
 		 */
