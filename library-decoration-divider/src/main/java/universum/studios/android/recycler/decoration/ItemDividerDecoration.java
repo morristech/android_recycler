@@ -346,6 +346,8 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	 * <p>
 	 * Both values are used with respect to layout direction of the parent {@link RecyclerView} and
 	 * also with respect to the orientation specified for this decoration.
+	 * <p>
+	 * <b>Note that these offsets are used for divider's graphics only.</b>
 	 *
 	 * @param start The desired amount in pixels by which to offset the divider at the start.
 	 * @param end   The desired amount in pixels by which to offset the divider at the end.
@@ -410,8 +412,8 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	}
 
 	/**
-	 * Called to update the given <var>rect</var> with the current divider thickness and divider offsets
-	 * specified for this decoration according to the orientation also specified for this decoration.
+	 * Called to update the given <var>rect</var> with the current divider thickness specified for
+	 * this decoration according to the orientation also specified for this decoration.
 	 *
 	 * @param rect         The desired item offsets rect to be updated.
 	 * @param rtlDirection {@code True} if offsets should be updated for <i>RTL</i> layout direction,
@@ -420,16 +422,11 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 	protected void updateItemOffsets(@NonNull final Rect rect, final boolean rtlDirection) {
 		switch (orientation) {
 			case HORIZONTAL:
-				rect.set(0, dividerOffsetStart, dividerThickness, dividerOffsetEnd);
+				rect.set(0, 0, dividerThickness, 0);
 				break;
 			case VERTICAL:
 			default:
-				rect.set(
-						rtlDirection ? dividerOffsetEnd : dividerOffsetStart,
-						0,
-						rtlDirection ? dividerOffsetStart : dividerOffsetEnd,
-						dividerThickness
-				);
+				rect.set(0, 0, 0, dividerThickness);
 				break;
 		}
 	}
@@ -482,7 +479,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			bottom = parent.getHeight();
 		}
 		top += dividerOffsetStart;
-		bottom += dividerOffsetEnd;
+		bottom -= dividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((skipFirst && childIndex == 0) || (skipLast && childIndex == childCount - 1)) {
@@ -527,7 +524,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 		}
 		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		left += hasRtlDirection ? dividerOffsetEnd : dividerOffsetStart;
-		right += hasRtlDirection ? dividerOffsetStart : dividerOffsetEnd;
+		right -= hasRtlDirection ? dividerOffsetStart : dividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((skipFirst && childIndex == 0) || (skipLast && childIndex == childCount - 1)) {
