@@ -67,6 +67,8 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		this.itemView = new TextView(application);
 		resetMock(mockCanvas);
 		resetMock(mockRecyclerView);
+		when(mockRecyclerView.getWidth()).thenReturn(1080);
+		when(mockRecyclerView.getHeight()).thenReturn(1920);
 		when(mockRecyclerView.getLayoutManager()).thenReturn(new LinearLayoutManager(application));
 		when(mockRecyclerView.getChildCount()).thenReturn(MOCK_ITEMS_COUNT);
 		when(mockRecyclerView.getChildAt(anyInt())).thenReturn(itemView);
@@ -539,7 +541,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				-decoration.getDividerThickness(),
 				10,
 				0,
-				5
+				mockRecyclerView.getHeight() - 5
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
 		verify(mockPrecondition, times(verifyTimes)).check(itemView, mockRecyclerView, mockRecyclerViewState);
@@ -599,7 +601,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 				-decoration.getDividerThickness(),
 				0,
 				0,
-				0
+				mockRecyclerView.getHeight()
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
 		verify(mockCanvas).restore();
@@ -650,7 +652,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		verify(mockDivider, times(verifyTimes)).setBounds(
 				5,
 				-decoration.getDividerThickness(),
-				10,
+				mockRecyclerView.getWidth() - 10,
 				0
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);
@@ -708,7 +710,7 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		verify(mockDivider, times(verifyTimes)).setBounds(
 				0,
 				-decoration.getDividerThickness(),
-				0,
+				mockRecyclerView.getWidth(),
 				0
 		);
 		verify(mockDivider, times(verifyTimes)).draw(mockCanvas);

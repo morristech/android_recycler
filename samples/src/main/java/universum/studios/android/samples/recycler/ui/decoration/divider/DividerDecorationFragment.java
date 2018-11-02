@@ -55,7 +55,6 @@ public class DividerDecorationFragment extends DecorationSampleFragment {
 					divider
 			);
 			decoration.setDividerThickness(dividerThickness);
-			decoration.setDividerOffset(50, 100);
 			setItemDecoration(decoration);
 		} else {
 			setItemDecoration(null);
