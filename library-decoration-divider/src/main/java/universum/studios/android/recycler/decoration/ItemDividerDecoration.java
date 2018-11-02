@@ -479,7 +479,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 			bottom = parent.getHeight();
 		}
 		top += dividerOffsetStart;
-		bottom += dividerOffsetEnd;
+		bottom -= dividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((skipFirst && childIndex == 0) || (skipLast && childIndex == childCount - 1)) {
@@ -524,7 +524,7 @@ public class ItemDividerDecoration extends RecyclerViewItemDecoration {
 		}
 		final boolean hasRtlDirection = ViewCompat.getLayoutDirection(parent) == ViewCompat.LAYOUT_DIRECTION_RTL;
 		left += hasRtlDirection ? dividerOffsetEnd : dividerOffsetStart;
-		right += hasRtlDirection ? dividerOffsetStart : dividerOffsetEnd;
+		right -= hasRtlDirection ? dividerOffsetStart : dividerOffsetEnd;
 		final int childCount = parent.getChildCount();
 		for (int childIndex = 0; childIndex < childCount; childIndex++) {
 			if ((skipFirst && childIndex == 0) || (skipLast && childIndex == childCount - 1)) {
