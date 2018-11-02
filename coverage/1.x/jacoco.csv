@@ -7,7 +7,7 @@ library,universum.studios.android.recycler.helper,ItemDragHelper.Interactor,4,33
 library,universum.studios.android.recycler.helper,ItemSwipeHelper.Interactor,0,298,1,47,0,82,1,46,0,23
 library,universum.studios.android.recycler.helper,ItemSwipeHelper.SwipeItemAnimator,0,37,0,6,0,8,0,5,0,2
 library,universum.studios.android.recycler.helper,ItemSwipeHelper,0,120,0,15,0,33,0,17,0,9
-library,universum.studios.android.recycler.decoration,ItemDividerDecoration,81,494,16,76,15,120,9,59,0,22
+library,universum.studios.android.recycler.decoration,ItemDividerDecoration,81,480,16,72,15,120,9,57,0,22
 library,universum.studios.android.recycler.decoration,RecyclerViewItemDecoration.Precondition.new RecyclerViewItemDecoration.Precondition() {...},0,5,0,0,0,2,0,2,0,2
 library,universum.studios.android.recycler.decoration,ItemSpaceDecoration,67,157,13,25,13,41,7,25,0,13
 library,universum.studios.android.recycler.decoration,RecyclerViewItemDecoration.Precondition,0,5,0,0,0,1,0,1,0,1
