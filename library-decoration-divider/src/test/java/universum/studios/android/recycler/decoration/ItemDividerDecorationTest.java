@@ -250,8 +250,8 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		final Rect rect = new Rect();
 		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 		// Assert:
-		assertThat(rect.left, is(10));
-		assertThat(rect.right, is(5));
+		assertThat(rect.left, is(0));
+		assertThat(rect.right, is(0));
 		assertThat(rect.top, is(0));
 		assertThat(rect.bottom, is(decoration.getDividerThickness()));
 		verify(mockRecyclerView).getLayoutDirection();
@@ -273,8 +273,8 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		final Rect rect = new Rect();
 		decoration.getItemOffsets(rect, itemView, mockRecyclerView, mockRecyclerViewState);
 		// Assert:
-		assertThat(rect.left, is(5));
-		assertThat(rect.right, is(10));
+		assertThat(rect.left, is(0));
+		assertThat(rect.right, is(0));
 		assertThat(rect.top, is(0));
 		assertThat(rect.bottom, is(decoration.getDividerThickness()));
 		verify(mockRecyclerView).getLayoutDirection();
@@ -297,8 +297,8 @@ public final class ItemDividerDecorationTest extends RobolectricTestCase {
 		// Assert:
 		assertThat(rect.left, is(0));
 		assertThat(rect.right, is(decoration.getDividerThickness()));
-		assertThat(rect.top, is(10));
-		assertThat(rect.bottom, is(5));
+		assertThat(rect.top, is(0));
+		assertThat(rect.bottom, is(0));
 		verify(mockPrecondition).check(itemView, mockRecyclerView, mockRecyclerViewState);
 		verifyNoMoreInteractions(mockPrecondition);
 	}

@@ -40,6 +40,7 @@ public class SampleViewHolder<VB extends ViewDataBinding> extends RecyclerViewHo
 	@SuppressWarnings({"unchecked", "ConstantConditions"})
 	protected SampleViewHolder(@NonNull View itemView) {
 		this((VB) DataBindingUtil.bind(itemView));
+		itemView.setOnClickListener(v -> {});
 	}
 
 	protected SampleViewHolder(@NonNull final VB viewBinding) {
